@@ -8,9 +8,9 @@ involving type-equality reasoning using smt solvers.
 You need
 
  * GHC 8.2.1
-  - Unfortuntately, this is version sensitive!
+   - Unfortuntately, this is version sensitive!
  * Z3 (the smt solver) version 4.5 and above.
-  - [The github repo has instructions](https://github.com/Z3Prover/z3)
+   - [The github repo has instructions](https://github.com/Z3Prover/z3)
  * To build simply
 
 ```bash
