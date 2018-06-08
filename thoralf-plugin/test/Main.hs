@@ -86,7 +86,7 @@ type LOne = '[ '(2,"hi"), '(1,"ok") ]
 type LTwo = '[ '(1,"ok"), '(2,"hi") ]
 
 -- Example 1
-fmtest1 :: (ConcreteFm LOne) :~: (ConcreteFm LTwo)
+fmtest1 :: (FromList LOne) :~: (FromList LTwo)
 fmtest1 = Refl
 
 

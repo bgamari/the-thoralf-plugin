@@ -5,7 +5,7 @@
  #-}
 module ThoralfPlugin.Theory.FiniteMap (
         Fm, Nil,
-        Has, Omits, ConcreteFm,
+        Has, Omits, FromList,
         AddField, DelField
   ) where
 
@@ -66,8 +66,8 @@ type family Has (f :: Fm k v) (key :: k) (val :: v) :: Constraint where
 type family Omits (f :: Fm (k :: Type) (v :: Type)) (key :: k) :: Constraint where
   Omits m k = (Delete m k ~ m)
 
-type family ConcreteFm (xs :: [(k,v)]) :: Fm k v where
-  ConcreteFm xs = Build Nil xs
+type family FromList (xs :: [(k,v)]) :: Fm k v where
+  FromList xs = Build Nil xs
 
 type family
   AddField (m :: Fm k v) (m' :: Fm k v) (key :: k) (val :: v)
