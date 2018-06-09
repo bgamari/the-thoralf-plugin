@@ -132,7 +132,7 @@ plugin = defaultPlugin {
 thoralfPlugin :: TheorySeed -> TcPlugin
 thoralfPlugin seed = TcPlugin
   { tcPluginInit = mkThoralfInit seed
-  , tcPluginSolve = thoralfSolver True       -- BOOLEAN for debugging printing
+  , tcPluginSolve = thoralfSolver False       -- BOOLEAN for debugging printing
   , tcPluginStop = thoralfStop
   }
 
@@ -162,7 +162,7 @@ mkThoralfInit seed = do
   disEqClass <- findClass disEqModule "DisEquality"
   let decs = startDecs theorybox
   z3SMTsolver <- tcPluginIO $ do
-    let logLevel = 0 --1 -- 0 --< for debugging
+    let logLevel = 1 -- 0 --< for debugging
     logger <- SMT.newLogger logLevel
     z3SMTsolver <- grabSMTsolver logger
     SMT.ackCommand z3SMTsolver typeDataType
