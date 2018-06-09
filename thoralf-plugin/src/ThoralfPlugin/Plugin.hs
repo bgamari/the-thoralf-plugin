@@ -56,6 +56,7 @@ import Outputable ( SDoc(..), showSDocUnsafe, ppr, pprPrec )
 import ThoralfPlugin.Box.TheoryBox
 import ThoralfPlugin.Box.Nat ( natSeed )
 import ThoralfPlugin.Box.FiniteMap ( fmSeed )
+import ThoralfPlugin.Box.UoM ( uomSeed )
 import ThoralfPlugin.Box.Symbol ( symbolSeed )
 
 
@@ -131,7 +132,7 @@ plugin = defaultPlugin {
 thoralfPlugin :: TheorySeed -> TcPlugin
 thoralfPlugin seed = TcPlugin
   { tcPluginInit = mkThoralfInit seed
-  , tcPluginSolve = thoralfSolver
+  , tcPluginSolve = thoralfSolver True       -- BOOLEAN for debugging printing
   , tcPluginStop = thoralfStop
   }
 
@@ -161,7 +162,7 @@ mkThoralfInit seed = do
   disEqClass <- findClass disEqModule "DisEquality"
   let decs = startDecs theorybox
   z3SMTsolver <- tcPluginIO $ do
-    let logLevel = 1 -- 0 --< for debugging
+    let logLevel = 0 --1 -- 0 --< for debugging
     logger <- SMT.newLogger logLevel
     z3SMTsolver <- grabSMTsolver logger
     SMT.ackCommand z3SMTsolver typeDataType
@@ -196,13 +197,13 @@ thoralfStop (ThoralfState {smtSolver = solver}) = do
 
 -- NOTE: the ThoralfState pattern match is sensitive to change
 
-thoralfSolver :: ThoralfState -> [Ct] -> [Ct] -> [Ct] -> TcPluginM TcPluginResult
-thoralfSolver (ThoralfState smt box deCls) gs ws ds = do
+thoralfSolver :: Bool -> ThoralfState -> [Ct] -> [Ct] -> [Ct] -> TcPluginM TcPluginResult
+thoralfSolver debug (ThoralfState smt box deCls) gs ws ds = do
   zonkedCts <- zonkEverything (gs ++ ws ++ ds)
-  --printCts False gs ws ds
+  printCts debug False gs ws ds
   case parser deCls box zonkedCts of
     Nothing -> do
-      --printCts True gs ws ds
+      printCts debug True gs ws ds
       return $ TcPluginOk [] []
     Just (parsedSExprs, parseDeclrs) -> do
       (givenSEqs, wantedSEqs) <- return (partition (isGivenCt . snd) parsedSExprs)
@@ -212,7 +213,7 @@ thoralfSolver (ThoralfState smt box deCls) gs ws ds = do
           let relevantWC = wCt : (map snd wSEqs)
           let wantedSExpr = foldl SMT.or wEq (map fst wSEqs)
           let givenSExprs = map fst givenSEqs
-          --printParsedInputs givenSExprs wantedSExpr parseDeclrs
+          printParsedInputs debug givenSExprs wantedSExpr parseDeclrs
           givenCheck <- tcPluginIO $
             (SMT.push smt) >> (sequence_ $ map (SMT.ackCommand smt) parseDeclrs) >>
             (sequence_ $ map (SMT.assert smt) givenSExprs) >> (SMT.check smt)
@@ -238,15 +239,16 @@ addEvTerm ct = do
   return (makeEqEvidence "Fm Plugin" (t1,t2), ct)
 
 
-printParsedInputs givenSExprs wantedSExpr parseDeclrs = do
+printParsedInputs True givenSExprs wantedSExpr parseDeclrs = do
   tcPluginIO $ do
     putStrLn ("Given SExpr: \n" ++ (show $ map (`SMT.showsSExpr`  "") givenSExprs))
     putStrLn ("Wanted SExpr: \n" ++ (SMT.showsSExpr wantedSExpr ""))
     putStrLn ("Variable Decs: \n" ++ (show $ map (`SMT.showsSExpr`  "") parseDeclrs))
+printParsedInputs False givenSExprs wantedSExpr parseDeclrs = return ()
 
 
-printCts :: Bool -> [Ct] -> [Ct] -> [Ct] -> TcPluginM TcPluginResult
-printCts bool gs ws ds = do
+printCts :: Bool -> Bool -> [Ct] -> [Ct] -> [Ct] -> TcPluginM TcPluginResult
+printCts True bool gs ws ds = do
   let iffail = if bool then "Parse Failure" else "Solver Call Start:"
   tcPluginIO $ do
     putStrLn "\n\n  ----- Plugin Call HERE !!! ------\n\n"
@@ -255,6 +257,7 @@ printCts bool gs ws ds = do
     putStrLn $ "\tWanteds: \n" ++ showList ws
     putStrLn $ "\tDesireds: \n" ++ showList ds
   return $ TcPluginOk [] []
+printCts False bool gs ws ds = return $ TcPluginOk [] []
 
 zonkEverything :: [Ct] -> TcPluginM [Ct]
 zonkEverything [] = return []
@@ -277,6 +280,7 @@ currentDefaultSeed =
   sumSeeds [ natSeed
            , fmSeed
            , symbolSeed
+           , uomSeed
            ]
 
 

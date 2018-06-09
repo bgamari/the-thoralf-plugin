@@ -19,11 +19,13 @@ library
   exposed-modules:     ThoralfPlugin.Plugin, 
                        ThoralfPlugin.Theory.DisEq,
                        ThoralfPlugin.Theory.FiniteMap,
+                       ThoralfPlugin.Theory.UoM,
                        ThoralfPlugin.Box.TheoryBox,
                        ThoralfPlugin.Singletons.Symbol
   other-modules:       ThoralfPlugin.Box.Nat, 
                        ThoralfPlugin.Box.FiniteMap,
-                       ThoralfPlugin.Box.Symbol
+                       ThoralfPlugin.Box.Symbol,
+                       ThoralfPlugin.Box.UoM
   other-extensions:    TypeFamilies, TypeInType, GADTs, RecordWildCards
   build-depends:       base, 
                        ghc, 
