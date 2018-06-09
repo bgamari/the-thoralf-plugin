@@ -29,7 +29,7 @@ Ok, 1 module loaded.
 
 ## Usage
 
- * Read our haskell symposium paper! Link forthcoming.
+ * Read our haskell symposium submission! Link forthcoming.
  * See /thoralf-plugin/test/Main.hs for an example
  * See [DOCUMENTATION.md](DOCUMENTATION.md) for how to extend thoralf 
    and make your own plugin with all of thoralf's theories and some new
