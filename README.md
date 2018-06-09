@@ -8,7 +8,7 @@ involving type-equality reasoning using smt solvers.
 You need
 
  * GHC 8.2.1
-   - Unfortuntately, this is version sensitive!
+   - Unfortunately, this is version sensitive!
  * Z3 (the smt solver) version 4.5 and above.
    - [The github repo has instructions](https://github.com/Z3Prover/z3)
  * To build simply
@@ -24,6 +24,7 @@ Loaded GHCi configuration from /home/divesh/.ghc/ghci.conf
 [1 of 1] Compiling Main             ( test/Main.hs, interpreted )
 Ok, 1 module loaded.
 *Main> 
+
 ```
 
 
