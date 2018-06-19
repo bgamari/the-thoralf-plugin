@@ -16,7 +16,7 @@ $ git clone git@github.com:Divesh-Otwani/the-thoralf-plugin.git
 $ cd the-thoralf-plugin
 $ stack install
 $ echo "Now the example should load or run!"
-$ stack ghci thoralf-plugin/test/Main.hs
+$ stack ghci test/Main.hs
 
 Loaded GHCi configuration from /home/divesh/.ghc/ghci.conf
 [1 of 1] Compiling Main             ( test/Main.hs, interpreted )

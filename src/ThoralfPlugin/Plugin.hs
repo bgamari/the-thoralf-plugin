@@ -2,6 +2,7 @@
     GADTs, RecordWildCards, StandaloneDeriving #-}
 module ThoralfPlugin.Plugin ( plugin, thoralfPlugin ) where
 
+
 --------------------------- IMPORTS ----------------------------
 
 -- Simple imports:

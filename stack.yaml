@@ -35,7 +35,9 @@ resolver: nightly-2017-11-24
 #  subdirs:
 #  - auto-update
 #  - wai
-packages: [ thoralf-plugin ]
+packages: 
+   - .
+
 # The following packages have been ignored due to incompatibility with the
 # resolver compiler, dependency conflicts with other packages
 # or unsatisfied dependencies.
