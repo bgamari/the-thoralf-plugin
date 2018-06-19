@@ -27,6 +27,12 @@ import GHC.TypeLits
 data a :~: b where
   Refl :: a :~: a
 
+
+-------------------------------------------------------
+-- Nats
+-------------------------------------------------------
+
+
 test1 :: 1 :~: 1
 test1 = Refl
 
@@ -101,6 +107,7 @@ altTwice = Refl
 --symtest = Refl
 
 
+
 ----------------------  Row Types    ------------------------
 
 data RowType :: (Fm Symbol Type) -> Type where
@@ -114,10 +121,10 @@ data RowType :: (Fm Symbol Type) -> Type where
 
 
 getPrice :: Has m "price" Int => RowType m -> Int
---getPrice (DelField rec fld val) = getPrice rec
+getPrice (DelField rec fld val) = getPrice rec
 getPrice (AddField rec fld val) =
   case (scomp fld (SSym @"price")) of
-    --D.Refl -> val
+    D.Refl -> val
     D.DisRefl -> getPrice rec
 
 pRecPrice :: PricedRec -> Int
@@ -147,9 +154,5 @@ main :: IO ()
 main = do
   let sumTest = totalPrice [car, plane]
   putStrLn ("Total value: " ++ (show sumTest))
-
-
---main = return ()
-
 
 

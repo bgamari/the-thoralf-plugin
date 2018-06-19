@@ -4,7 +4,6 @@ module ThoralfPlugin.Plugin ( plugin, thoralfPlugin ) where
 
 --------------------------- IMPORTS ----------------------------
 
-
 -- Simple imports:
 import Prelude hiding ( showList )
 import FastString ( unpackFS, fsLit )
