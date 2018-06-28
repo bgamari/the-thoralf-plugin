@@ -82,7 +82,7 @@ For example, the FM stuff will need to specify Maybe:
     "(store (...) (...) (...) )"
 
 (*) The syntactic parts also should only generate FunTy's and TyConApp's.
-    Nothing else. No AppTy's
+    Nothing else. No AppTy's.
 
 (*) None of the theorybox functions deal with type variables !!!
 
@@ -121,6 +121,31 @@ my known theories.
 
 
 
+
+
+
+
+
+
+--------------------- Current Supported Theories --------------------
+
+{-
+# Paradigm For Implementation
+You just make TheorySeed's and add them together.
+(I didn't bother with a monoid instance.)
+-}
+
+
+currentDefaultSeed :: TheorySeed
+currentDefaultSeed =
+  sumSeeds [ natSeed
+           , fmSeed
+           , symbolSeed
+           , uomSeed
+           ]
+
+
+
 --------------------- TOP LEVEL PLUGIN INTERFACE --------------------
 --Recall: type TheorySeed = TcPluginM TheoryBox
 
@@ -132,7 +157,7 @@ plugin = defaultPlugin {
 thoralfPlugin :: TheorySeed -> TcPlugin
 thoralfPlugin seed = TcPlugin
   { tcPluginInit = mkThoralfInit seed
-  , tcPluginSolve = thoralfSolver False       -- BOOLEAN for debugging printing
+  , tcPluginSolve = thoralfSolver False -- for Debugging
   , tcPluginStop = thoralfStop
   }
 
@@ -268,20 +293,6 @@ zonkEverything (x:xs) = do
 
 -------------------------- END TOP LEVEL FUNCTIONS ----------------------
 
-{-
-# Paradigm For Implementation
-You just make TheorySeed's and add them together.
-(I didn't bother with a monoid instance.)
--}
-
-
-currentDefaultSeed :: TheorySeed
-currentDefaultSeed =
-  sumSeeds [ natSeed
-           , fmSeed
-           , symbolSeed
-           , uomSeed
-           ]
 
 
 

@@ -4,7 +4,7 @@
 module ThoralfPlugin.Box.Nat ( natSeed ) where
 
 import TysWiredIn ( typeNatKindCon )
-import TcTypeNats ( typeNatAddTyCon )
+import TcTypeNats ( typeNatAddTyCon, typeNatSubTyCon )
 import qualified SimpleSMT as SMT
 import Type ( Type, classifyPredType, PredTree(..),
               EqRel(..), splitTyConApp_maybe, isStrLitTy,
@@ -22,8 +22,9 @@ import ThoralfPlugin.Box.TheoryBox
 natSeed :: TheorySeed
 natSeed = return natBox
 
+natBox :: TheoryBox
 natBox = emptyBox
-  { typeConvs = [natLitConv, natAddConv]
+  { typeConvs = [natLitConv, natAddConv, natSubConv]
   , kindConvs = [natKindConv]
   }
 
@@ -46,6 +47,23 @@ natAddConv ty = do
       in
         return $ TyKit (tyList, VNil, mkNatSExpr)
     (_, _) -> Nothing
+
+
+
+natSubConv :: Type -> Maybe TyStrMaker
+natSubConv ty = do
+  (tycon, types) <- splitTyConApp_maybe ty
+  case (tycon == typeNatSubTyCon, types) of
+    (True, [x,y]) ->
+      let
+        mkNatSExpr :: Vec (Succ (Succ Zero)) String -> Vec Zero String ->  String
+        mkNatSExpr (a :> b :> VNil)  VNil = "(- " ++ a ++ " " ++ b ++ ")"
+        tyList = x :> y :> VNil
+      in
+        return $ TyKit (tyList, VNil, mkNatSExpr)
+    (_, _) -> Nothing
+
+
 
 
 natKindConv :: Type -> Maybe KdStrMaker

@@ -20,12 +20,15 @@ library
                        ThoralfPlugin.Theory.DisEq,
                        ThoralfPlugin.Theory.FiniteMap,
                        ThoralfPlugin.Theory.UoM,
+                       ThoralfPlugin.Theory.Bool,
                        ThoralfPlugin.Box.TheoryBox,
                        ThoralfPlugin.Singletons.Symbol
-  other-modules:       ThoralfPlugin.Box.Nat, 
+  other-modules:       ThoralfPlugin.Box.Nat,
                        ThoralfPlugin.Box.FiniteMap,
                        ThoralfPlugin.Box.Symbol,
-                       ThoralfPlugin.Box.UoM
+                       ThoralfPlugin.Box.UoM,
+                       ThoralfPlugin.Box.Predicates.Nat,
+                       ThoralfPlugin.Box.Predicates.Bool
   other-extensions:    TypeFamilies, TypeInType, GADTs, RecordWildCards
   build-depends:       base, 
                        ghc, 
