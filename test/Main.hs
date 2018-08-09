@@ -1,8 +1,11 @@
-{-# LANGUAGE TypeFamilies, TypeInType, GADTs,
-    DataKinds, AllowAmbiguousTypes,
-    OverloadedLabels, StandaloneDeriving,
-    TypeOperators, ScopedTypeVariables, TypeApplications
-#-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeInType #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE AllowAmbiguousTypes #-}
+
 
 {-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
 {-# OPTIONS_GHC -Wno-unused-matches #-}
@@ -12,13 +15,12 @@
 module Main where
 
 
-import ThoralfPlugin.Theory.FiniteMap 
+import ThoralfPlugin.Theory.FiniteMap
 import ThoralfPlugin.Singletons.Symbol
 import qualified ThoralfPlugin.Theory.DisEq as D
 
 import Data.Kind ( Type )
-import GHC.TypeLits ( Symbol )
-import Data.Singletons.TypeLits
+import GHC.TypeLits
 import System.IO (hFlush, stdin, stdout)
 
 
@@ -109,7 +111,6 @@ altTwice = Refl
 
 
 ----------------------  Row Types    ------------------------
-
 data RowType :: (Fm Symbol Type) -> Type where
     EmptyRec :: RowType Nil
     AddField :: AddField m m' field val =>

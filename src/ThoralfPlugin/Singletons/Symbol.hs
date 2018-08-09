@@ -9,17 +9,23 @@
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module ThoralfPlugin.Singletons.Symbol where
+module ThoralfPlugin.Singletons.Symbol
+  ( SSymbol (..), scomp )
+where
 
-import Data.Singletons.TypeLits ( SSymbol(..), symbolVal, Sing(..) )
+import GHC.TypeLits ( symbolVal, Symbol, KnownSymbol (..) )
 import Unsafe.Coerce
 
 import ThoralfPlugin.Theory.DisEq
 import Data.Proxy ( Proxy(..) )
 import Data.Kind ( Constraint, Type )
 
+
+data SSymbol :: Symbol -> Type where
+  SSym :: KnownSymbol s => SSymbol s
+
 scomp :: SSymbol s -> SSymbol s' -> s :~?~: s'
-scomp (SSym :: Sing s) (SSym :: Sing s') =
+scomp (SSym :: SSymbol s) (SSym :: SSymbol s') =
   case (symbolVal (Proxy :: Proxy s)) == (symbolVal (Proxy :: Proxy s')) of
     True ->  unsafeCoerce  Refl
     False ->

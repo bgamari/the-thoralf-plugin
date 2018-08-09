@@ -34,4 +34,3 @@ library
                        , ghc-prim
                        , containers
                        , simple-smt
-                       , singletons
