@@ -36,7 +36,6 @@ data a :~: b where
 -- Nats
 -------------------------------------------------------
 
-  {-
 test1 :: 1 :~: 1
 test1 = Refl
 
@@ -163,13 +162,6 @@ main = do
 
 -- Boolean Comparisons
 
--}
-
-ltTrans :: (a <? b) :~: True -> (b <? c) :~: True -> (a <? c) :~: True
-ltTrans Refl Refl = Refl
-
-
-main = return ()
 
 
 
