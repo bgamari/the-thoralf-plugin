@@ -13,16 +13,19 @@ library
   hs-source-dirs:        src
   default-language:      Haskell2010
   exposed-modules:       ThoralfPlugin.Plugin
+                       , ThoralfPlugin.Singletons.Symbol
+
                        , ThoralfPlugin.Theory.DisEq
                        , ThoralfPlugin.Theory.FiniteMap
                        , ThoralfPlugin.Theory.UoM
-                       , ThoralfPlugin.Box.TheoryBox
-                       , ThoralfPlugin.Singletons.Symbol
+                       , ThoralfPlugin.Theory.Bool
 
-  other-modules:         ThoralfPlugin.Box.Nat
+  other-modules:         ThoralfPlugin.Box.TheoryBox
+                       , ThoralfPlugin.Box.Nat
                        , ThoralfPlugin.Box.FiniteMap
                        , ThoralfPlugin.Box.Symbol
                        , ThoralfPlugin.Box.UoM
+                       , ThoralfPlugin.Box.Bool
 
   other-extensions:      TypeFamilies
                        , TypeInType

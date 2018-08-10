@@ -5,6 +5,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE RankNTypes #-}
 
 
 {-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
@@ -16,6 +17,7 @@ module Main where
 
 
 import ThoralfPlugin.Theory.FiniteMap
+import ThoralfPlugin.Theory.Bool
 import ThoralfPlugin.Singletons.Symbol
 import qualified ThoralfPlugin.Theory.DisEq as D
 
@@ -34,7 +36,7 @@ data a :~: b where
 -- Nats
 -------------------------------------------------------
 
-
+  {-
 test1 :: 1 :~: 1
 test1 = Refl
 
@@ -155,5 +157,23 @@ main :: IO ()
 main = do
   let sumTest = totalPrice [car, plane]
   putStrLn ("Total value: " ++ (show sumTest))
+
+--------------------------------------------------------
+
+
+-- Boolean Comparisons
+
+-}
+
+ltTrans :: (a <? b) :~: True -> (b <? c) :~: True -> (a <? c) :~: True
+ltTrans Refl Refl = Refl
+
+
+main = return ()
+
+
+
+
+
 
 

@@ -58,6 +58,7 @@ import ThoralfPlugin.Box.Nat ( natSeed )
 import ThoralfPlugin.Box.FiniteMap ( fmSeed )
 import ThoralfPlugin.Box.UoM ( uomSeed )
 import ThoralfPlugin.Box.Symbol ( symbolSeed )
+import ThoralfPlugin.Box.Bool ( boolSeed )
 
 
 -- Renaming
@@ -132,7 +133,7 @@ plugin = defaultPlugin {
 thoralfPlugin :: TheorySeed -> TcPlugin
 thoralfPlugin seed = TcPlugin
   { tcPluginInit = mkThoralfInit seed
-  , tcPluginSolve = thoralfSolver False       -- BOOLEAN for debugging printing
+  , tcPluginSolve = thoralfSolver True       -- BOOLEAN for debugging printing
   , tcPluginStop = thoralfStop
   }
 
@@ -280,6 +281,7 @@ currentDefaultSeed =
   sumSeeds [ natSeed
            , fmSeed
            , symbolSeed
+           , boolSeed
            , uomSeed
            ]
 
