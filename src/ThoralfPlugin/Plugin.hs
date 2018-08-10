@@ -17,6 +17,7 @@ import qualified Data.Set as Set
 import qualified SimpleSMT as SMT
 import Control.Monad ( sequence_ )
 import Class ( Class(..) )
+import System.IO.Error
 
 -- GHC API imports:
 import GhcPlugins ( Plugin (..), defaultPlugin, getUnique, getOccName )
@@ -215,15 +216,21 @@ thoralfSolver debug (ThoralfState smt box deCls) gs ws ds = do
           let wantedSExpr = foldl SMT.or wEq (map fst wSEqs)
           let givenSExprs = map fst givenSEqs
           printParsedInputs debug givenSExprs wantedSExpr parseDeclrs
-          givenCheck <- tcPluginIO $
-            (SMT.push smt) >> (sequence_ $ map (SMT.ackCommand smt) parseDeclrs) >>
-            (sequence_ $ map (SMT.assert smt) givenSExprs) >> (SMT.check smt)
+          givenCheck <- tcPluginIO $ 
+            flip catchIOError (const $ return SMT.Sat) $ do
+              SMT.push smt
+              sequence_ $ map (SMT.ackCommand smt) parseDeclrs
+              sequence_ $ map (SMT.assert smt) givenSExprs
+              SMT.check smt
           case givenCheck of
             SMT.Unsat -> do
               tcPluginIO $ (putStrLn "Inconsistent givens.") >> (SMT.pop smt)
               return $ TcPluginContradiction []
             SMT.Sat -> do
-              wantedCheck <- tcPluginIO $ (SMT.assert smt wantedSExpr) >> (SMT.check smt)
+              wantedCheck <- tcPluginIO $
+                flip catchIOError (const $ return SMT.Sat) $ do
+                  SMT.assert smt wantedSExpr
+                  SMT.check smt
               case wantedCheck of
                 SMT.Unsat ->
                   (tcPluginIO $ SMT.pop smt) >>
