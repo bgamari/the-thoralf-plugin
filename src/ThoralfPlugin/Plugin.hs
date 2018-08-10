@@ -133,7 +133,7 @@ plugin = defaultPlugin {
 thoralfPlugin :: TheorySeed -> TcPlugin
 thoralfPlugin seed = TcPlugin
   { tcPluginInit = mkThoralfInit seed
-  , tcPluginSolve = thoralfSolver True       -- BOOLEAN for debugging printing
+  , tcPluginSolve = thoralfSolver False       -- BOOLEAN for debugging printing
   , tcPluginStop = thoralfStop
   }
 
