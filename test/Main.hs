@@ -94,6 +94,7 @@ stripPrefix (x :> xs) (y :> ys) =
 type LOne = '[ '(2,"hi"), '(1,"ok") ]
 type LTwo = '[ '(1,"ok"), '(2,"hi") ]
 
+
 -- Example 1
 fmtest1 :: (FromList LOne) :~: (FromList LTwo)
 fmtest1 = Refl
@@ -162,6 +163,10 @@ main = do
 
 -- Boolean Comparisons
 
+
+ltTrans :: forall (a :: Nat) (b :: Nat) (c :: Nat).
+  (a <? b) :~: True -> (b <? c) :~: True -> (a <? c) :~: True
+ltTrans Refl Refl = Refl
 
 
 

@@ -4,12 +4,11 @@
 
 {-# OPTIONS_GHC -Wunused-top-binds #-}
 
-module ThoralfPlugin.Theory.Bool
-( type (<?) )
-where
+module ThoralfPlugin.Theory.Bool where
 
-import Data.Kind ( Type, Constraint )
+import GHC.TypeLits ( Nat )
 
-type family (<?) (x :: a) (y :: a) :: Bool where {}
+type family (<?) (x :: Nat) (y :: Nat) :: Bool where {}
+
 
 

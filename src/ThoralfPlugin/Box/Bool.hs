@@ -38,7 +38,7 @@ boolSeed :: TheorySeed
 boolSeed = do
   let boolModM = findImportedModule boolMod $ Just pkg
   Found location boolModule <- boolModM
-  compTyCon <- findTyCon boolModule "(<?)"
+  compTyCon <- findTyCon boolModule "<?"
   return $ natBox compTyCon
   where
     boolMod = mkModuleName "ThoralfPlugin.Theory.Bool"
