@@ -1,8 +1,8 @@
 {-# LANGUAGE TypeFamilies, TypeInType, TypeOperators,
-    GADTs, RecordWildCards, StandaloneDeriving 
+    GADTs, RecordWildCards, StandaloneDeriving
 #-}
 
-module ThoralfPlugin.Box.Symbol ( symbolSeed ) where
+module ThoralfPlugin.Encode.Symbol ( symbolTheory ) where
 
 import qualified SimpleSMT as SMT
 import TyCon ( TyCon(..), tyConKind )
@@ -27,17 +27,17 @@ import TysWiredIn ( maybeTyCon, promotedNothingDataCon, promotedJustDataCon
                   )
 
 
-import ThoralfPlugin.Box.TheoryBox
+import ThoralfPlugin.Encode.TheoryEncoding
 
 
-symbolSeed :: TheorySeed
-symbolSeed = return symbolBox
+symbolTheory :: TcPluginM TheoryEncoding
+symbolTheory = return symbolBox
 
-symbolBox :: TheoryBox
-symbolBox =
-  emptyBox { typeConvs = [symLitConv]
-           , kindConvs = [symKindConv]
-           }
+symbolBox :: TheoryEncoding
+symbolBox = emptyTheory
+  { typeConvs = [symLitConv]
+  , kindConvs = [symKindConv]
+  }
 
 symLitConv :: Type -> Maybe TyStrMaker
 symLitConv ty = do

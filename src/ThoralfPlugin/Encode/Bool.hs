@@ -2,7 +2,7 @@
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 
-module ThoralfPlugin.Box.Bool ( boolSeed ) where
+module ThoralfPlugin.Encode.Bool ( boolTheory ) where
 
 import TysWiredIn ( boolTyCon, promotedTrueDataCon, promotedFalseDataCon )
 
@@ -31,11 +31,11 @@ import FastString ( unpackFS, fsLit )
 
 
 
-import ThoralfPlugin.Box.TheoryBox
+import ThoralfPlugin.Encode.TheoryEncoding
 
 
-boolSeed :: TheorySeed
-boolSeed = do
+boolTheory :: TcPluginM TheoryEncoding
+boolTheory = do
   let boolModM = findImportedModule boolMod $ Just pkg
   Found location boolModule <- boolModM
   compTyCon <- findTyCon boolModule "<?"
@@ -50,8 +50,8 @@ boolSeed = do
         tcLookupTyCon name
 
 
-natBox :: TyCon -> TheoryBox
-natBox compTyCon = emptyBox
+natBox :: TyCon -> TheoryEncoding
+natBox compTyCon = emptyTheory
   { typeConvs = [trueLitConv, falseLitConv, compLitConv compTyCon]
   , kindConvs = [boolKindConv]
   }

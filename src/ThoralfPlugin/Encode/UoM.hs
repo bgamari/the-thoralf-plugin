@@ -2,7 +2,7 @@
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 
-module ThoralfPlugin.Box.UoM ( uomSeed ) where
+module ThoralfPlugin.Encode.UoM ( uomTheory ) where
 
 import qualified SimpleSMT as SMT
 import TyCon ( TyCon(..), tyConKind )
@@ -23,11 +23,11 @@ import OccName ( mkTcOcc )
 import Module ( Module, mkModuleName )
 import FastString ( unpackFS, fsLit )
 
-import ThoralfPlugin.Box.TheoryBox
+import ThoralfPlugin.Encode.TheoryEncoding
 
 
-uomSeed :: TheorySeed
-uomSeed = do
+uomTheory :: TcPluginM TheoryEncoding
+uomTheory = do
   (Found location uomModule) <- findImportedModule fmModName (Just pkg)
   baseTyCon <- findTyCon uomModule "Base"
   oneTyCon <- findTyCon uomModule "One"
@@ -47,17 +47,17 @@ findTyCon md strNm = do
     tcLookupTyCon name
 
 
-mkFmBox :: TyCon -> TyCon -> TyCon -> TyCon -> TyCon -> TheoryBox
-mkFmBox base one div mult uom =
-  emptyBox { startDecs = []
-           , typeConvs =
-             [ baseConvert base
-             , oneConvert one
-             , divConvert div
-             , mulConvert mult
-             ]
-           , kindConvs = [uomConvert uom]
-           }
+mkFmBox :: TyCon -> TyCon -> TyCon -> TyCon -> TyCon -> TheoryEncoding
+mkFmBox base one div mult uom =  emptyTheory 
+  { startDecs = []
+  , typeConvs =
+    [ baseConvert base
+    , oneConvert one
+    , divConvert div
+    , mulConvert mult
+    ]
+  , kindConvs = [uomConvert uom]
+  }
 
 
 baseConvert :: TyCon -> Type -> Maybe TyStrMaker

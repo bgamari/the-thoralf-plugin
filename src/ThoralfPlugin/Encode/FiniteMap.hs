@@ -2,7 +2,7 @@
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 
-module ThoralfPlugin.Box.FiniteMap ( fmSeed ) where
+module ThoralfPlugin.Encode.FiniteMap ( fmTheory ) where
 
 import qualified SimpleSMT as SMT
 import TyCon ( TyCon(..), tyConKind )
@@ -23,11 +23,11 @@ import OccName ( mkTcOcc )
 import Module ( Module, mkModuleName )
 import FastString ( unpackFS, fsLit )
 
-import ThoralfPlugin.Box.TheoryBox
+import ThoralfPlugin.Encode.TheoryEncoding
 
 
-fmSeed :: TheorySeed
-fmSeed = do
+fmTheory :: TcPluginM TheoryEncoding
+fmTheory = do
   (Found location fmModule) <- findImportedModule fmModName (Just pkg)
   nilTyCon <- findTyCon fmModule "Nil"
   alterTyCon <- findTyCon fmModule "Alter"
@@ -46,9 +46,9 @@ findTyCon md strNm = do
     tcLookupTyCon name
 
 
-mkFmBox :: TyCon -> TyCon -> TyCon -> TyCon -> TheoryBox
+mkFmBox :: TyCon -> TyCon -> TyCon -> TyCon -> TheoryEncoding
 mkFmBox nil alter delete fm =
-  emptyBox { startDecs = [maybeDef]
+  emptyTheory { startDecs = [maybeDef]
            , typeConvs =
              [ nilConvert nil
              , alterConvert alter

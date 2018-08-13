@@ -8,7 +8,6 @@
 {-# LANGUAGE RankNTypes #-}
 
 
-{-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
@@ -111,7 +110,6 @@ altTwice = Refl
 --symtest = Refl
 
 
-
 ----------------------  Row Types    ------------------------
 data RowType :: (Fm Symbol Type) -> Type where
     EmptyRec :: RowType Nil
@@ -121,6 +119,8 @@ data RowType :: (Fm Symbol Type) -> Type where
     DelField :: DelField m m' field =>
                 RowType m -> SSymbol field -> val ->
                 RowType m'
+
+
 
 
 getPrice :: Has m "price" Int => RowType m -> Int

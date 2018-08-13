@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies, TypeInType, TypeOperators,
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
-module ThoralfPlugin.Box.Nat ( natSeed ) where
+module ThoralfPlugin.Encode.Nat ( natTheory ) where
 
 import TysWiredIn ( typeNatKindCon )
 import TcTypeNats ( typeNatAddTyCon, typeNatSubTyCon )
@@ -15,14 +15,15 @@ import Type ( Type, classifyPredType, PredTree(..),
               isNumLitTy
             )
 import qualified Data.Kind as Kind
+import TcRnTypes( TcPluginM )
 
-import ThoralfPlugin.Box.TheoryBox
+import ThoralfPlugin.Encode.TheoryEncoding
 
 
-natSeed :: TheorySeed
-natSeed = return natBox
+natTheory :: TcPluginM TheoryEncoding
+natTheory = return natBox
 
-natBox = emptyBox
+natBox = emptyTheory
   { typeConvs = [natLitConv, natAddConv, natSubConv]
   , kindConvs = [natKindConv]
   }

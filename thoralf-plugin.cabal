@@ -11,8 +11,12 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:        src
+  ghc-options:           -Wall
   default-language:      Haskell2010
   exposed-modules:       ThoralfPlugin.Plugin
+                       , ThoralfPlugin.Convert
+                       , ThoralfPlugin.Variables
+
                        , ThoralfPlugin.Singletons.Symbol
                        , ThoralfPlugin.Singletons.Nat
 
@@ -21,12 +25,16 @@ library
                        , ThoralfPlugin.Theory.UoM
                        , ThoralfPlugin.Theory.Bool
 
-  other-modules:         ThoralfPlugin.Box.TheoryBox
-                       , ThoralfPlugin.Box.Nat
-                       , ThoralfPlugin.Box.FiniteMap
-                       , ThoralfPlugin.Box.Symbol
-                       , ThoralfPlugin.Box.UoM
-                       , ThoralfPlugin.Box.Bool
+
+  other-modules:         ThoralfPlugin.Encode
+                       , ThoralfPlugin.Encode.TheoryEncoding
+                       , ThoralfPlugin.Encode.Nat
+                       , ThoralfPlugin.Encode.FiniteMap
+                       , ThoralfPlugin.Encode.Symbol
+                       , ThoralfPlugin.Encode.UoM
+                       , ThoralfPlugin.Encode.Bool
+
+                       , Data.Vec
 
   other-extensions:      TypeFamilies
                        , TypeInType
@@ -38,3 +46,17 @@ library
                        , ghc-prim
                        , containers
                        , simple-smt
+
+
+
+Test-suite tests
+  type:                exitcode-stdio-1.0
+  default-language:    Haskell2010
+  hs-source-dirs:      test
+  main-is:             Main.hs
+  other-modules:
+  ghc-options:         -Wall -fplugin ThoralfPlugin.Plugin
+  build-depends:       base
+                     , thoralf-plugin
+
+
