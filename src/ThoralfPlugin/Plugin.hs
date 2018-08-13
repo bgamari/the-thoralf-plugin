@@ -50,7 +50,6 @@ import ThoralfPlugin.Encode.TheoryEncoding ( TheoryEncoding (..) )
 -- Renaming
 type Set = Set.Set
 type Map = M.Map
-type SExpr = SMT.SExpr
 
 
 plugin :: Plugin
@@ -91,7 +90,7 @@ mkThoralfInit debug seed = do
     logger <- SMT.newLogger logLevel
     z3Solver <- grabSMTsolver logger
     SMT.ackCommand z3Solver typeDataType
-    sequence_ $ map (SMT.ackCommand z3Solver) decs
+    _ <- traverse (SMT.ackCommand z3Solver) $ map SMT.Atom decs
     SMT.push z3Solver
     return z3Solver
   return $ ThoralfState z3Solver encoding disEq

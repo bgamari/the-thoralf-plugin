@@ -172,5 +172,15 @@ ltTrans Refl Refl = Refl
 
 
 
+--type family Union m n where {}
+
+--unionTest :: Record m -> Record n -> Record (Union m n)
+--unionTest = undefined
+
+
+
+
+
+
 
 

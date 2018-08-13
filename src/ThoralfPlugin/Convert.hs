@@ -29,10 +29,12 @@ import Data.Vec
 
 -- Renaming
 type Set = Set.Set
-
+type SExpr = SMT.SExpr
 
 
 type TypePair = (Type,Type,Ct)
+
+-- TODO: with new addition, check that the declarations are unique.
 
 -- Returns ([Converted TypeEq/DisEqs], [Declarations])
 convertor :: Class -> TheoryEncoding -> [Ct] -> Maybe ([(SExpr, Ct)], [SExpr])
@@ -215,7 +217,8 @@ tryTyTheories ::
   TheoryEncoding -> Type -> Maybe (String, TypeVars, KindVars, DefVars)
 tryTyTheories encode@(TheoryEncoding {typeConvs = tconvs}) ty =
   case tryThese tconvs ty of
-    Just (TyKit (types, kinds, strMaker)) -> do
+    -- TODO: declarations ignored:
+    Just (TyConvCont types kinds strMaker _) -> do
       recurTypes <- vecMapAll (innerTyConv encode) types
       recurKinds <- vecMapAll (kindConvertor encode) kinds
       let filledTyHoles = vecMap (\(a,_,_,_) -> a) recurTypes
@@ -307,7 +310,7 @@ tryKTheories :: TheoryEncoding -> Kind -> Maybe (String, KindVars)
 tryKTheories encode@(TheoryEncoding {kindConvs = kconvs}) kind =
   case tryThese kconvs kind of
     Nothing -> Just ("Type", []) -- kind defaulting
-    Just (KdKit (kholes, strMaker)) -> do
+    Just (KdConvCont kholes strMaker) -> do
       recur <- vecMapAll (kindConvertor encode) kholes
       let filledHoles = vecMap fst recur
       let recurKVars = concat $ vecMapList id $ vecMap snd recur

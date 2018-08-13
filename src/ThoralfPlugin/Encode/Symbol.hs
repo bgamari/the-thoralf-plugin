@@ -31,29 +31,30 @@ import ThoralfPlugin.Encode.TheoryEncoding
 
 
 symbolTheory :: TcPluginM TheoryEncoding
-symbolTheory = return symbolBox
+symbolTheory = return symbolEncoding
 
-symbolBox :: TheoryEncoding
-symbolBox = emptyTheory
+symbolEncoding :: TheoryEncoding
+symbolEncoding = emptyTheory
   { typeConvs = [symLitConv]
   , kindConvs = [symKindConv]
   }
 
-symLitConv :: Type -> Maybe TyStrMaker
+symLitConv :: Type -> Maybe TyConvCont
 symLitConv ty = do
   fastStr <- isStrLitTy ty
   let str = unpackFS fastStr
   let sexprStr = "\"" ++ str ++ "\""
-  return $ TyKit (VNil, VNil, (const . const) sexprStr)
+  return $
+    TyConvCont VNil VNil ((const . const) sexprStr) []
 
 
-symKindConv :: Type -> Maybe KdStrMaker
+symKindConv :: Type -> Maybe KdConvCont
 symKindConv ty = do
   (tcon, _) <- splitTyConApp_maybe ty
   case tcon == typeSymbolKindCon of
     False -> Nothing
     True ->
-      Just $ KdKit (VNil, const "String")
+      Just $ KdConvCont VNil (const "String")
 
 
 

@@ -33,7 +33,7 @@ fmTheory = do
   alterTyCon <- findTyCon fmModule "Alter"
   deleteTyCon <- findTyCon fmModule "Delete"
   fmTyCon <- findTyCon fmModule "Fm"
-  return $ mkFmBox nilTyCon alterTyCon deleteTyCon fmTyCon
+  return $ mkFmTheory nilTyCon alterTyCon deleteTyCon fmTyCon
   where
     fmModName = mkModuleName "ThoralfPlugin.Theory.FiniteMap"
     pkg = fsLit "thoralf-plugin"
@@ -46,8 +46,8 @@ findTyCon md strNm = do
     tcLookupTyCon name
 
 
-mkFmBox :: TyCon -> TyCon -> TyCon -> TyCon -> TheoryEncoding
-mkFmBox nil alter delete fm =
+mkFmTheory :: TyCon -> TyCon -> TyCon -> TyCon -> TheoryEncoding
+mkFmTheory nil alter delete fm =
   emptyTheory { startDecs = [maybeDef]
            , typeConvs =
              [ nilConvert nil
@@ -58,9 +58,9 @@ mkFmBox nil alter delete fm =
            }
 
 -- Data and constant declarations
-maybeDef :: SExpr
-maybeDef = SMT.Atom "(declare-datatypes (T) \
-           \((Maybe nothing (just (fromJust T)))))"
+maybeDef :: String
+maybeDef =
+  "(declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))"
 
 
 
@@ -73,7 +73,7 @@ TODO: eventually make this less of a hack.
 -}
 -- DO NOT MESS WITH THE ORDER
 
-nilConvert :: TyCon -> Type -> Maybe TyStrMaker
+nilConvert :: TyCon -> Type -> Maybe TyConvCont
 nilConvert nil ty = do
   (tcon, (keyKind : valKind : xs)) <- splitTyConApp_maybe ty
   case tcon == nil of
@@ -82,7 +82,7 @@ nilConvert nil ty = do
       let
         kindList =  keyKind :> valKind :> VNil
       in
-        Just $ TyKit (VNil, kindList, nilString)
+        Just $ TyConvCont VNil kindList nilString []
 
 
 nilString :: Vec Zero String -> Vec Two String -> String
@@ -94,7 +94,7 @@ nilString VNil (keyKindStr :> valKindStr :> VNil) =
   in nilStr
 
 
-alterConvert :: TyCon -> Type -> Maybe TyStrMaker
+alterConvert :: TyCon -> Type -> Maybe TyConvCont
 alterConvert alter ty = do
   (tcon, (_ : _ : fmTp : keyTp : valTp : xs)) <- splitTyConApp_maybe ty
   case tcon == alter of
@@ -103,7 +103,7 @@ alterConvert alter ty = do
       let
         tyList = fmTp :> keyTp :> valTp :> VNil
       in
-        Just $ TyKit (tyList, VNil, alterString)
+        Just $ TyConvCont tyList VNil alterString []
 
 
 type Three = 'Succ ('Succ ('Succ 'Zero))
@@ -117,7 +117,7 @@ alterString (fmStr :> keyStr :> valStr :> VNil) VNil =
     altStr
 
 
-deleteConvert :: TyCon -> Type -> Maybe TyStrMaker
+deleteConvert :: TyCon -> Type -> Maybe TyConvCont
 deleteConvert delete ty = do
   (tcon, (_ : _ : fmTp : keyTp : xs)) <- splitTyConApp_maybe ty
   case tcon == delete of
@@ -126,7 +126,7 @@ deleteConvert delete ty = do
       let
         tyList = fmTp :> keyTp :> VNil
       in
-        Just $ TyKit (tyList, VNil, deleteString)
+        Just $ TyConvCont tyList VNil deleteString []
 
 type Two = 'Succ ('Succ 'Zero)
 deleteString :: Vec Two String -> Vec Zero String -> String
@@ -134,7 +134,7 @@ deleteString (fmStr :> keyStr :> VNil) VNil =
   "(store " ++ fmStr ++ " " ++ keyStr ++ " nothing)"
 
 
-fmConvert :: TyCon -> Type -> Maybe KdStrMaker
+fmConvert :: TyCon -> Type -> Maybe KdConvCont
 fmConvert fm ty = do
   (tcon, (_ : _ : keyKind : valKind : xs)) <- splitTyConApp_maybe ty
   case tcon == fm of
@@ -143,7 +143,7 @@ fmConvert fm ty = do
       let
         kindList = keyKind :> valKind :> VNil
       in
-        Just $ KdKit (kindList, fmString)
+        Just $ KdConvCont kindList fmString
 
 fmString :: Vec Two String -> String
 fmString (keyKindStr :> valKindStr :> VNil) =

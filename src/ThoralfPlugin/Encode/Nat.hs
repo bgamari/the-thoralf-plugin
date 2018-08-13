@@ -21,56 +21,58 @@ import ThoralfPlugin.Encode.TheoryEncoding
 
 
 natTheory :: TcPluginM TheoryEncoding
-natTheory = return natBox
+natTheory = return natEncoding
 
-natBox = emptyTheory
+natEncoding :: TheoryEncoding
+natEncoding = emptyTheory
   { typeConvs = [natLitConv, natAddConv, natSubConv]
   , kindConvs = [natKindConv]
   }
 
 
-natLitConv :: Type -> Maybe TyStrMaker
+natLitConv :: Type -> Maybe TyConvCont
 natLitConv ty = do
   integer <- isNumLitTy ty
-  return $ TyKit (VNil, VNil, (const . const) (show integer))
+  return $
+    TyConvCont VNil VNil ((const . const) (show integer)) []
 
+type Two = 'Succ ('Succ 'Zero)
 
-natAddConv :: Type -> Maybe TyStrMaker
+natAddConv :: Type -> Maybe TyConvCont
 natAddConv ty = do
   (tycon, types) <- splitTyConApp_maybe ty
   case (tycon == typeNatAddTyCon, types) of
     (True, [x,y]) ->
       let
-        mkNatSExpr :: Vec (Succ (Succ Zero)) String -> Vec Zero String ->  String
-        mkNatSExpr (a :> b :> VNil)  VNil = "(+ " ++ a ++ " " ++ b ++ ")"
+        mkNatSExpr :: Vec Two String -> Vec Zero String -> String
+        mkNatSExpr (a :> b :> VNil) VNil = "(+ " ++ a ++ " " ++ b ++ ")"
         tyList = x :> y :> VNil
       in
-        return $ TyKit (tyList, VNil, mkNatSExpr)
+        return $ TyConvCont tyList VNil mkNatSExpr []
     (_, _) -> Nothing
 
 
 
-natSubConv :: Type -> Maybe TyStrMaker
+natSubConv :: Type -> Maybe TyConvCont
 natSubConv ty = do
   (tycon, types) <- splitTyConApp_maybe ty
   case (tycon == typeNatSubTyCon, types) of
     (True, [x,y]) ->
       let
-        mkNatSExpr :: Vec (Succ (Succ Zero)) String -> Vec Zero String -> String
+        mkNatSExpr :: Vec Two String -> Vec Zero String -> String
         mkNatSExpr (a :> b :> VNil)  VNil = "(- " ++ a ++ " " ++ b ++ ")"
         tyList = x :> y :> VNil
       in
-        return $ TyKit (tyList, VNil, mkNatSExpr)
+        return $ TyConvCont tyList VNil mkNatSExpr []
     (_, _) -> Nothing
 
 
-natKindConv :: Type -> Maybe KdStrMaker
+natKindConv :: Type -> Maybe KdConvCont
 natKindConv ty = do
   (tycon, _) <- splitTyConApp_maybe ty
   case tycon == typeNatKindCon of
-    True -> return $ KdKit (VNil, const "Int")
+    True -> return $ KdConvCont VNil (const "Int")
     False -> Nothing
-
 
 
 

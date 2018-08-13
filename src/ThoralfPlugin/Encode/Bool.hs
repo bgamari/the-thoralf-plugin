@@ -39,7 +39,7 @@ boolTheory = do
   let boolModM = findImportedModule boolMod $ Just pkg
   Found location boolModule <- boolModM
   compTyCon <- findTyCon boolModule "<?"
-  return $ natBox compTyCon
+  return $ boolEncoding compTyCon
   where
     boolMod = mkModuleName "ThoralfPlugin.Theory.Bool"
     pkg = fsLit "thoralf-plugin"
@@ -50,8 +50,9 @@ boolTheory = do
         tcLookupTyCon name
 
 
-natBox :: TyCon -> TheoryEncoding
-natBox compTyCon = emptyTheory
+
+boolEncoding :: TyCon -> TheoryEncoding
+boolEncoding compTyCon = emptyTheory
   { typeConvs = [trueLitConv, falseLitConv, compLitConv compTyCon]
   , kindConvs = [boolKindConv]
   }
@@ -63,29 +64,31 @@ natBox compTyCon = emptyTheory
 -------------------------------------------------------------------------------
 
 
-trueLitConv :: Type -> Maybe TyStrMaker
+trueLitConv :: Type -> Maybe TyConvCont
 trueLitConv ty = do
   (tcon,xs) <- splitTyConApp_maybe ty
   case tcon == promotedTrueDataCon of
-    True -> return $ TyKit (VNil, VNil, const . const $ "true")
+    True -> return $
+      TyConvCont VNil VNil (const . const $ "true") []
     False -> Nothing
 
 
 
-falseLitConv :: Type -> Maybe TyStrMaker
+falseLitConv :: Type -> Maybe TyConvCont
 falseLitConv ty = do
   (tcon,xs) <- splitTyConApp_maybe ty
   case tcon == promotedFalseDataCon of
-    True -> return $ TyKit (VNil, VNil, const . const $ "false")
+    True -> return $
+      TyConvCont VNil VNil (const . const $ "false") []
     False -> Nothing
 
 
-compLitConv :: TyCon -> Type -> Maybe TyStrMaker
+compLitConv :: TyCon -> Type -> Maybe TyConvCont
 compLitConv comp ty = do
   (tycon, types) <- splitTyConApp_maybe ty
   case (tycon == comp, types) of
-    (True, (x : y : xs)) ->
-      return $ TyKit ((x :> y :> VNil), VNil, compMaker)
+    (True, (x : y : xs)) -> return $
+        TyConvCont (x :> y :> VNil) VNil compMaker []
     _ -> Nothing
 
 
@@ -94,11 +97,11 @@ compMaker :: Vec Two String -> Vec Zero String -> String
 compMaker (x :> y :> VNil) VNil = "(< " ++ x ++ " " ++ y ++ ")"
 
 
-boolKindConv :: Type -> Maybe KdStrMaker
+boolKindConv :: Type -> Maybe KdConvCont
 boolKindConv ty = do
   (tycon, xs) <- splitTyConApp_maybe ty
   case tycon == boolTyCon of
-    True -> return $ KdKit (VNil, const "Bool")
+    True -> return $ KdConvCont VNil (const "Bool")
     False -> Nothing
 
 
