@@ -88,13 +88,8 @@ type Hash = String
 -- A 'DecCont' must satisfy the property that two declarations are the same
 -- if and only if the converted list of kinds are the same. Then, to make
 -- each declaration different, we must provide a hash of the converted list
--- of kinds that can be used in a SMT identifier. A converted kind will not
--- suffice. For example, for a function symbol for the length of a linked
--- list of arrays from @Int@ to @Bool@, the identifier @len(Array Int
--- Bool)@ is not a valid name, whereas, @len1@ is a valid name.
---
+-- of kinds that can be used in a SMT identifier.
 
--- TODO: Clarify the above.
 
 
 

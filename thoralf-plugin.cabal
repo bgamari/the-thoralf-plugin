@@ -14,6 +14,7 @@ library
   ghc-options:           -Wall
   default-language:      Haskell2010
   exposed-modules:       ThoralfPlugin.Plugin
+                       , ThoralfPlugin.ThoralfPlugin
                        , ThoralfPlugin.Convert
                        , ThoralfPlugin.Variables
 
@@ -42,21 +43,22 @@ library
                        , RecordWildCards
 
   build-depends:         base
+                       , containers
                        , ghc
                        , ghc-prim
-                       , containers
+                       , mtl
                        , simple-smt
 
 
 
 Test-suite tests
-  type:                exitcode-stdio-1.0
-  default-language:    Haskell2010
-  hs-source-dirs:      test
-  main-is:             Main.hs
+  type:                  exitcode-stdio-1.0
+  default-language:      Haskell2010
+  hs-source-dirs:        test
+  main-is:               Main.hs
   other-modules:
-  ghc-options:         -Wall -fplugin ThoralfPlugin.Plugin
-  build-depends:       base
-                     , thoralf-plugin
+  ghc-options:           -Wall -fplugin ThoralfPlugin.Plugin
+  build-depends:         base
+                       , thoralf-plugin
 
 

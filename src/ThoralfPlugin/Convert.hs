@@ -7,14 +7,17 @@
 module ThoralfPlugin.Convert where
 
 import Data.Maybe ( mapMaybe )
-import qualified Data.Set as Set
+import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified SimpleSMT as SMT
-import Class ( Class(..) )
+import Data.Semigroup
+import Control.Monad.Reader
 
 
 -- GHC API imports:
 import GhcPlugins ( getUnique )
 import TcRnTypes ( Ct, ctPred )
+import Class ( Class(..) )
 import TcType ( Kind )
 import Var ( TyVar )
 import Type ( Type, PredTree (..), EqRel (..), getTyVar_maybe
@@ -27,299 +30,376 @@ import ThoralfPlugin.Encode.TheoryEncoding
 import Data.Vec
 
 
--- Renaming
-type Set = Set.Set
+
+-- * Data Definitions
+--------------------------------------------------------------------------------
+
+
+-- ** Core Types
+
+-- | The input needed to convert 'Ct' into smt expressions.
+-- We need the class for dis equality, and an encoding of a collection of
+-- theories.
+data EncodingData where
+  EncodingData ::
+    { encodeDisEq :: Class
+    , encodeTheory :: TheoryEncoding
+    } -> EncodingData
+
+
+-- | The output of converting constraints. We have a list of converted
+-- constraints as well as a list of declarations. These declarations are
+-- variable declarations as well as function symbols with accompanying
+-- defining assert statements.
+data ConvCts where
+  ConvCts ::
+    { convEquals :: [(SExpr, Ct)]
+    , convDeps :: [SExpr]
+    } -> ConvCts
+
+
+
+
+-- | Since our encoding data is passed around as a constant state, we put
+-- it in a reader monad. Of course, conversion could fail, so we transform
+-- from a Maybe monad.
+type ConvMonad a = ReaderT EncodingData Maybe a
+
+
+
+
+-- ** Basic Definitions
+
+-- | The type of smt expressions.
 type SExpr = SMT.SExpr
 
 
-type TypePair = (Type,Type,Ct)
 
--- TODO: with new addition, check that the declarations are unique.
+-- * Convert Function
+--------------------------------------------------------------------------------
 
--- Returns ([Converted TypeEq/DisEqs], [Declarations])
-convertor :: Class -> TheoryEncoding -> [Ct] -> Maybe ([(SExpr, Ct)], [SExpr])
-convertor cls encode cts = do
-  let tyDisEqs = extractDisEq cls cts
-  let tyEqs = extractEq cts
-  (sDisEqs, tyvar1, kvars1, df1) <- innerConvertor encode tyDisEqs
-  (sEqs, tyvar2, kvars2, df2) <- innerConvertor encode tyEqs
-  let defaultTyVarConst = umap mkDefConst $ df1 ++ df2
-  let tyvarSet = Set.toList . Set.fromList $ tyvar1 ++ tyvar2
-  makingTvConst <- traverse (mkTyVarConst encode) tyvarSet
-  let tyVarConst = map fst makingTvConst
-  let moreKindVar = concat $ map snd makingTvConst
-  let sortConst = umap mkSort (kvars1 ++ kvars2 ++ moreKindVar)
-  -- Sorts must come first in list of decs:
-  let decs = sortConst ++ defaultTyVarConst ++ tyVarConst
-  let equalSExprs = map mkEqExpr sEqs
-  let disEqualSExprs = map mkDisEqExpr sDisEqs
-  return (equalSExprs ++ disEqualSExprs, decs)
+convert :: EncodingData -> [Ct] -> Maybe ConvCts
+convert encodingData cts = runReaderT (conv cts) encodingData
 
 
-umap :: Ord a => (a -> b) -> [a] -> [b]
-umap f = map f . Set.toList . Set.fromList
+conv :: [Ct] -> ConvMonad ConvCts
+conv cts = do
+  EncodingData disEqClass _ <- ask
+  let disEquals = extractDisEq disEqClass cts
+  let equals = extractEq cts
+  convDisEqs <- traverse convPair (map fst disEquals)
+  convEqs <- traverse convPair (map fst equals)
 
-mkEqExpr :: (SExpr, SExpr, Ct) -> (SExpr, Ct)
-mkEqExpr (s1,s2,ct) = (SMT.eq s1 s2, ct)
+  let deps = mconcat $ map snd convDisEqs ++ map snd convEqs
+  decls <- convertDeps deps
 
-mkDisEqExpr :: (SExpr, SExpr, Ct) -> (SExpr, Ct)
-mkDisEqExpr (s1,s2,ct) = ((SMT.not $ SMT.eq s1 s2), ct)
+  let eqExprs = map (mkEqExpr . fst) convEqs
+  let disEqExprs = map (mkDisEqExpr . fst) convDisEqs
+  let matchingCts = map snd $ disEquals ++ equals
+  let convPairs = zip (disEqExprs ++ eqExprs) matchingCts
+  return $ ConvCts convPairs decls
 
+  where
 
-
-
-
-
-
-
-
-
-
-
-
-type TypeVars = [TyVar]
-type KindVars = [TyVar]
-type DefVars = [TyVar] -- for defaulting: (declare-const lk3w Type)
-type ParseResult = ([(SExpr, SExpr, Ct)], TypeVars, KindVars, DefVars)
+  convPair :: (Type, Type) -> ConvMonad ((SExpr, SExpr), ConvDependencies)
+  convPair (t1, t2) = do
+    (t1', deps1) <- convertType t1
+    (t2', deps2) <- convertType t2
+    let sexpr = SMT.Atom
+    let convertedPair = (sexpr t1', sexpr t2')
+    return (convertedPair, deps1 <> deps2)
 
 
--- We require that all type equalities parse.
-innerConvertor :: TheoryEncoding -> [TypePair] -> Maybe ParseResult
-innerConvertor _ [] = Just ([],[],[],[])
-innerConvertor encode (e:es) = do
-  (e', tvars1, _, dvars1) <- tyPairConvertor encode e
-  (es', tvars2, kvars2, dvars2) <- innerConvertor encode es
-  return (e':es', tvars1 ++ tvars2, kvars2 ++ kvars2, dvars1 ++ dvars2)
+  mkEqExpr :: (SExpr, SExpr) -> SExpr
+  mkEqExpr (s1,s2) = SMT.eq s1 s2
 
-type OneConvert = ((SExpr, SExpr, Ct), TypeVars, KindVars, DefVars)
-tyPairConvertor :: TheoryEncoding -> TypePair -> Maybe OneConvert
-tyPairConvertor encode (t1,t2,ct) = do
-  (t1Sexp, tvars1, kvars1, df1) <- tyConvertor encode t1
-  (t2Sexp, tvars2, kvars2, df2) <- tyConvertor encode t2
-  return
-    ((t1Sexp, t2Sexp, ct), tvars1 ++ tvars2, kvars1 ++ kvars2, df1 ++ df2)
+  mkDisEqExpr :: (SExpr, SExpr) -> SExpr
+  mkDisEqExpr (s1,s2) = (SMT.not $ SMT.eq s1 s2)
 
 
 
-----------------------------------------------------------
--- Making Declarations
-----------------------------------------------------------
+-- ** Extraction
+--------------------------------------------------------------------------------
 
-mkDefConst :: TyVar -> SExpr
-mkDefConst tv = let
+extractEq :: [Ct] -> [((Type, Type), Ct)]
+extractEq = mapMaybe maybeExtractTyEq
+
+extractDisEq :: Class -> [Ct] -> [((Type, Type), Ct)]
+extractDisEq cls = mapMaybe (maybeExtractTyDisEq cls) where
+
+
+maybeExtractTyDisEq :: Class -> Ct -> Maybe ((Type, Type), Ct)
+maybeExtractTyDisEq disEqCls ct = do
+  let predTree = classifyPredType $ ctPred ct
+  ClassPred class' (_: t1 : t2 : _) <- return predTree
+  guard (class' == disEqCls)
+  return ((t1,t2),ct)
+
+maybeExtractTyEq :: Ct -> Maybe ((Type, Type), Ct)
+maybeExtractTyEq ct = do
+  let predTree = classifyPredType $ ctPred ct
+  EqPred NomEq t1 t2 <- return predTree
+  return ((simpIfCan t1, simpIfCan t2), ct) where
+
+  simpIfCan :: Type -> Type
+  simpIfCan t = case coreView t of
+    Just t' -> t'
+    Nothing -> t
+
+
+-- * Converting A Single Type
+--------------------------------------------------------------------------------
+
+
+-- ** Type Conversion Data
+----------------------------------------
+
+-- | A Type is converted into a string which is a valid SMT term, if the
+-- dependencies are converted properly and sent to the solver before the
+-- term is mentioned.
+type ConvertedType = (String, ConvDependencies)
+
+-- | These are pieces of a type that need to be converted into
+-- SMT declarations or definitions in order for the converted
+-- type to be well sorted.
+data ConvDependencies where
+  ConvDeps ::
+    { convTyVars :: [TyVar] -- Type variables for a known theory
+    , convKdVars :: [TyVar] -- Kind variables for unknown theories
+    , convDefVar :: [TyVar] -- Type variables for default, syntactic theories
+    , convDecs   :: [Decl]  -- SMT declarations specific to some converted type
+    } -> ConvDependencies
+
+noDeps :: ConvDependencies
+noDeps = ConvDeps [] [] [] []
+
+data Decl where
+  Decl ::
+    { decKey :: String               -- ^ A unique identifier
+    , localDec :: Hash -> [String]   -- ^ $decmaker
+    } -> Decl
+
+type Hash = String
+
+-- $decmaker
+--
+-- A function to make declarations given a unique hash, which is just a
+-- string.  The hash should be some string, determined by the decKey that
+-- is a valid string to add on to the end of a SMT identifier (e.g., it
+-- should not have spaces or underscores).
+
+instance Semigroup ConvDependencies where
+  (ConvDeps a b c d) <> (ConvDeps e f g h) =
+    ConvDeps (a ++ e) (b ++ f) (c ++ g) (d ++ h)
+
+instance Monoid ConvDependencies where
+  mempty = ConvDeps [] [] [] []
+  mappend = (<>)
+
+
+
+-- ** Converting A Type
+----------------------------------------
+
+
+
+convertType :: Type -> ConvMonad ConvertedType
+convertType ty =
+  case tyVarConv ty of
+    Just (smtVar, tyvar) ->
+      return  (smtVar, noDeps {convTyVars = [tyvar]})
+    Nothing -> tryConvTheory ty
+
+tyVarConv :: Type -> Maybe (String, TyVar)
+tyVarConv ty = do
+  tyvar <- getTyVar_maybe ty
+  -- Not checking for skolems.
+  -- See doc on "dumb tau variables"
+  let isSkolem = True
+  guard isSkolem
+  let tvarStr = show $ getUnique tyvar
+  return (tvarStr, tyvar)
+
+
+tryConvTheory :: Type -> ConvMonad ConvertedType
+tryConvTheory ty = do
+  EncodingData _ theories <- ask
+  let tyConvs = typeConvs theories
+  case tryFns tyConvs ty of
+    Just (TyConvCont tys kds cont decs) -> do
+      recurTys <- vecMapAll convertType tys
+      recurKds <- vecMapAll convertKind kds
+      (decls, decKds) <- convDecConts decs
+      let convTys = fmap fst recurTys
+      let convKds = fmap fst recurKds
+      let converted = cont convTys convKds
+      let tyDeps = foldMap snd recurTys
+      let kdVars = foldMap snd recurKds ++ decKds
+      let deps = addDepParts tyDeps kdVars decls
+      return (converted, deps)
+    Nothing -> defaultConvTy ty
+
+addDepParts :: ConvDependencies -> [KdVar] -> [Decl] -> ConvDependencies
+addDepParts (ConvDeps t k d decl) ks decls =
+  ConvDeps t (k ++ ks) d (decl ++ decls)
+
+convDecConts :: [DecCont] -> ConvMonad ([Decl], [KdVar])
+convDecConts dcs = do
+  decConts <- traverse convDecCont dcs
+  let decls = map fst decConts
+  let kdVars = concatMap snd decConts
+  return (decls, kdVars) where
+
+  convDecCont :: DecCont -> ConvMonad (Decl, [KdVar])
+  convDecCont (DecCont kholes cont) = do
+   recur <- vecMapAll convertKind kholes
+   let kConvs = fmap fst recur
+   let declKey = foldMap id kConvs
+   let kdVars = foldMap snd recur
+   let decl = Decl declKey (cont kConvs)
+   return (decl, kdVars)
+
+
+defaultConvTy :: Type -> ConvMonad ConvertedType
+defaultConvTy ty = do
+  (convertedTy, defVars) <- lift (defConvTy ty)
+  return (convertedTy, noDeps {convDefVar = defVars})
+
+defConvTy :: Type -> Maybe (String, [TyVar])
+defConvTy = tryFns [defTyVar, defFn, defTyConApp] where
+
+  defTyVar :: Type -> Maybe (String, [TyVar])
+  defTyVar ty = do
+    tv <- getTyVar_maybe ty
+    return ( show $ getUnique tv, [tv])
+
+  defFn :: Type -> Maybe (String, [TyVar])
+  defFn ty = do
+    (fn, arg) <- splitFunTy_maybe ty
+    (fnStr, tv1) <- defConvTy fn
+    (argStr, tv2) <- defConvTy arg
+    let smtStr = fnDef fnStr argStr
+    return (smtStr, tv1 ++ tv2)
+
+  fnDef :: String -> String -> String
+  fnDef strIn strOut =
+    "(apply (apply (lit \"->\") " ++
+      strIn ++ ") " ++ strOut ++ ")"
+
+  defTyConApp :: Type -> Maybe (String, [TyVar])
+  defTyConApp ty = do
+    (tcon, tys) <- splitTyConApp_maybe ty
+    recur <- traverse defConvTy tys
+    let defConvTys = map fst recur
+    let tvars = foldMap snd recur
+    let convTcon = "(lit \"" ++ (show $ getUnique tcon) ++ "\")"
+    let converted = foldl appDef convTcon defConvTys
+    return (converted, tvars)
+
+  appDef :: String -> String -> String
+  appDef f x = "(apply " ++ f ++ " " ++ x ++ ")"
+
+
+-- ** Converting the Dependencies
+----------------------------------------
+
+
+convertDeps :: ConvDependencies -> ConvMonad [SExpr]
+convertDeps (ConvDeps tyvars' kdvars' defvars' decs) = do
+  let nub = S.toList . S.fromList
+  let tyvars = nub tyvars'
+  let kdvars = nub kdvars'
+  let defvars = nub defvars'
+
+  convertedTyVars <- traverse convertTyVars tyvars
+  let tyVarExprs = map fst convertedTyVars
+  let kindVars = concatMap snd convertedTyVars ++ kdvars
+  let kindExprs = map mkSMTSort kindVars
+  let defExprs = map mkDefaultSMTVar defvars
+  decExprs <- convertDecs decs
+  -- Order matters:
+  let exprs = kindExprs ++ tyVarExprs ++ defExprs ++ decExprs
+  return exprs
+
+
+-- | Converting Local Declarations
+convertDecs :: [Decl] -> ConvMonad [SExpr]
+convertDecs ds = do
+  let assocList = map (\(Decl k v) -> (k,v)) ds
+  let ourMap = M.fromList assocList
+  let uniqueDecs = map snd $ M.toList ourMap
+  let decs = concat $ zipWith ($) uniqueDecs uniqueHashes
+  return $ map SMT.Atom decs where
+
+  nats :: [Int]
+  nats = 1 : (map (+ 1) nats)
+
+  uniqueHashes :: [String]
+  uniqueHashes = map show nats
+
+mkDefaultSMTVar :: TyVar -> SExpr
+mkDefaultSMTVar tv = let
   name = show $ getUnique tv
   smtStr = "(declare-const " ++ name ++ " Type)"
   in SMT.Atom smtStr
 
-mkSort :: TyVar -> SExpr
-mkSort tv = let
+mkSMTSort :: TyVar -> SExpr
+mkSMTSort tv = let
   name = "Sort" ++ (show $ getUnique tv)
   smtStr = "(declare-sort " ++ name ++ ")"
   in SMT.Atom smtStr
 
-mkTyVarConst :: TheoryEncoding -> TyVar -> Maybe (SExpr, KindVars)
-mkTyVarConst encode tv = do
-  tvKindConv <- kindConvertor encode (tyVarKind tv)
-  let kindStr = fst tvKindConv
-  let kindVars = snd tvKindConv
-  let name = show $ getUnique tv
-  let smtStr = "(declare-const " ++ name ++ " " ++ kindStr ++ ")"
-  return (SMT.Atom smtStr, kindVars)
 
-
-monadMap :: Monad m => (a -> m b) -> [a] -> m [b]
-monadMap _ [] = return []
-monadMap f (x:xs) = do
-  b <- f x
-  bs <- monadMap f xs
-  return (b:bs)
-
-----------------------------------------------------------
--- END: Making Declarations
-----------------------------------------------------------
-
-
-
-
-----------------------------------------------------------
--- Extraction
-----------------------------------------------------------
-
-extractEq :: [Ct] -> [TypePair]
-extractEq = mapMaybe maybeExtractTyEq
-
-maybeExtractTyEq :: Ct -> Maybe TypePair
-maybeExtractTyEq ct = case classifyPredType $ ctPred ct of
-  EqPred NomEq t1 t2 -> Just (simpIfCan t1, simpIfCan t2, ct)
-  _ -> Nothing
-  where
-    simpIfCan :: Type -> Type
-    simpIfCan t = case coreView t of
-      Just t' -> t'
-      Nothing -> t
-
-
-extractDisEq :: Class -> [Ct] -> [TypePair]
-extractDisEq cls = mapMaybe (maybeExtractTyDisEq cls)
-
-maybeExtractTyDisEq :: Class -> Ct -> Maybe TypePair
-maybeExtractTyDisEq disEqCls ct = case classifyPredType $ ctPred ct of
-  ClassPred cls (_: t1 : t2 : _) ->
-    case cls == disEqCls of
-      True -> Just (t1,t2,ct)
-      False -> Nothing
-  _ -> Nothing
+-- | Kind variables are just type variables
+type KdVar = TyVar
+convertTyVars :: TyVar -> ConvMonad (SExpr, [KdVar])
+convertTyVars tv = do
+  (smtSort, kindVars) <- convertKind $ tyVarKind tv
+  let tvId = show $ getUnique tv
+  let smtVar = "(declare-const " ++ tvId ++ " " ++ smtSort ++ ")"
+  return (SMT.Atom smtVar, kindVars)
 
 
 
 
 
-----------------------------------------------------------
--- END Extraction
-----------------------------------------------------------
+
+-- * Converting A Single Kind
+------------------------------------------------------------------------------
+
+
+-- | Converts a Kind into a String and some kind variables
+convertKind :: Kind -> ConvMonad (String, [KdVar])
+convertKind kind =
+  case getTyVar_maybe kind of
+    Just tvar ->
+      return ("Sort" ++ (show $ getUnique tvar), [tvar])
+    Nothing -> convKindTheories kind
+
+convKindTheories :: Kind -> ConvMonad (String, [KdVar])
+convKindTheories kind = do
+  EncodingData _ theories <- ask
+  let kindConvFns = kindConvs theories
+  case tryFns kindConvFns kind of
+    Nothing -> return ("Type", []) -- Kind defaulting
+    Just (KdConvCont kholes kContin) -> do
+      recur <- vecMapAll convKindTheories  kholes
+      let convHoles = fmap fst recur
+      let holeVars = foldMap snd recur
+      return (kContin convHoles, holeVars)
 
 
 
 
+-- * A Common Helper Function
 
-----------------------------------------------------------
--- Type -> SExpr Conversion
-----------------------------------------------------------
-
-
--- Recall: Type/KindVars = [TyVar]
-
-tyConvertor ::
-  TheoryEncoding -> Type -> Maybe (SExpr, TypeVars, KindVars, DefVars)
-tyConvertor encode ty = do
-  (strExp, tvars, kvars, defvars) <- innerTyConv encode ty
-  return (SMT.Atom strExp, tvars, kvars, defvars)
-
-innerTyConv ::
-  TheoryEncoding -> Type -> Maybe (String, TypeVars, KindVars, DefVars)
-innerTyConv encode ty = case tryTyVarConvert ty of
-  Just (varNm, var) -> Just (varNm, [var], [], [])
-  Nothing -> tryTyTheories encode ty
-
--- (1)
-tryTyVarConvert :: Type -> Maybe (String, TyVar)
-tryTyVarConvert ty = do
-  tyvar <- getTyVar_maybe ty
-  () <- assertIsSkolem tyvar
-  let tvarName = show $ getUnique tyvar
-  return (tvarName, tyvar)
-  where
-    assertIsSkolem = const $ Just ()
-    -- Ignored for now:
-
--- (2)
-tryTyTheories ::
-  TheoryEncoding -> Type -> Maybe (String, TypeVars, KindVars, DefVars)
-tryTyTheories encode@(TheoryEncoding {typeConvs = tconvs}) ty =
-  case tryThese tconvs ty of
-    -- TODO: declarations ignored:
-    Just (TyConvCont types kinds strMaker _) -> do
-      recurTypes <- vecMapAll (innerTyConv encode) types
-      recurKinds <- vecMapAll (kindConvertor encode) kinds
-      let filledTyHoles = vecMap (\(a,_,_,_) -> a) recurTypes
-      let filledKdHoles = vecMap fst recurKinds
-      let mkList = concat . vecMapList id
-      let tyHoleTyVars = mkList $ vecMap (\(_,b,_,_) -> b) recurTypes
-      let tyHoleKVars = mkList $ vecMap (\(_,_,c,_) -> c) recurTypes
-      let defVars = mkList $ vecMap (\(_,_,_,d) -> d) recurTypes
-      let kHoleKVars = mkList $ vecMap snd recurKinds
-      let kVars = tyHoleKVars ++ kHoleKVars
-      let convertedType = strMaker filledTyHoles filledKdHoles
-      return (convertedType, tyHoleTyVars, kVars, defVars)
-    Nothing -> defaultTyConv encode ty
-
-
-tryThese :: [a -> Maybe b] -> a -> Maybe b
-tryThese [] _ = Nothing
-tryThese (f:fs) a = case f a of
-  Nothing -> tryThese fs a
+-- | In order, try the functions.
+tryFns :: [a -> Maybe b] -> a -> Maybe b
+tryFns [] _ = Nothing
+tryFns (f:fs) a = case f a of
+  Nothing -> tryFns fs a
   Just b -> Just b
 
 
-
--- (3) From here, we are assuming the equational theory of Type 
--- is syntactic.
-defaultTyConv ::
-  TheoryEncoding -> Type -> Maybe (String, TypeVars, KindVars, DefVars)
-defaultTyConv encode ty =
-  case getTyVar_maybe ty of
-    -- we redo type var checking b/c
-    -- trivialFun & trivialTyCon recursivly call this fn
-    Just tyvar -> let strTy = show $ getUnique tyvar
-      in Just (strTy, [], [], [tyvar])
-    Nothing -> defaultFunTyConvert encode ty
-
-
-defaultFunTyConvert ::
-  TheoryEncoding -> Type -> Maybe (String, TypeVars, KindVars, DefVars)
-defaultFunTyConvert encode ty = case splitFunTy_maybe ty of
-  Nothing -> defaultTyConConv encode ty
-  Just (tyIn, _) -> do
-    (strIn, tvs1, kvs1, df1) <- defaultTyConv encode tyIn
-    (strOut, tvs2, kvs2, df2) <- defaultTyConv encode tyIn
-    let smtStr = applyStr strIn strOut
-    return (smtStr, tvs1 ++ tvs2, kvs1 ++ kvs2, df1 ++ df2)
-
-applyStr :: String -> String -> String
-applyStr strIn strOut =
-  "(apply (apply (lit \"->\") " ++ strIn ++ ") " ++ strOut ++ ")"
-
-
-defaultTyConConv ::
-  TheoryEncoding -> Type -> Maybe (String, TypeVars, KindVars, DefVars)
-defaultTyConConv encode ty = do
-  (tcon, types) <- splitTyConApp_maybe ty
-  case types of
-    [] -> let smtStr = "(lit \"" ++ (show $ getUnique tcon) ++ "\")"
-      in Just (smtStr, [], [], [])
-    (_:_) -> do
-      let tconString = "(lit \"" ++ (show $ getUnique tcon) ++ "\")"
-      (strConvTypes, tv, kv, dv) <- maybeGetDefaultConvs encode types
-      let smtString = foldl makeSExprApp tconString strConvTypes
-      return (smtString, tv, kv, dv)
-
-maybeGetDefaultConvs ::
-  TheoryEncoding -> [Type] -> Maybe ([String], TypeVars, KindVars, DefVars)
-maybeGetDefaultConvs _  [] = Just ([],[],[],[])
-maybeGetDefaultConvs encode (x:xs) = do
-  (strConv, tvars, kvars, defvars) <- defaultTyConv encode x
-  (strConvs, tvars', kvars', defvars') <- maybeGetDefaultConvs encode xs
-  let tv = tvars ++ tvars'
-  let kv = kvars ++ kvars'
-  let dv = defvars ++ defvars'
-  return (strConv:strConvs, tv, kv, dv)
-
-
-makeSExprApp :: String -> String -> String
-makeSExprApp func arg = "(apply " ++ func ++ " " ++ arg ++ ")"
-
-
-
-kindConvertor :: TheoryEncoding -> Kind -> Maybe (String, KindVars)
-kindConvertor encode kind = case getTyVar_maybe kind of
-  Just tvar -> let name = "Sort" ++ (show $ getUnique tvar)
-    in Just (name, [tvar])
-  Nothing -> tryKTheories encode kind
-
-tryKTheories :: TheoryEncoding -> Kind -> Maybe (String, KindVars)
-tryKTheories encode@(TheoryEncoding {kindConvs = kconvs}) kind =
-  case tryThese kconvs kind of
-    Nothing -> Just ("Type", []) -- kind defaulting
-    Just (KdConvCont kholes strMaker) -> do
-      recur <- vecMapAll (kindConvertor encode) kholes
-      let filledHoles = vecMap fst recur
-      let recurKVars = concat $ vecMapList id $ vecMap snd recur
-      let convertedKind = strMaker filledHoles
-      return (convertedKind, recurKVars)
-
-
-----------------------------------------------------------
--- END: Type -> SExpr Conversion
-----------------------------------------------------------
 
 
