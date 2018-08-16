@@ -36,10 +36,11 @@ import TcType ( isMetaTyVar )
 import TcEvidence ( EvTerm(..) )
 import TyCoRep ( UnivCoProvenance(..) )
 import Coercion ( mkUnivCo, Role(..)  )
-import Type ( Type )
+import Type ( Type, splitTyConApp_maybe )
+import TyCon ( TyCon )
 import Var ( Var, isTcTyVar )
 import Module ( Module, mkModuleName )
-import OccName ( mkTcOcc )
+import OccName ( mkTcOcc, occNameString )
 import Outputable ( showSDocUnsafe, ppr )
 
 
@@ -133,6 +134,8 @@ thoralfSolver debug (ThoralfState smt encode deCls) gs ws ds = do
   case convert (EncodingData deCls encode) zonkedCts of
     Nothing -> printCts debug True gs ws ds
     Just (ConvCts smtEqs smtDecs) -> do
+      debugIO debug $ "Eqs:" ++ showList smtEqs
+      debugIO debug $ "Decs:" ++ showList smtDecs
       (ProcessedEqs gSExprs wSExpr wCts) <- return $ processEqs smtEqs
       let wCtsWithEv = mapMaybe addEvTerm wCts
       givenCheck <- tcPluginIO $ hideError $ do
@@ -223,6 +226,10 @@ printCts True bool gs ws ds = do
   return $ TcPluginOk [] []
 printCts False _ _ _ _ = return $ TcPluginOk [] []
 
+debugIO :: Bool -> String -> TcPluginM ()
+debugIO False _ = return ()
+debugIO True s = tcPluginIO $ putStrLn s
+
 
 zonkEverything :: [Ct] -> TcPluginM [Ct]
 zonkEverything [] = return []
@@ -248,7 +255,14 @@ makeEqEvidence s (t1,t2) =
 
 
 instance Show Type where
-  show = showSDocUnsafe . ppr
+  show ty = case splitTyConApp_maybe ty of
+    Just (tcon, tys) -> show tcon ++ " " ++ show tys
+    Nothing -> showSDocUnsafe $ ppr ty
+  --show = showSDocUnsafe . ppr
+
+instance Show TyCon where
+  show = occNameString . getOccName
+
 
 instance Show Var where
   show v = nicename ++ ":" ++  classify where

@@ -169,14 +169,19 @@ ltTrans :: forall (a :: Nat) (b :: Nat) (c :: Nat).
 ltTrans Refl Refl = Refl
 
 
+-- Union Test
+
+union1 ::
+  ( UnionFm a b ab
+  , UnionFm ab c abc
+  , UnionFm b c bc
+  , UnionFm a bc abc'
+  ) => abc :~: abc'
+union1 = Refl
 
 
 
---type family Union m n where {}
-
---unionTest :: Record m -> Record n -> Record (Union m n)
---unionTest = undefined
-
+-- Intersect Test
 
 
 

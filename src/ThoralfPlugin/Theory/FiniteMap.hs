@@ -1,20 +1,22 @@
 {-# OPTIONS_GHC -Wunused-top-binds #-}
 {-# LANGUAGE TypeFamilies, TypeInType,
  TypeOperators, GADTs, UndecidableInstances,
- RankNTypes, KindSignatures
+ RankNTypes, KindSignatures, ConstraintKinds
  #-}
-module ThoralfPlugin.Theory.FiniteMap (
-        Fm, Nil,
-        Has, Omits, FromList,
-        AddField, DelField
+module ThoralfPlugin.Theory.FiniteMap
+  ( Fm, Nil
+  , Has
+  , Omits
+  , FromList
+  , AddField
+  , DelField
+  , UnionFm
+  , IntersectFm
   ) where
 
 import GHC.Types ( Symbol )
 import Data.Kind ( Type, Constraint )
---import Type.Family.List ( (:<) )
 
-type (:<) = '(:)
-infixr 5 :<
 
 {-
 
@@ -51,39 +53,32 @@ type family TJust (a :: k) :: TMaybe k where {}
 -- The Encoding
 type family Nil :: forall (k :: Type) (v :: Type). Fm k v where {}
 
-type family Alter (m :: Fm k v) (key :: k) (val :: v)
-  :: forall (k :: Type) (v :: Type). Fm k v where {}
+type family Alter (m :: Fm k v) (key :: k) (val :: v) :: Fm k v where {}
 
-type family Delete (m :: Fm k (v :: Type)) (key :: k)
-  :: forall (k :: Type) (v :: Type). Fm k v where {}
+type family Delete (m :: Fm k (v :: Type)) (key :: k) :: Fm k v where {}
+
+type family UnionL (m :: Fm (k :: Type) (v :: Type)) (m' :: Fm k v)
+  :: Fm k v where {}
+
+type family IntersectL (m :: Fm (k :: Type) (v :: Type)) (m' :: Fm k v)
+  :: Fm k v where {}
+
+
 ------------------------------------------------------------------------
 
 
--- Interface
-type family Has (f :: Fm k v) (key :: k) (val :: v) :: Constraint where
-  Has m k v = (Alter m k v ~ m)
+-- Contraints
 
-type family Omits (f :: Fm (k :: Type) (v :: Type)) (key :: k) :: Constraint where
-  Omits m k = (Delete m k ~ m)
+type Has m k v = Alter m k v ~ m
+type Omits m k = Delete m k ~ m
+type AddField m m' k v = (Alter m k v) ~ m'
+type DelField m m' k = (Delete m k) ~ m'
+type UnionFm m1 m2 u = u ~ UnionL m1 m2
+type IntersectFm m1 m2 i = i ~ IntersectL m1 m2
 
 type family FromList (xs :: [(k,v)]) :: Fm k v where
-  FromList xs = Build Nil xs
-
-type family
-  AddField (m :: Fm k v) (m' :: Fm k v) (key :: k) (val :: v)
-  :: Constraint where
-    AddField m m' k v = (Alter m k v) ~ m'
-
-type family
-  DelField (m :: Fm k (v :: Type)) (m' :: Fm k v) (key :: k)
-  :: Constraint where
-    DelField m m' k = (Delete m k) ~ m'
-------------------------------------------------------------------------
-
-
-type family Build (m :: Fm k v) (xs :: [(k, v)]) :: Fm k v where
-  Build m '[] = m
-  Build m ('(k,v) :< ys) = Build (Alter m k v) ys
+  FromList '[] = Nil
+  FromList ( '(k,v) : ys ) = (Alter (FromList ys) k v)
 
 
 

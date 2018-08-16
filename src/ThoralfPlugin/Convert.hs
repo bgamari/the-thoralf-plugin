@@ -175,18 +175,12 @@ noDeps = ConvDeps [] [] [] []
 
 data Decl where
   Decl ::
-    { decKey :: String               -- ^ A unique identifier
-    , localDec :: Hash -> [String]   -- ^ $decmaker
+    { decKey :: String     -- ^ A unique identifier
+    , localDec :: [String] -- ^ A list of local declarations
     } -> Decl
 
 type Hash = String
 
--- $decmaker
---
--- A function to make declarations given a unique hash, which is just a
--- string.  The hash should be some string, determined by the decKey that
--- is a valid string to add on to the end of a SMT identifier (e.g., it
--- should not have spaces or underscores).
 
 instance Semigroup ConvDependencies where
   (ConvDeps a b c d) <> (ConvDeps e f g h) =
@@ -313,7 +307,7 @@ convertDeps (ConvDeps tyvars' kdvars' defvars' decs) = do
 
   convertedTyVars <- traverse convertTyVars tyvars
   let tyVarExprs = map fst convertedTyVars
-  let kindVars = concatMap snd convertedTyVars ++ kdvars
+  let kindVars = nub $ concatMap snd convertedTyVars ++ kdvars
   let kindExprs = map mkSMTSort kindVars
   let defExprs = map mkDefaultSMTVar defvars
   decExprs <- convertDecs decs
@@ -327,15 +321,9 @@ convertDecs :: [Decl] -> ConvMonad [SExpr]
 convertDecs ds = do
   let assocList = map (\(Decl k v) -> (k,v)) ds
   let ourMap = M.fromList assocList
-  let uniqueDecs = map snd $ M.toList ourMap
-  let decs = concat $ zipWith ($) uniqueDecs uniqueHashes
-  return $ map SMT.Atom decs where
+  let uniqueDecs = foldMap snd $ M.toList ourMap
+  return $ map SMT.Atom uniqueDecs where
 
-  nats :: [Int]
-  nats = 1 : (map (+ 1) nats)
-
-  uniqueHashes :: [String]
-  uniqueHashes = map show nats
 
 mkDefaultSMTVar :: TyVar -> SExpr
 mkDefaultSMTVar tv = let
@@ -383,7 +371,7 @@ convKindTheories kind = do
   case tryFns kindConvFns kind of
     Nothing -> return ("Type", []) -- Kind defaulting
     Just (KdConvCont kholes kContin) -> do
-      recur <- vecMapAll convKindTheories  kholes
+      recur <- vecMapAll convertKind kholes
       let convHoles = fmap fst recur
       let holeVars = foldMap snd recur
       return (kContin convHoles, holeVars)

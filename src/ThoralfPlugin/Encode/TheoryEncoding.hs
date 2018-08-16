@@ -70,10 +70,9 @@ data TyConvCont where
 data DecCont where
   DecCont ::
     { decContKds :: Vec n Kind
-    , decCont :: Vec n String -> Hash -> [String]
+    , decCont :: Vec n String -> [String]
     } -> DecCont
 
-type Hash = String
 
 -- $decCont
 --
@@ -86,9 +85,9 @@ type Hash = String
 -- kinds into a list of strings and feeding that to the 'decCont' function.
 --
 -- A 'DecCont' must satisfy the property that two declarations are the same
--- if and only if the converted list of kinds are the same. Then, to make
--- each declaration different, we must provide a hash of the converted list
--- of kinds that can be used in a SMT identifier.
+-- if and only if the converted list of kinds are the same. So, to make
+-- each declaration different, an encoding must use a hash of the converted
+-- list of kinds in making the declaration.
 
 
 

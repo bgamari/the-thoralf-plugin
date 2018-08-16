@@ -46,6 +46,7 @@ library
                        , containers
                        , ghc
                        , ghc-prim
+                       , hashable
                        , mtl
                        , simple-smt
 
