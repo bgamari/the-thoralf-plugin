@@ -181,18 +181,22 @@ interConvert intersect ty = do
     hashVal = show $ hash valKd
 
   bothDec :: Vec One String -> [String]
-  bothDec (valKd :> VNil) = let hashVal = show $ hash valKd in
+  bothDec (valKd :> VNil) =
     [ "(declare-fun both" ++ hashVal ++ 
       " ((Maybe " ++ valKd ++ ") (Maybe " ++
         valKd ++ ")) (Maybe " ++ valKd ++ "))"
     , "(assert (forall ((y (Maybe " ++ valKd ++ "))) \
-      \(= (both" ++ hashVal ++ " y nothing) nothing)))"
+      \(= (both" ++ hashVal ++ " y " ++ noth ++ ") " ++ noth ++ ")))"
     , "(assert (forall ((y (Maybe " ++ valKd ++
-      "))) (= (both nothing y) nothing)))"
+      "))) (= (both" ++ hashVal ++ " nothing y) nothing)))"
     , "(assert (forall ((x (Maybe " ++ valKd ++ ")) (y (Maybe " ++ 
-      valKd ++ "))) (=> (and ((_ is just) x) ((_ is just) y) )\
-        \ (= (both" ++ hashVal ++ " x y) x))))"
-    ]
+      valKd ++ "))) (=> (and ((_ is " ++ jus ++ 
+      ") x) ((_ is "++ jus ++") y) ) (= (both" ++ hashVal ++ " x y) x))))"
+    ] where
+
+        hashVal = show $ hash valKd 
+        noth = "(as nothing (Maybe " ++ valKd ++ "))"
+        jus = "(just ("++ valKd ++ ") (Maybe "++ valKd ++ "))"
 
 
 

@@ -1,0 +1,3313 @@
+GHCi, version 8.2.2: http://www.haskell.org/ghc/  :? for help
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+[1 of 1] Compiling Main             ( /home/divesh/git_repos/the-thoralf-plugin/test/Main.hs, interpreted )
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a2hd {0}:: m' ~ m' (CDictCan)
+[G] $d~~_a2he {0}:: m' ~ m' (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],fsk0)
+(fsk0,m')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a2gX a2gY (just a2gZ))",Atom "(store a2gX a2gY (just a2gZ))"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],Alter [Symbol [],TYPE [LiftedRep []],m,field,val]))
+(List [Atom "=",Atom "(store a2gX a2gY (just a2gZ))",Atom "a2gW"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],m'))
+]
+Decs:[
+Atom "(declare-const a2gW (Array String (Maybe Type)))"
+Atom "(declare-const a2gX (Array String (Maybe Type)))"
+Atom "(declare-const a2gY String)"
+Atom "(declare-const a2gZ Type)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a2gW (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a2gX (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a2gY String)
+[<-recv] success
+[send->] (declare-const a2gZ Type)
+[<-recv] success
+[send->] (assert (= (store a2gX a2gY (just a2gZ)) (store a2gX a2gY (just a2gZ)) ) )
+[<-recv] success
+[send->] (assert (= (store a2gX a2gY (just a2gZ)) a2gW ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a2hx {0}:: m' ~ m' (CDictCan)
+[G] $d~~_a2hy {0}:: m' ~ m' (CDictCan)
+(Delete [Symbol [],TYPE [LiftedRep []],m,field],fsk0)
+(fsk0,m')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a2hh a2hi (as nothing (Maybe Type) )  )",Atom "(store a2hh a2hi (as nothing (Maybe Type) )  )"],(Delete [Symbol [],TYPE [LiftedRep []],m,field],Delete [Symbol [],TYPE [LiftedRep []],m,field]))
+(List [Atom "=",Atom "(store a2hh a2hi (as nothing (Maybe Type) )  )",Atom "a2hg"],(Delete [Symbol [],TYPE [LiftedRep []],m,field],m'))
+]
+Decs:[
+Atom "(declare-const a2hg (Array String (Maybe Type)))"
+Atom "(declare-const a2hh (Array String (Maybe Type)))"
+Atom "(declare-const a2hi String)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a2hg (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a2hh (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a2hi String)
+[<-recv] success
+[send->] (assert (= (store a2hh a2hi (as nothing (Maybe Type) )  ) (store a2hh a2hi (as nothing (Maybe Type) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a2hh a2hi (as nothing (Maybe Type) )  ) a2hg ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a2if {0}:: m ~ m (CDictCan)
+[G] $d~~_a2ig {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a2i4 \"price\" (just (lit \"3u\")))",Atom "(store a2i4 \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a2i4 \"price\" (just (lit \"3u\")))",Atom "a2i4"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+]
+Decs:[
+Atom "(declare-const a2i4 (Array String (Maybe Type)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a2i4 (Array String (Maybe Type)))
+[<-recv] success
+[send->] (assert (= (store a2i4 "price" (just (lit "3u"))) (store a2i4 "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a2i4 "price" (just (lit "3u"))) a2i4 ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3kr {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3kt {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3kv {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3kx {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3ks {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3ku {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3kw {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3ky {0}:: ab ~ ab (CDictCan)
+(IntersectL [k,v,b,c],fsk0)
+(IntersectL [k,v,ab,c],fsk0)
+(IntersectL [k,v,a,bc],fsk0)
+(IntersectL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jI a3jK)",Atom "( (_ map both1849911911428309931) a3jI a3jK)"],(IntersectL [k,v,b,c],IntersectL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jJ a3jK)",Atom "( (_ map both1849911911428309931) a3jJ a3jK)"],(IntersectL [k,v,ab,c],IntersectL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jM)",Atom "( (_ map both1849911911428309931) a3jH a3jM)"],(IntersectL [k,v,a,bc],IntersectL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jI)",Atom "( (_ map both1849911911428309931) a3jH a3jI)"],(IntersectL [k,v,a,b],IntersectL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jI a3jK)",Atom "a3jM"],(IntersectL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jI)",Atom "a3jJ"],(IntersectL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jJ a3jK)",Atom "a3jL"],(IntersectL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jM)",Atom "a3jN"],(IntersectL [k,v,a,bc],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3jF)"
+Atom "(declare-sort Sorta3jG)"
+Atom "(declare-const a3jH (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jI (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jJ (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jK (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jL (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jM (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jN (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-fun both1849911911428309931 ((Maybe Sorta3jG) (Maybe Sorta3jG)) (Maybe Sorta3jG))"
+Atom "(assert (forall ((y (Maybe Sorta3jG))) (= (both1849911911428309931 y (as nothing (Maybe Sorta3jG))) (as nothing (Maybe Sorta3jG)))))"
+Atom "(assert (forall ((y (Maybe Sorta3jG))) (= (both nothing y) nothing)))"
+Atom "(assert (forall ((x (Maybe Sorta3jG)) (y (Maybe Sorta3jG))) (=> (and ((_ is (just (Sorta3jG) (Maybe Sorta3jG))) x) ((_ is (just (Sorta3jG) (Maybe Sorta3jG))) y) ) (= (both1849911911428309931 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3jF)
+[<-recv] success
+[send->] (declare-sort Sorta3jG)
+[<-recv] success
+[send->] (declare-const a3jH (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jI (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jJ (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jK (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jL (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jM (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jN (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-fun both1849911911428309931 ((Maybe Sorta3jG) (Maybe Sorta3jG)) (Maybe Sorta3jG))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3jG))) (= (both1849911911428309931 y (as nothing (Maybe Sorta3jG))) (as nothing (Maybe Sorta3jG)))))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3jG))) (= (both nothing y) nothing)))
+[<-recv] (error "line 47 column 57: unknown function/constant both" )
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3kr {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3kt {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3kv {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3kx {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3ks {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3ku {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3kw {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3ky {0}:: ab ~ ab (CDictCan)
+(IntersectL [k,v,b,c],fsk0)
+(IntersectL [k,v,ab,c],fsk0)
+(IntersectL [k,v,a,bc],fsk0)
+(IntersectL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(IntersectL [k,v,IntersectL [k,v,a0,b0],c0],abc)
+(IntersectL [k,v,a0,IntersectL [k,v,b0,c0]],abc')
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jI a3jK)",Atom "( (_ map both1849911911428309931) a3jI a3jK)"],(IntersectL [k,v,b,c],IntersectL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jJ a3jK)",Atom "( (_ map both1849911911428309931) a3jJ a3jK)"],(IntersectL [k,v,ab,c],IntersectL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jM)",Atom "( (_ map both1849911911428309931) a3jH a3jM)"],(IntersectL [k,v,a,bc],IntersectL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jI)",Atom "( (_ map both1849911911428309931) a3jH a3jI)"],(IntersectL [k,v,a,b],IntersectL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jI a3jK)",Atom "a3jM"],(IntersectL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jI)",Atom "a3jJ"],(IntersectL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jJ a3jK)",Atom "a3jL"],(IntersectL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jM)",Atom "a3jN"],(IntersectL [k,v,a,bc],abc'))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) ( (_ map both1849911911428309931) a3jU a3jV) a3jX)",Atom "a3jL"],(IntersectL [k,v,IntersectL [k,v,a0,b0],c0],abc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jU ( (_ map both1849911911428309931) a3jV a3jX))",Atom "a3jN"],(IntersectL [k,v,a0,IntersectL [k,v,b0,c0]],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3jF)"
+Atom "(declare-sort Sorta3jG)"
+Atom "(declare-const a3jH (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jI (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jJ (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jK (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jL (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jM (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jN (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jU (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jV (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jX (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-fun both1849911911428309931 ((Maybe Sorta3jG) (Maybe Sorta3jG)) (Maybe Sorta3jG))"
+Atom "(assert (forall ((y (Maybe Sorta3jG))) (= (both1849911911428309931 y (as nothing (Maybe Sorta3jG))) (as nothing (Maybe Sorta3jG)))))"
+Atom "(assert (forall ((y (Maybe Sorta3jG))) (= (both nothing y) nothing)))"
+Atom "(assert (forall ((x (Maybe Sorta3jG)) (y (Maybe Sorta3jG))) (=> (and ((_ is (just (Sorta3jG) (Maybe Sorta3jG))) x) ((_ is (just (Sorta3jG) (Maybe Sorta3jG))) y) ) (= (both1849911911428309931 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3jF)
+[<-recv] success
+[send->] (declare-sort Sorta3jG)
+[<-recv] success
+[send->] (declare-const a3jH (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jI (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jJ (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jK (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jL (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jM (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jN (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jU (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jV (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jX (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-fun both1849911911428309931 ((Maybe Sorta3jG) (Maybe Sorta3jG)) (Maybe Sorta3jG))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3jG))) (= (both1849911911428309931 y (as nothing (Maybe Sorta3jG))) (as nothing (Maybe Sorta3jG)))))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3jG))) (= (both nothing y) nothing)))
+[<-recv] (error "line 66 column 57: unknown function/constant both" )
+[send->] (assert (or (or false (not (= ( (_ map both1849911911428309931) ( (_ map both1849911911428309931) a3jU a3jV) a3jX) a3jL ) ) ) (not (= ( (_ map both1849911911428309931) a3jU ( (_ map both1849911911428309931) a3jV a3jX)) a3jN ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3kr {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3kt {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3kv {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3kx {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3ks {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3ku {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3kw {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3ky {0}:: ab ~ ab (CDictCan)
+(IntersectL [k,v,b,c],fsk0)
+(IntersectL [k,v,ab,c],fsk0)
+(IntersectL [k,v,a,bc],fsk0)
+(IntersectL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(IntersectL [k,v,IntersectL [k,v,a0,b0],c0],abc)
+(IntersectL [k,v,a0,IntersectL [k,v,b0,c0]],abc')
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jI a3jK)",Atom "( (_ map both1849911911428309931) a3jI a3jK)"],(IntersectL [k,v,b,c],IntersectL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jJ a3jK)",Atom "( (_ map both1849911911428309931) a3jJ a3jK)"],(IntersectL [k,v,ab,c],IntersectL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jM)",Atom "( (_ map both1849911911428309931) a3jH a3jM)"],(IntersectL [k,v,a,bc],IntersectL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jI)",Atom "( (_ map both1849911911428309931) a3jH a3jI)"],(IntersectL [k,v,a,b],IntersectL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jI a3jK)",Atom "a3jM"],(IntersectL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jI)",Atom "a3jJ"],(IntersectL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jJ a3jK)",Atom "a3jL"],(IntersectL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jH a3jM)",Atom "a3jN"],(IntersectL [k,v,a,bc],abc'))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) ( (_ map both1849911911428309931) a3jU a3jV) a3jX)",Atom "a3jL"],(IntersectL [k,v,IntersectL [k,v,a0,b0],c0],abc))
+(List [Atom "=",Atom "( (_ map both1849911911428309931) a3jU ( (_ map both1849911911428309931) a3jV a3jX))",Atom "a3jN"],(IntersectL [k,v,a0,IntersectL [k,v,b0,c0]],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3jF)"
+Atom "(declare-sort Sorta3jG)"
+Atom "(declare-const a3jH (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jI (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jJ (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jK (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jL (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jM (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jN (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jU (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jV (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-const a3jX (Array Sorta3jF (Maybe Sorta3jG)))"
+Atom "(declare-fun both1849911911428309931 ((Maybe Sorta3jG) (Maybe Sorta3jG)) (Maybe Sorta3jG))"
+Atom "(assert (forall ((y (Maybe Sorta3jG))) (= (both1849911911428309931 y (as nothing (Maybe Sorta3jG))) (as nothing (Maybe Sorta3jG)))))"
+Atom "(assert (forall ((y (Maybe Sorta3jG))) (= (both nothing y) nothing)))"
+Atom "(assert (forall ((x (Maybe Sorta3jG)) (y (Maybe Sorta3jG))) (=> (and ((_ is (just (Sorta3jG) (Maybe Sorta3jG))) x) ((_ is (just (Sorta3jG) (Maybe Sorta3jG))) y) ) (= (both1849911911428309931 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3jF)
+[<-recv] success
+[send->] (declare-sort Sorta3jG)
+[<-recv] success
+[send->] (declare-const a3jH (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jI (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jJ (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jK (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jL (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jM (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jN (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jU (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jV (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-const a3jX (Array Sorta3jF (Maybe Sorta3jG)))
+[<-recv] success
+[send->] (declare-fun both1849911911428309931 ((Maybe Sorta3jG) (Maybe Sorta3jG)) (Maybe Sorta3jG))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3jG))) (= (both1849911911428309931 y (as nothing (Maybe Sorta3jG))) (as nothing (Maybe Sorta3jG)))))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3jG))) (= (both nothing y) nothing)))
+[<-recv] (error "line 85 column 57: unknown function/constant both" )
+[send->] (assert (or (or false (not (= ( (_ map both1849911911428309931) ( (_ map both1849911911428309931) a3jU a3jV) a3jX) a3jL ) ) ) (not (= ( (_ map both1849911911428309931) a3jU ( (_ map both1849911911428309931) a3jV a3jX)) a3jN ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3mn {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3mp {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3mr {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3mt {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3mo {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3mq {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3ms {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3mu {0}:: ab ~ ab (CDictCan)
+(UnionL [k,v,b,c],fsk0)
+(UnionL [k,v,ab,c],fsk0)
+(UnionL [k,v,a,bc],fsk0)
+(UnionL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )"],(UnionL [k,v,b,c],UnionL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )"],(UnionL [k,v,ab,c],UnionL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )"],(UnionL [k,v,a,bc],UnionL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )"],(UnionL [k,v,a,b],UnionL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )",Atom "a3lI"],(UnionL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )",Atom "a3lF"],(UnionL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )",Atom "a3lH"],(UnionL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )",Atom "a3lJ"],(UnionL [k,v,a,bc],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3lB)"
+Atom "(declare-sort Sorta3lC)"
+Atom "(declare-const a3lD (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lE (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lF (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lG (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lH (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lI (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lJ (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-fun either1850474890708684421 ((Maybe Sorta3lC) (Maybe Sorta3lC)) (Maybe Sorta3lC))"
+Atom "(assert (forall ((y (Maybe Sorta3lC))) (= (either1850474890708684421 (as nothing (Maybe Sorta3lC) ) y) y)))"
+Atom "(assert (forall ((x (Maybe Sorta3lC)) (y (Maybe Sorta3lC))) (=> ((_ is (just (Sorta3lC) (Maybe Sorta3lC) ) ) x) (= (either1850474890708684421 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3lB)
+[<-recv] success
+[send->] (declare-sort Sorta3lC)
+[<-recv] success
+[send->] (declare-const a3lD (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lE (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lF (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lG (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lH (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lI (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lJ (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-fun either1850474890708684421 ((Maybe Sorta3lC) (Maybe Sorta3lC)) (Maybe Sorta3lC))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3lC))) (= (either1850474890708684421 (as nothing (Maybe Sorta3lC) ) y) y)))
+[<-recv] success
+[send->] (assert (forall ((x (Maybe Sorta3lC)) (y (Maybe Sorta3lC))) (=> ((_ is (just (Sorta3lC) (Maybe Sorta3lC) ) ) x) (= (either1850474890708684421 x y) x))))
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lE a3lG ) ( (_ map either1850474890708684421 ) a3lE a3lG ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lF a3lG ) ( (_ map either1850474890708684421 ) a3lF a3lG ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lI ) ( (_ map either1850474890708684421 ) a3lD a3lI ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lE ) ( (_ map either1850474890708684421 ) a3lD a3lE ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lE a3lG ) a3lI ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lE ) a3lF ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lF a3lG ) a3lH ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lI ) a3lJ ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3mn {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3mp {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3mr {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3mt {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3mo {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3mq {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3ms {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3mu {0}:: ab ~ ab (CDictCan)
+(UnionL [k,v,b,c],fsk0)
+(UnionL [k,v,ab,c],fsk0)
+(UnionL [k,v,a,bc],fsk0)
+(UnionL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(UnionL [k,v,UnionL [k,v,a0,b0],c0],abc)
+(UnionL [k,v,a0,UnionL [k,v,b0,c0]],abc')
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )"],(UnionL [k,v,b,c],UnionL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )"],(UnionL [k,v,ab,c],UnionL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )"],(UnionL [k,v,a,bc],UnionL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )"],(UnionL [k,v,a,b],UnionL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )",Atom "a3lI"],(UnionL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )",Atom "a3lF"],(UnionL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )",Atom "a3lH"],(UnionL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )",Atom "a3lJ"],(UnionL [k,v,a,bc],abc'))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) ( (_ map either1850474890708684421 ) a3lQ a3lR ) a3lT )",Atom "a3lH"],(UnionL [k,v,UnionL [k,v,a0,b0],c0],abc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lQ ( (_ map either1850474890708684421 ) a3lR a3lT ) )",Atom "a3lJ"],(UnionL [k,v,a0,UnionL [k,v,b0,c0]],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3lB)"
+Atom "(declare-sort Sorta3lC)"
+Atom "(declare-const a3lD (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lE (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lF (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lG (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lH (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lI (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lJ (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lQ (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lR (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lT (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-fun either1850474890708684421 ((Maybe Sorta3lC) (Maybe Sorta3lC)) (Maybe Sorta3lC))"
+Atom "(assert (forall ((y (Maybe Sorta3lC))) (= (either1850474890708684421 (as nothing (Maybe Sorta3lC) ) y) y)))"
+Atom "(assert (forall ((x (Maybe Sorta3lC)) (y (Maybe Sorta3lC))) (=> ((_ is (just (Sorta3lC) (Maybe Sorta3lC) ) ) x) (= (either1850474890708684421 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3lB)
+[<-recv] success
+[send->] (declare-sort Sorta3lC)
+[<-recv] success
+[send->] (declare-const a3lD (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lE (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lF (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lG (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lH (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lI (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lJ (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lQ (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lR (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lT (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-fun either1850474890708684421 ((Maybe Sorta3lC) (Maybe Sorta3lC)) (Maybe Sorta3lC))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3lC))) (= (either1850474890708684421 (as nothing (Maybe Sorta3lC) ) y) y)))
+[<-recv] success
+[send->] (assert (forall ((x (Maybe Sorta3lC)) (y (Maybe Sorta3lC))) (=> ((_ is (just (Sorta3lC) (Maybe Sorta3lC) ) ) x) (= (either1850474890708684421 x y) x))))
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lE a3lG ) ( (_ map either1850474890708684421 ) a3lE a3lG ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lF a3lG ) ( (_ map either1850474890708684421 ) a3lF a3lG ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lI ) ( (_ map either1850474890708684421 ) a3lD a3lI ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lE ) ( (_ map either1850474890708684421 ) a3lD a3lE ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lE a3lG ) a3lI ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lE ) a3lF ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lF a3lG ) a3lH ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lI ) a3lJ ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or (or false (not (= ( (_ map either1850474890708684421 ) ( (_ map either1850474890708684421 ) a3lQ a3lR ) a3lT ) a3lH ) ) ) (not (= ( (_ map either1850474890708684421 ) a3lQ ( (_ map either1850474890708684421 ) a3lR a3lT ) ) a3lJ ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3mn {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3mp {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3mr {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3mt {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3mo {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3mq {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3ms {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3mu {0}:: ab ~ ab (CDictCan)
+(UnionL [k,v,b,c],fsk0)
+(UnionL [k,v,ab,c],fsk0)
+(UnionL [k,v,a,bc],fsk0)
+(UnionL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(UnionL [k,v,UnionL [k,v,a0,b0],c0],abc)
+(UnionL [k,v,a0,UnionL [k,v,b0,c0]],abc')
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )"],(UnionL [k,v,b,c],UnionL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )"],(UnionL [k,v,ab,c],UnionL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )"],(UnionL [k,v,a,bc],UnionL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )"],(UnionL [k,v,a,b],UnionL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lE a3lG )",Atom "a3lI"],(UnionL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lE )",Atom "a3lF"],(UnionL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lF a3lG )",Atom "a3lH"],(UnionL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lD a3lI )",Atom "a3lJ"],(UnionL [k,v,a,bc],abc'))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) ( (_ map either1850474890708684421 ) a3lQ a3lR ) a3lT )",Atom "a3lH"],(UnionL [k,v,UnionL [k,v,a0,b0],c0],abc))
+(List [Atom "=",Atom "( (_ map either1850474890708684421 ) a3lQ ( (_ map either1850474890708684421 ) a3lR a3lT ) )",Atom "a3lJ"],(UnionL [k,v,a0,UnionL [k,v,b0,c0]],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3lB)"
+Atom "(declare-sort Sorta3lC)"
+Atom "(declare-const a3lD (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lE (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lF (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lG (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lH (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lI (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lJ (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lQ (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lR (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-const a3lT (Array Sorta3lB (Maybe Sorta3lC)))"
+Atom "(declare-fun either1850474890708684421 ((Maybe Sorta3lC) (Maybe Sorta3lC)) (Maybe Sorta3lC))"
+Atom "(assert (forall ((y (Maybe Sorta3lC))) (= (either1850474890708684421 (as nothing (Maybe Sorta3lC) ) y) y)))"
+Atom "(assert (forall ((x (Maybe Sorta3lC)) (y (Maybe Sorta3lC))) (=> ((_ is (just (Sorta3lC) (Maybe Sorta3lC) ) ) x) (= (either1850474890708684421 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3lB)
+[<-recv] success
+[send->] (declare-sort Sorta3lC)
+[<-recv] success
+[send->] (declare-const a3lD (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lE (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lF (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lG (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lH (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lI (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lJ (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lQ (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lR (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-const a3lT (Array Sorta3lB (Maybe Sorta3lC)))
+[<-recv] success
+[send->] (declare-fun either1850474890708684421 ((Maybe Sorta3lC) (Maybe Sorta3lC)) (Maybe Sorta3lC))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3lC))) (= (either1850474890708684421 (as nothing (Maybe Sorta3lC) ) y) y)))
+[<-recv] success
+[send->] (assert (forall ((x (Maybe Sorta3lC)) (y (Maybe Sorta3lC))) (=> ((_ is (just (Sorta3lC) (Maybe Sorta3lC) ) ) x) (= (either1850474890708684421 x y) x))))
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lE a3lG ) ( (_ map either1850474890708684421 ) a3lE a3lG ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lF a3lG ) ( (_ map either1850474890708684421 ) a3lF a3lG ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lI ) ( (_ map either1850474890708684421 ) a3lD a3lI ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lE ) ( (_ map either1850474890708684421 ) a3lD a3lE ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lE a3lG ) a3lI ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lE ) a3lF ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lF a3lG ) a3lH ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1850474890708684421 ) a3lD a3lI ) a3lJ ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or (or false (not (= ( (_ map either1850474890708684421 ) ( (_ map either1850474890708684421 ) a3lQ a3lR ) a3lT ) a3lH ) ) ) (not (= ( (_ map either1850474890708684421 ) a3lQ ( (_ map either1850474890708684421 ) a3lR a3lT ) ) a3lJ ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(<? [b,c],<? [b0,c0])
+(<? [a0,c0],<? [a,c])
+(<? [a,b],<? [a0,b0])
+]
+Eqs:[
+(List [Atom "=",Atom "(< a3nf a3ng)",Atom "(< a3ni a3nj)"],(<? [b,c],<? [b0,c0]))
+(List [Atom "=",Atom "(< a3nh a3nj)",Atom "(< a3ne a3ng)"],(<? [a0,c0],<? [a,c]))
+(List [Atom "=",Atom "(< a3ne a3nf)",Atom "(< a3nh a3ni)"],(<? [a,b],<? [a0,b0]))
+]
+Decs:[
+Atom "(declare-const a3ne Int)"
+Atom "(declare-const a3nf Int)"
+Atom "(declare-const a3ng Int)"
+Atom "(declare-const a3nh Int)"
+Atom "(declare-const a3ni Int)"
+Atom "(declare-const a3nj Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3ne Int)
+[<-recv] success
+[send->] (declare-const a3nf Int)
+[<-recv] success
+[send->] (declare-const a3ng Int)
+[<-recv] success
+[send->] (declare-const a3nh Int)
+[<-recv] success
+[send->] (declare-const a3ni Int)
+[<-recv] success
+[send->] (declare-const a3nj Int)
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or (or (or false (not (= (< a3nf a3ng) (< a3ni a3nj) ) ) ) (not (= (< a3nh a3nj) (< a3ne a3ng) ) ) ) (not (= (< a3ne a3nf) (< a3nh a3ni) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3CD {0}:: m ~ m (CDictCan)
+[G] $d~~_a3CE {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3Cs \"price\" (just (lit \"3u\")))",Atom "(store a3Cs \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3Cs \"price\" (just (lit \"3u\")))",Atom "a3Cs"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+]
+Decs:[
+Atom "(declare-const a3Cs (Array String (Maybe Type)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Cs (Array String (Maybe Type)))
+[<-recv] success
+[send->] (assert (= (store a3Cs "price" (just (lit "3u"))) (store a3Cs "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3Cs "price" (just (lit "3u"))) a3Cs ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Df {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3Dg {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3De {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3Dh {0}:: m3 ~ m3 (CDictCan)
+(Alter [Symbol [],Nat [],m2,"ok",2],fsk0)
+(Alter [Symbol [],Nat [],m1,"ok",2],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3CT \"ok\" (just 2))",Atom "(store a3CT \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m2,"ok",2],Alter [Symbol [],Nat [],m2,"ok",2]))
+(List [Atom "=",Atom "(store a3CS \"ok\" (just 2))",Atom "(store a3CS \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m1,"ok",2],Alter [Symbol [],Nat [],m1,"ok",2]))
+(List [Atom "=",Atom "(store a3CT \"ok\" (just 2))",Atom "a3CU"],(Alter [Symbol [],Nat [],m2,"ok",2],m3))
+(List [Atom "=",Atom "(store a3CS \"ok\" (just 2))",Atom "a3CT"],(Alter [Symbol [],Nat [],m1,"ok",2],m2))
+]
+Decs:[
+Atom "(declare-const a3CS (Array String (Maybe Int)))"
+Atom "(declare-const a3CT (Array String (Maybe Int)))"
+Atom "(declare-const a3CU (Array String (Maybe Int)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3CS (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3CT (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3CU (Array String (Maybe Int)))
+[<-recv] success
+[send->] (assert (= (store a3CT "ok" (just 2)) (store a3CT "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3CS "ok" (just 2)) (store a3CS "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3CT "ok" (just 2)) a3CU ) )
+[<-recv] success
+[send->] (assert (= (store a3CS "ok" (just 2)) a3CT ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Df {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3Dg {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3De {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3Dh {0}:: m3 ~ m3 (CDictCan)
+(Alter [Symbol [],Nat [],m2,"ok",2],fsk0)
+(Alter [Symbol [],Nat [],m1,"ok",2],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(Alter [Symbol [],Nat [],m10,"ok",2],m2)
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3CT \"ok\" (just 2))",Atom "(store a3CT \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m2,"ok",2],Alter [Symbol [],Nat [],m2,"ok",2]))
+(List [Atom "=",Atom "(store a3CS \"ok\" (just 2))",Atom "(store a3CS \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m1,"ok",2],Alter [Symbol [],Nat [],m1,"ok",2]))
+(List [Atom "=",Atom "(store a3CT \"ok\" (just 2))",Atom "a3CU"],(Alter [Symbol [],Nat [],m2,"ok",2],m3))
+(List [Atom "=",Atom "(store a3CS \"ok\" (just 2))",Atom "a3CT"],(Alter [Symbol [],Nat [],m1,"ok",2],m2))
+(List [Atom "=",Atom "(store a3CX \"ok\" (just 2))",Atom "a3CT"],(Alter [Symbol [],Nat [],m10,"ok",2],m2))
+]
+Decs:[
+Atom "(declare-const a3CS (Array String (Maybe Int)))"
+Atom "(declare-const a3CT (Array String (Maybe Int)))"
+Atom "(declare-const a3CU (Array String (Maybe Int)))"
+Atom "(declare-const a3CX (Array String (Maybe Int)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3CS (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3CT (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3CU (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3CX (Array String (Maybe Int)))
+[<-recv] success
+[send->] (assert (= (store a3CT "ok" (just 2)) (store a3CT "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3CS "ok" (just 2)) (store a3CS "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3CT "ok" (just 2)) a3CU ) )
+[<-recv] success
+[send->] (assert (= (store a3CS "ok" (just 2)) a3CT ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (store a3CX "ok" (just 2)) a3CT ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3DZ {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3E0 {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3DY {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3E1 {0}:: m3 ~ m3 (CDictCan)
+(Delete [Symbol [],v,m2,"bob"],fsk0)
+(Delete [Symbol [],v,m1,"bob"],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3DC \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "(store a3DC \"bob\" (as nothing (Maybe Sorta3DA) )  )"],(Delete [Symbol [],v,m2,"bob"],Delete [Symbol [],v,m2,"bob"]))
+(List [Atom "=",Atom "(store a3DB \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "(store a3DB \"bob\" (as nothing (Maybe Sorta3DA) )  )"],(Delete [Symbol [],v,m1,"bob"],Delete [Symbol [],v,m1,"bob"]))
+(List [Atom "=",Atom "(store a3DC \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "a3DD"],(Delete [Symbol [],v,m2,"bob"],m3))
+(List [Atom "=",Atom "(store a3DB \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "a3DC"],(Delete [Symbol [],v,m1,"bob"],m2))
+]
+Decs:[
+Atom "(declare-sort Sorta3DA)"
+Atom "(declare-const a3DB (Array String (Maybe Sorta3DA)))"
+Atom "(declare-const a3DC (Array String (Maybe Sorta3DA)))"
+Atom "(declare-const a3DD (Array String (Maybe Sorta3DA)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3DA)
+[<-recv] success
+[send->] (declare-const a3DB (Array String (Maybe Sorta3DA)))
+[<-recv] success
+[send->] (declare-const a3DC (Array String (Maybe Sorta3DA)))
+[<-recv] success
+[send->] (declare-const a3DD (Array String (Maybe Sorta3DA)))
+[<-recv] success
+[send->] (assert (= (store a3DC "bob" (as nothing (Maybe Sorta3DA) )  ) (store a3DC "bob" (as nothing (Maybe Sorta3DA) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3DB "bob" (as nothing (Maybe Sorta3DA) )  ) (store a3DB "bob" (as nothing (Maybe Sorta3DA) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3DC "bob" (as nothing (Maybe Sorta3DA) )  ) a3DD ) )
+[<-recv] success
+[send->] (assert (= (store a3DB "bob" (as nothing (Maybe Sorta3DA) )  ) a3DC ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3DZ {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3E0 {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3DY {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3E1 {0}:: m3 ~ m3 (CDictCan)
+(Delete [Symbol [],v,m2,"bob"],fsk0)
+(Delete [Symbol [],v,m1,"bob"],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(Delete [Symbol [],v,m10,"bob"],m2)
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3DC \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "(store a3DC \"bob\" (as nothing (Maybe Sorta3DA) )  )"],(Delete [Symbol [],v,m2,"bob"],Delete [Symbol [],v,m2,"bob"]))
+(List [Atom "=",Atom "(store a3DB \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "(store a3DB \"bob\" (as nothing (Maybe Sorta3DA) )  )"],(Delete [Symbol [],v,m1,"bob"],Delete [Symbol [],v,m1,"bob"]))
+(List [Atom "=",Atom "(store a3DC \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "a3DD"],(Delete [Symbol [],v,m2,"bob"],m3))
+(List [Atom "=",Atom "(store a3DB \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "a3DC"],(Delete [Symbol [],v,m1,"bob"],m2))
+(List [Atom "=",Atom "(store a3DH \"bob\" (as nothing (Maybe Sorta3DA) )  )",Atom "a3DC"],(Delete [Symbol [],v,m10,"bob"],m2))
+]
+Decs:[
+Atom "(declare-sort Sorta3DA)"
+Atom "(declare-const a3DB (Array String (Maybe Sorta3DA)))"
+Atom "(declare-const a3DC (Array String (Maybe Sorta3DA)))"
+Atom "(declare-const a3DD (Array String (Maybe Sorta3DA)))"
+Atom "(declare-const a3DH (Array String (Maybe Sorta3DA)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3DA)
+[<-recv] success
+[send->] (declare-const a3DB (Array String (Maybe Sorta3DA)))
+[<-recv] success
+[send->] (declare-const a3DC (Array String (Maybe Sorta3DA)))
+[<-recv] success
+[send->] (declare-const a3DD (Array String (Maybe Sorta3DA)))
+[<-recv] success
+[send->] (declare-const a3DH (Array String (Maybe Sorta3DA)))
+[<-recv] success
+[send->] (assert (= (store a3DC "bob" (as nothing (Maybe Sorta3DA) )  ) (store a3DC "bob" (as nothing (Maybe Sorta3DA) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3DB "bob" (as nothing (Maybe Sorta3DA) )  ) (store a3DB "bob" (as nothing (Maybe Sorta3DA) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3DC "bob" (as nothing (Maybe Sorta3DA) )  ) a3DD ) )
+[<-recv] success
+[send->] (assert (= (store a3DB "bob" (as nothing (Maybe Sorta3DA) )  ) a3DC ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (store a3DH "bob" (as nothing (Maybe Sorta3DA) )  ) a3DC ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(+ [a0,b0],+ [a,b])
+(+ [b0,a0],+ [b,a])
+]
+Eqs:[
+(List [Atom "=",Atom "(+ a3Fz a3FA)",Atom "(+ a3Fx a3Fy)"],(+ [a0,b0],+ [a,b]))
+(List [Atom "=",Atom "(+ a3FA a3Fz)",Atom "(+ a3Fy a3Fx)"],(+ [b0,a0],+ [b,a]))
+]
+Decs:[
+Atom "(declare-const a3Fx Int)"
+Atom "(declare-const a3Fy Int)"
+Atom "(declare-const a3Fz Int)"
+Atom "(declare-const a3FA Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Fx Int)
+[<-recv] success
+[send->] (declare-const a3Fy Int)
+[<-recv] success
+[send->] (declare-const a3Fz Int)
+[<-recv] success
+[send->] (declare-const a3FA Int)
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or (or false (not (= (+ a3Fz a3FA) (+ a3Fx a3Fy) ) ) ) (not (= (+ a3FA a3Fz) (+ a3Fy a3Fx) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"pilot",[] [Char []]],"price",Int []],"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"pilot",[] [Char []]],"price",Int []])
+]
+Eqs:[
+(List [Atom "=",Atom "(store (store (store ((as const (Array String  (Maybe Type))) nothing) \"pilot\" (just (apply (lit \"3M\") (lit \"3g\")))) \"price\" (just (lit \"3u\"))) \"price\" (just (lit \"3u\")))",Atom "(store (store ((as const (Array String  (Maybe Type))) nothing) \"pilot\" (just (apply (lit \"3M\") (lit \"3g\")))) \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"pilot",[] [Char []]],"price",Int []],"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"pilot",[] [Char []]],"price",Int []]))
+]
+Decs:[
+
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (store (store (store ((as const (Array String  (Maybe Type))) nothing) "pilot" (just (apply (lit "3M") (lit "3g")))) "price" (just (lit "3u"))) "price" (just (lit "3u"))) (store (store ((as const (Array String  (Maybe Type))) nothing) "pilot" (just (apply (lit "3M") (lit "3g")))) "price" (just (lit "3u"))) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"price",Int []],"make",[] [Char []]],"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"price",Int []],"make",[] [Char []]])
+]
+Eqs:[
+(List [Atom "=",Atom "(store (store (store ((as const (Array String  (Maybe Type))) nothing) \"price\" (just (lit \"3u\"))) \"make\" (just (apply (lit \"3M\") (lit \"3g\")))) \"price\" (just (lit \"3u\")))",Atom "(store (store ((as const (Array String  (Maybe Type))) nothing) \"price\" (just (lit \"3u\"))) \"make\" (just (apply (lit \"3M\") (lit \"3g\"))))"],(Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"price",Int []],"make",[] [Char []]],"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],Alter [Symbol [],TYPE [LiftedRep []],Nil [Symbol [],TYPE [LiftedRep []]],"price",Int []],"make",[] [Char []]]))
+]
+Decs:[
+
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (store (store (store ((as const (Array String  (Maybe Type))) nothing) "price" (just (lit "3u"))) "make" (just (apply (lit "3M") (lit "3g")))) "price" (just (lit "3u"))) (store (store ((as const (Array String  (Maybe Type))) nothing) "price" (just (lit "3u"))) "make" (just (apply (lit "3M") (lit "3g")))) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(Alter [Nat [],Symbol [],Alter [Nat [],Symbol [],Nil [Nat [],Symbol []],1,"ok"],2,"hi"],Alter [Nat [],Symbol [],Alter [Nat [],Symbol [],Nil [Nat [],Symbol []],2,"hi"],1,"ok"])
+]
+Eqs:[
+(List [Atom "=",Atom "(store (store ((as const (Array Int  (Maybe String))) nothing) 1 (just \"ok\")) 2 (just \"hi\"))",Atom "(store (store ((as const (Array Int  (Maybe String))) nothing) 2 (just \"hi\")) 1 (just \"ok\"))"],(Alter [Nat [],Symbol [],Alter [Nat [],Symbol [],Nil [Nat [],Symbol []],1,"ok"],2,"hi"],Alter [Nat [],Symbol [],Alter [Nat [],Symbol [],Nil [Nat [],Symbol []],2,"hi"],1,"ok"]))
+]
+Decs:[
+
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (store (store ((as const (Array Int  (Maybe String))) nothing) 1 (just "ok")) 2 (just "hi")) (store (store ((as const (Array Int  (Maybe String))) nothing) 2 (just "hi")) 1 (just "ok")) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Qz {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3QB {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3QD {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3QF {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3QA {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3QC {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3QE {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3QG {0}:: ab ~ ab (CDictCan)
+(IntersectL [k,v,b,c],fsk0)
+(IntersectL [k,v,ab,c],fsk0)
+(IntersectL [k,v,a,bc],fsk0)
+(IntersectL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gj a3Gl)",Atom "( (_ map both1844563632575522039) a3Gj a3Gl)"],(IntersectL [k,v,b,c],IntersectL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gk a3Gl)",Atom "( (_ map both1844563632575522039) a3Gk a3Gl)"],(IntersectL [k,v,ab,c],IntersectL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gn)",Atom "( (_ map both1844563632575522039) a3Gi a3Gn)"],(IntersectL [k,v,a,bc],IntersectL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gj)",Atom "( (_ map both1844563632575522039) a3Gi a3Gj)"],(IntersectL [k,v,a,b],IntersectL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gj a3Gl)",Atom "a3Gn"],(IntersectL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gj)",Atom "a3Gk"],(IntersectL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gk a3Gl)",Atom "a3Gm"],(IntersectL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gn)",Atom "a3Go"],(IntersectL [k,v,a,bc],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3Gg)"
+Atom "(declare-sort Sorta3Gh)"
+Atom "(declare-const a3Gi (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gj (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gk (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gl (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gm (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gn (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Go (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-fun both1844563632575522039 ((Maybe Sorta3Gh) (Maybe Sorta3Gh)) (Maybe Sorta3Gh))"
+Atom "(assert (forall ((y (Maybe Sorta3Gh))) (= (both1844563632575522039 y (as nothing (Maybe Sorta3Gh))) (as nothing (Maybe Sorta3Gh)))))"
+Atom "(assert (forall ((y (Maybe Sorta3Gh))) (= (both nothing y) nothing)))"
+Atom "(assert (forall ((x (Maybe Sorta3Gh)) (y (Maybe Sorta3Gh))) (=> (and ((_ is (just (Sorta3Gh) (Maybe Sorta3Gh))) x) ((_ is (just (Sorta3Gh) (Maybe Sorta3Gh))) y) ) (= (both1844563632575522039 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3Gg)
+[<-recv] success
+[send->] (declare-sort Sorta3Gh)
+[<-recv] success
+[send->] (declare-const a3Gi (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gj (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gk (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gl (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gm (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gn (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Go (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-fun both1844563632575522039 ((Maybe Sorta3Gh) (Maybe Sorta3Gh)) (Maybe Sorta3Gh))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3Gh))) (= (both1844563632575522039 y (as nothing (Maybe Sorta3Gh))) (as nothing (Maybe Sorta3Gh)))))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3Gh))) (= (both nothing y) nothing)))
+[<-recv] (error "line 277 column 57: unknown function/constant both" )
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Qz {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3QB {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3QD {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3QF {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3QA {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3QC {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3QE {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3QG {0}:: ab ~ ab (CDictCan)
+(IntersectL [k,v,b,c],fsk0)
+(IntersectL [k,v,ab,c],fsk0)
+(IntersectL [k,v,a,bc],fsk0)
+(IntersectL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(abc,abc')
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gj a3Gl)",Atom "( (_ map both1844563632575522039) a3Gj a3Gl)"],(IntersectL [k,v,b,c],IntersectL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gk a3Gl)",Atom "( (_ map both1844563632575522039) a3Gk a3Gl)"],(IntersectL [k,v,ab,c],IntersectL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gn)",Atom "( (_ map both1844563632575522039) a3Gi a3Gn)"],(IntersectL [k,v,a,bc],IntersectL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gj)",Atom "( (_ map both1844563632575522039) a3Gi a3Gj)"],(IntersectL [k,v,a,b],IntersectL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gj a3Gl)",Atom "a3Gn"],(IntersectL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gj)",Atom "a3Gk"],(IntersectL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gk a3Gl)",Atom "a3Gm"],(IntersectL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map both1844563632575522039) a3Gi a3Gn)",Atom "a3Go"],(IntersectL [k,v,a,bc],abc'))
+(List [Atom "=",Atom "a3Gm",Atom "a3Go"],(abc,abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3Gg)"
+Atom "(declare-sort Sorta3Gh)"
+Atom "(declare-const a3Gi (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gj (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gk (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gl (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gm (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Gn (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-const a3Go (Array Sorta3Gg (Maybe Sorta3Gh)))"
+Atom "(declare-fun both1844563632575522039 ((Maybe Sorta3Gh) (Maybe Sorta3Gh)) (Maybe Sorta3Gh))"
+Atom "(assert (forall ((y (Maybe Sorta3Gh))) (= (both1844563632575522039 y (as nothing (Maybe Sorta3Gh))) (as nothing (Maybe Sorta3Gh)))))"
+Atom "(assert (forall ((y (Maybe Sorta3Gh))) (= (both nothing y) nothing)))"
+Atom "(assert (forall ((x (Maybe Sorta3Gh)) (y (Maybe Sorta3Gh))) (=> (and ((_ is (just (Sorta3Gh) (Maybe Sorta3Gh))) x) ((_ is (just (Sorta3Gh) (Maybe Sorta3Gh))) y) ) (= (both1844563632575522039 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3Gg)
+[<-recv] success
+[send->] (declare-sort Sorta3Gh)
+[<-recv] success
+[send->] (declare-const a3Gi (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gj (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gk (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gl (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gm (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Gn (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-const a3Go (Array Sorta3Gg (Maybe Sorta3Gh)))
+[<-recv] success
+[send->] (declare-fun both1844563632575522039 ((Maybe Sorta3Gh) (Maybe Sorta3Gh)) (Maybe Sorta3Gh))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3Gh))) (= (both1844563632575522039 y (as nothing (Maybe Sorta3Gh))) (as nothing (Maybe Sorta3Gh)))))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3Gh))) (= (both nothing y) nothing)))
+[<-recv] (error "line 293 column 57: unknown function/constant both" )
+[send->] (assert (or false (not (= a3Gm a3Go ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3R1 {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3R3 {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3R5 {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3R7 {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3R2 {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3R4 {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3R6 {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3R8 {0}:: ab ~ ab (CDictCan)
+(UnionL [k,v,b,c],fsk0)
+(UnionL [k,v,ab,c],fsk0)
+(UnionL [k,v,a,bc],fsk0)
+(UnionL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GB a3GD )",Atom "( (_ map either1844563632877519197 ) a3GB a3GD )"],(UnionL [k,v,b,c],UnionL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GC a3GD )",Atom "( (_ map either1844563632877519197 ) a3GC a3GD )"],(UnionL [k,v,ab,c],UnionL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GF )",Atom "( (_ map either1844563632877519197 ) a3GA a3GF )"],(UnionL [k,v,a,bc],UnionL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GB )",Atom "( (_ map either1844563632877519197 ) a3GA a3GB )"],(UnionL [k,v,a,b],UnionL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GB a3GD )",Atom "a3GF"],(UnionL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GB )",Atom "a3GC"],(UnionL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GC a3GD )",Atom "a3GE"],(UnionL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GF )",Atom "a3GG"],(UnionL [k,v,a,bc],abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3Gy)"
+Atom "(declare-sort Sorta3Gz)"
+Atom "(declare-const a3GA (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GB (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GC (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GD (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GE (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GF (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GG (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-fun either1844563632877519197 ((Maybe Sorta3Gz) (Maybe Sorta3Gz)) (Maybe Sorta3Gz))"
+Atom "(assert (forall ((y (Maybe Sorta3Gz))) (= (either1844563632877519197 (as nothing (Maybe Sorta3Gz) ) y) y)))"
+Atom "(assert (forall ((x (Maybe Sorta3Gz)) (y (Maybe Sorta3Gz))) (=> ((_ is (just (Sorta3Gz) (Maybe Sorta3Gz) ) ) x) (= (either1844563632877519197 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3Gy)
+[<-recv] success
+[send->] (declare-sort Sorta3Gz)
+[<-recv] success
+[send->] (declare-const a3GA (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GB (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GC (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GD (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GE (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GF (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GG (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-fun either1844563632877519197 ((Maybe Sorta3Gz) (Maybe Sorta3Gz)) (Maybe Sorta3Gz))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3Gz))) (= (either1844563632877519197 (as nothing (Maybe Sorta3Gz) ) y) y)))
+[<-recv] success
+[send->] (assert (forall ((x (Maybe Sorta3Gz)) (y (Maybe Sorta3Gz))) (=> ((_ is (just (Sorta3Gz) (Maybe Sorta3Gz) ) ) x) (= (either1844563632877519197 x y) x))))
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GB a3GD ) ( (_ map either1844563632877519197 ) a3GB a3GD ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GC a3GD ) ( (_ map either1844563632877519197 ) a3GC a3GD ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GF ) ( (_ map either1844563632877519197 ) a3GA a3GF ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GB ) ( (_ map either1844563632877519197 ) a3GA a3GB ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GB a3GD ) a3GF ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GB ) a3GC ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GC a3GD ) a3GE ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GF ) a3GG ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3R1 {0}:: abc' ~ abc' (CDictCan)
+[G] $d~_a3R3 {0}:: bc ~ bc (CDictCan)
+[G] $d~_a3R5 {0}:: abc ~ abc (CDictCan)
+[G] $d~_a3R7 {0}:: ab ~ ab (CDictCan)
+[G] $d~~_a3R2 {0}:: abc' ~ abc' (CDictCan)
+[G] $d~~_a3R4 {0}:: bc ~ bc (CDictCan)
+[G] $d~~_a3R6 {0}:: abc ~ abc (CDictCan)
+[G] $d~~_a3R8 {0}:: ab ~ ab (CDictCan)
+(UnionL [k,v,b,c],fsk0)
+(UnionL [k,v,ab,c],fsk0)
+(UnionL [k,v,a,bc],fsk0)
+(UnionL [k,v,a,b],fsk0)
+(fsk0,bc)
+(fsk0,ab)
+(fsk0,abc)
+(fsk0,abc')
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(abc,abc')
+]
+Eqs:[
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GB a3GD )",Atom "( (_ map either1844563632877519197 ) a3GB a3GD )"],(UnionL [k,v,b,c],UnionL [k,v,b,c]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GC a3GD )",Atom "( (_ map either1844563632877519197 ) a3GC a3GD )"],(UnionL [k,v,ab,c],UnionL [k,v,ab,c]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GF )",Atom "( (_ map either1844563632877519197 ) a3GA a3GF )"],(UnionL [k,v,a,bc],UnionL [k,v,a,bc]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GB )",Atom "( (_ map either1844563632877519197 ) a3GA a3GB )"],(UnionL [k,v,a,b],UnionL [k,v,a,b]))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GB a3GD )",Atom "a3GF"],(UnionL [k,v,b,c],bc))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GB )",Atom "a3GC"],(UnionL [k,v,a,b],ab))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GC a3GD )",Atom "a3GE"],(UnionL [k,v,ab,c],abc))
+(List [Atom "=",Atom "( (_ map either1844563632877519197 ) a3GA a3GF )",Atom "a3GG"],(UnionL [k,v,a,bc],abc'))
+(List [Atom "=",Atom "a3GE",Atom "a3GG"],(abc,abc'))
+]
+Decs:[
+Atom "(declare-sort Sorta3Gy)"
+Atom "(declare-sort Sorta3Gz)"
+Atom "(declare-const a3GA (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GB (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GC (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GD (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GE (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GF (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-const a3GG (Array Sorta3Gy (Maybe Sorta3Gz)))"
+Atom "(declare-fun either1844563632877519197 ((Maybe Sorta3Gz) (Maybe Sorta3Gz)) (Maybe Sorta3Gz))"
+Atom "(assert (forall ((y (Maybe Sorta3Gz))) (= (either1844563632877519197 (as nothing (Maybe Sorta3Gz) ) y) y)))"
+Atom "(assert (forall ((x (Maybe Sorta3Gz)) (y (Maybe Sorta3Gz))) (=> ((_ is (just (Sorta3Gz) (Maybe Sorta3Gz) ) ) x) (= (either1844563632877519197 x y) x))))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3Gy)
+[<-recv] success
+[send->] (declare-sort Sorta3Gz)
+[<-recv] success
+[send->] (declare-const a3GA (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GB (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GC (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GD (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GE (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GF (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-const a3GG (Array Sorta3Gy (Maybe Sorta3Gz)))
+[<-recv] success
+[send->] (declare-fun either1844563632877519197 ((Maybe Sorta3Gz) (Maybe Sorta3Gz)) (Maybe Sorta3Gz))
+[<-recv] success
+[send->] (assert (forall ((y (Maybe Sorta3Gz))) (= (either1844563632877519197 (as nothing (Maybe Sorta3Gz) ) y) y)))
+[<-recv] success
+[send->] (assert (forall ((x (Maybe Sorta3Gz)) (y (Maybe Sorta3Gz))) (=> ((_ is (just (Sorta3Gz) (Maybe Sorta3Gz) ) ) x) (= (either1844563632877519197 x y) x))))
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GB a3GD ) ( (_ map either1844563632877519197 ) a3GB a3GD ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GC a3GD ) ( (_ map either1844563632877519197 ) a3GC a3GD ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GF ) ( (_ map either1844563632877519197 ) a3GA a3GF ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GB ) ( (_ map either1844563632877519197 ) a3GA a3GB ) ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GB a3GD ) a3GF ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GB ) a3GC ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GC a3GD ) a3GE ) )
+[<-recv] success
+[send->] (assert (= ( (_ map either1844563632877519197 ) a3GA a3GF ) a3GG ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= a3GE a3GG ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(<? [a,b],fsk0)
+(fsk0,True [])
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(< a3GQ a3GR)",Atom "(< a3GQ a3GR)"],(<? [a,b],<? [a,b]))
+(List [Atom "=",Atom "(< a3GQ a3GR)",Atom "true"],(<? [a,b],True []))
+]
+Decs:[
+Atom "(declare-const a3GQ Int)"
+Atom "(declare-const a3GR Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3GQ Int)
+[<-recv] success
+[send->] (declare-const a3GR Int)
+[<-recv] success
+[send->] (assert (= (< a3GQ a3GR) (< a3GQ a3GR) ) )
+[<-recv] success
+[send->] (assert (= (< a3GQ a3GR) true ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(<? [a,b],fsk0)
+(<? [b,c],fsk0)
+(fsk0,True [])
+(fsk0,True [])
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(< a3GQ a3GR)",Atom "(< a3GQ a3GR)"],(<? [a,b],<? [a,b]))
+(List [Atom "=",Atom "(< a3GR a3GS)",Atom "(< a3GR a3GS)"],(<? [b,c],<? [b,c]))
+(List [Atom "=",Atom "(< a3GQ a3GR)",Atom "true"],(<? [a,b],True []))
+(List [Atom "=",Atom "(< a3GR a3GS)",Atom "true"],(<? [b,c],True []))
+]
+Decs:[
+Atom "(declare-const a3GQ Int)"
+Atom "(declare-const a3GR Int)"
+Atom "(declare-const a3GS Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3GQ Int)
+[<-recv] success
+[send->] (declare-const a3GR Int)
+[<-recv] success
+[send->] (declare-const a3GS Int)
+[<-recv] success
+[send->] (assert (= (< a3GQ a3GR) (< a3GQ a3GR) ) )
+[<-recv] success
+[send->] (assert (= (< a3GR a3GS) (< a3GR a3GS) ) )
+[<-recv] success
+[send->] (assert (= (< a3GQ a3GR) true ) )
+[<-recv] success
+[send->] (assert (= (< a3GR a3GS) true ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(<? [a,b],fsk0)
+(<? [b,c],fsk0)
+(fsk0,True [])
+(fsk0,True [])
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(<? [a,c],True [])
+]
+Eqs:[
+(List [Atom "=",Atom "(< a3GQ a3GR)",Atom "(< a3GQ a3GR)"],(<? [a,b],<? [a,b]))
+(List [Atom "=",Atom "(< a3GR a3GS)",Atom "(< a3GR a3GS)"],(<? [b,c],<? [b,c]))
+(List [Atom "=",Atom "(< a3GQ a3GR)",Atom "true"],(<? [a,b],True []))
+(List [Atom "=",Atom "(< a3GR a3GS)",Atom "true"],(<? [b,c],True []))
+(List [Atom "=",Atom "(< a3GQ a3GS)",Atom "true"],(<? [a,c],True []))
+]
+Decs:[
+Atom "(declare-const a3GQ Int)"
+Atom "(declare-const a3GR Int)"
+Atom "(declare-const a3GS Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3GQ Int)
+[<-recv] success
+[send->] (declare-const a3GR Int)
+[<-recv] success
+[send->] (declare-const a3GS Int)
+[<-recv] success
+[send->] (assert (= (< a3GQ a3GR) (< a3GQ a3GR) ) )
+[<-recv] success
+[send->] (assert (= (< a3GR a3GS) (< a3GR a3GS) ) )
+[<-recv] success
+[send->] (assert (= (< a3GQ a3GR) true ) )
+[<-recv] success
+[send->] (assert (= (< a3GR a3GS) true ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (< a3GQ a3GS) true ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(Delete [Symbol [],TYPE [LiftedRep []],m,field],fsk0)
+(fsk0,m)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IR a3IS (as nothing (Maybe Type) )  )",Atom "(store a3IR a3IS (as nothing (Maybe Type) )  )"],(Delete [Symbol [],TYPE [LiftedRep []],m,field],Delete [Symbol [],TYPE [LiftedRep []],m,field]))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+(List [Atom "=",Atom "(store a3IR a3IS (as nothing (Maybe Type) )  )",Atom "a3IO"],(Delete [Symbol [],TYPE [LiftedRep []],m,field],m))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+Atom "(declare-const a3IR (Array String (Maybe Type)))"
+Atom "(declare-const a3IS String)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IR (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IS String)
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IR a3IS (as nothing (Maybe Type) )  ) (store a3IR a3IS (as nothing (Maybe Type) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (assert (= (store a3IR a3IS (as nothing (Maybe Type) )  ) a3IO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(Delete [Symbol [],TYPE [LiftedRep []],m,field],fsk0)
+(fsk0,m)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m)
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IR a3IS (as nothing (Maybe Type) )  )",Atom "(store a3IR a3IS (as nothing (Maybe Type) )  )"],(Delete [Symbol [],TYPE [LiftedRep []],m,field],Delete [Symbol [],TYPE [LiftedRep []],m,field]))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+(List [Atom "=",Atom "(store a3IR a3IS (as nothing (Maybe Type) )  )",Atom "a3IO"],(Delete [Symbol [],TYPE [LiftedRep []],m,field],m))
+(List [Atom "=",Atom "(store a3IR \"price\" (just (lit \"3u\")))",Atom "a3IR"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+Atom "(declare-const a3IR (Array String (Maybe Type)))"
+Atom "(declare-const a3IS String)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IR (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IS String)
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IR a3IS (as nothing (Maybe Type) )  ) (store a3IR a3IS (as nothing (Maybe Type) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (assert (= (store a3IR a3IS (as nothing (Maybe Type) )  ) a3IO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (store a3IR "price" (just (lit "3u"))) a3IR ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],fsk0)
+(fsk0,m)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "(store a3IY a3IZ (just a3J0))"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],Alter [Symbol [],TYPE [LiftedRep []],m,field,val]))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],m))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+Atom "(declare-const a3IY (Array String (Maybe Type)))"
+Atom "(declare-const a3IZ String)"
+Atom "(declare-const a3J0 Type)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IY (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IZ String)
+[<-recv] success
+[send->] (declare-const a3J0 Type)
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) (store a3IY a3IZ (just a3J0)) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) a3IO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",val],fsk0)
+(fsk0,m)
+(fsk0,m)
+(field,"price")
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IY \"price\" (just a3J0))",Atom "(store a3IY a3IZ (just a3J0))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",val],Alter [Symbol [],TYPE [LiftedRep []],m,field,val]))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],m))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+(List [Atom "=",Atom "a3IZ",Atom "\"price\""],(field,"price"))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+Atom "(declare-const a3IY (Array String (Maybe Type)))"
+Atom "(declare-const a3IZ String)"
+Atom "(declare-const a3J0 Type)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IY (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IZ String)
+[<-recv] success
+[send->] (declare-const a3J0 Type)
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IY "price" (just a3J0)) (store a3IY a3IZ (just a3J0)) ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) a3IO ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (assert (= a3IZ "price" ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",val],fsk0)
+(fsk0,m)
+(fsk0,m)
+(field,"price")
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(val,Int [])
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IY \"price\" (just a3J0))",Atom "(store a3IY a3IZ (just a3J0))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",val],Alter [Symbol [],TYPE [LiftedRep []],m,field,val]))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],m))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+(List [Atom "=",Atom "a3IZ",Atom "\"price\""],(field,"price"))
+(List [Atom "=",Atom "a3J0",Atom "(lit \"3u\")"],(val,Int []))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+Atom "(declare-const a3IY (Array String (Maybe Type)))"
+Atom "(declare-const a3IZ String)"
+Atom "(declare-const a3J0 Type)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IY (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IZ String)
+[<-recv] success
+[send->] (declare-const a3J0 Type)
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IY "price" (just a3J0)) (store a3IY a3IZ (just a3J0)) ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) a3IO ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (assert (= a3IZ "price" ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= a3J0 (lit "3u") ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+[G] $dDisEquality_a3Jl {0}:: DisEquality field "price" (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],fsk0)
+(fsk0,m)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "not",List [Atom "=",Atom "a3IZ",Atom "\"price\""]],[G] $dDisEquality_a3Jl {0}:: DisEquality field "price" (CDictCan))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "(store a3IY a3IZ (just a3J0))"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],Alter [Symbol [],TYPE [LiftedRep []],m,field,val]))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],m))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+Atom "(declare-const a3IY (Array String (Maybe Type)))"
+Atom "(declare-const a3IZ String)"
+Atom "(declare-const a3J0 Type)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IY (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IZ String)
+[<-recv] success
+[send->] (declare-const a3J0 Type)
+[<-recv] success
+[send->] (assert (not (= a3IZ "price" ) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) (store a3IY a3IZ (just a3J0)) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) a3IO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~~_a3Rp {0}:: m ~ m (CDictCan)
+[G] $d~_a3Ro {0}:: m ~ m (CDictCan)
+[G] $dDisEquality_a3Jl {0}:: DisEquality field "price" (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],fsk0)
+(fsk0,m)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m)
+]
+Eqs:[
+(List [Atom "not",List [Atom "=",Atom "a3IZ",Atom "\"price\""]],[G] $dDisEquality_a3Jl {0}:: DisEquality field "price" (CDictCan))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "(store a3IO \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "(store a3IY a3IZ (just a3J0))"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],Alter [Symbol [],TYPE [LiftedRep []],m,field,val]))
+(List [Atom "=",Atom "(store a3IO \"price\" (just (lit \"3u\")))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+(List [Atom "=",Atom "(store a3IY a3IZ (just a3J0))",Atom "a3IO"],(Alter [Symbol [],TYPE [LiftedRep []],m,field,val],m))
+(List [Atom "=",Atom "(store a3IY \"price\" (just (lit \"3u\")))",Atom "a3IY"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+]
+Decs:[
+Atom "(declare-const a3IO (Array String (Maybe Type)))"
+Atom "(declare-const a3IY (Array String (Maybe Type)))"
+Atom "(declare-const a3IZ String)"
+Atom "(declare-const a3J0 Type)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3IO (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IY (Array String (Maybe Type)))
+[<-recv] success
+[send->] (declare-const a3IZ String)
+[<-recv] success
+[send->] (declare-const a3J0 Type)
+[<-recv] success
+[send->] (assert (not (= a3IZ "price" ) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) (store a3IO "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) (store a3IY a3IZ (just a3J0)) ) )
+[<-recv] success
+[send->] (assert (= (store a3IO "price" (just (lit "3u"))) a3IO ) )
+[<-recv] success
+[send->] (assert (= (store a3IY a3IZ (just a3J0)) a3IO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (store a3IY "price" (just (lit "3u"))) a3IY ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3RV {0}:: m ~ m (CDictCan)
+[G] $d~~_a3RW {0}:: m ~ m (CDictCan)
+(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],fsk0)
+(fsk0,m)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3Js \"price\" (just (lit \"3u\")))",Atom "(store a3Js \"price\" (just (lit \"3u\")))"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []]))
+(List [Atom "=",Atom "(store a3Js \"price\" (just (lit \"3u\")))",Atom "a3Js"],(Alter [Symbol [],TYPE [LiftedRep []],m,"price",Int []],m))
+]
+Decs:[
+Atom "(declare-const a3Js (Array String (Maybe Type)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Js (Array String (Maybe Type)))
+[<-recv] success
+[send->] (assert (= (store a3Js "price" (just (lit "3u"))) (store a3Js "price" (just (lit "3u"))) ) )
+[<-recv] success
+[send->] (assert (= (store a3Js "price" (just (lit "3u"))) a3Js ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3S8 {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3S9 {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3S7 {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3Sa {0}:: m3 ~ m3 (CDictCan)
+(Alter [Symbol [],Nat [],m2,"ok",2],fsk0)
+(Alter [Symbol [],Nat [],m1,"ok",2],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3LO \"ok\" (just 2))",Atom "(store a3LO \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m2,"ok",2],Alter [Symbol [],Nat [],m2,"ok",2]))
+(List [Atom "=",Atom "(store a3LN \"ok\" (just 2))",Atom "(store a3LN \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m1,"ok",2],Alter [Symbol [],Nat [],m1,"ok",2]))
+(List [Atom "=",Atom "(store a3LO \"ok\" (just 2))",Atom "a3LP"],(Alter [Symbol [],Nat [],m2,"ok",2],m3))
+(List [Atom "=",Atom "(store a3LN \"ok\" (just 2))",Atom "a3LO"],(Alter [Symbol [],Nat [],m1,"ok",2],m2))
+]
+Decs:[
+Atom "(declare-const a3LN (Array String (Maybe Int)))"
+Atom "(declare-const a3LO (Array String (Maybe Int)))"
+Atom "(declare-const a3LP (Array String (Maybe Int)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3LN (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3LO (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3LP (Array String (Maybe Int)))
+[<-recv] success
+[send->] (assert (= (store a3LO "ok" (just 2)) (store a3LO "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3LN "ok" (just 2)) (store a3LN "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3LO "ok" (just 2)) a3LP ) )
+[<-recv] success
+[send->] (assert (= (store a3LN "ok" (just 2)) a3LO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3S8 {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3S9 {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3S7 {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3Sa {0}:: m3 ~ m3 (CDictCan)
+(Alter [Symbol [],Nat [],m2,"ok",2],fsk0)
+(Alter [Symbol [],Nat [],m1,"ok",2],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(m2,m3)
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3LO \"ok\" (just 2))",Atom "(store a3LO \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m2,"ok",2],Alter [Symbol [],Nat [],m2,"ok",2]))
+(List [Atom "=",Atom "(store a3LN \"ok\" (just 2))",Atom "(store a3LN \"ok\" (just 2))"],(Alter [Symbol [],Nat [],m1,"ok",2],Alter [Symbol [],Nat [],m1,"ok",2]))
+(List [Atom "=",Atom "(store a3LO \"ok\" (just 2))",Atom "a3LP"],(Alter [Symbol [],Nat [],m2,"ok",2],m3))
+(List [Atom "=",Atom "(store a3LN \"ok\" (just 2))",Atom "a3LO"],(Alter [Symbol [],Nat [],m1,"ok",2],m2))
+(List [Atom "=",Atom "a3LO",Atom "a3LP"],(m2,m3))
+]
+Decs:[
+Atom "(declare-const a3LN (Array String (Maybe Int)))"
+Atom "(declare-const a3LO (Array String (Maybe Int)))"
+Atom "(declare-const a3LP (Array String (Maybe Int)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3LN (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3LO (Array String (Maybe Int)))
+[<-recv] success
+[send->] (declare-const a3LP (Array String (Maybe Int)))
+[<-recv] success
+[send->] (assert (= (store a3LO "ok" (just 2)) (store a3LO "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3LN "ok" (just 2)) (store a3LN "ok" (just 2)) ) )
+[<-recv] success
+[send->] (assert (= (store a3LO "ok" (just 2)) a3LP ) )
+[<-recv] success
+[send->] (assert (= (store a3LN "ok" (just 2)) a3LO ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= a3LO a3LP ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Sm {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3Sn {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3Sl {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3So {0}:: m3 ~ m3 (CDictCan)
+(Delete [Symbol [],v,m2,"bob"],fsk0)
+(Delete [Symbol [],v,m1,"bob"],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3LZ \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "(store a3LZ \"bob\" (as nothing (Maybe Sorta3LX) )  )"],(Delete [Symbol [],v,m2,"bob"],Delete [Symbol [],v,m2,"bob"]))
+(List [Atom "=",Atom "(store a3LY \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "(store a3LY \"bob\" (as nothing (Maybe Sorta3LX) )  )"],(Delete [Symbol [],v,m1,"bob"],Delete [Symbol [],v,m1,"bob"]))
+(List [Atom "=",Atom "(store a3LZ \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "a3M0"],(Delete [Symbol [],v,m2,"bob"],m3))
+(List [Atom "=",Atom "(store a3LY \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "a3LZ"],(Delete [Symbol [],v,m1,"bob"],m2))
+]
+Decs:[
+Atom "(declare-sort Sorta3LX)"
+Atom "(declare-const a3LY (Array String (Maybe Sorta3LX)))"
+Atom "(declare-const a3LZ (Array String (Maybe Sorta3LX)))"
+Atom "(declare-const a3M0 (Array String (Maybe Sorta3LX)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3LX)
+[<-recv] success
+[send->] (declare-const a3LY (Array String (Maybe Sorta3LX)))
+[<-recv] success
+[send->] (declare-const a3LZ (Array String (Maybe Sorta3LX)))
+[<-recv] success
+[send->] (declare-const a3M0 (Array String (Maybe Sorta3LX)))
+[<-recv] success
+[send->] (assert (= (store a3LZ "bob" (as nothing (Maybe Sorta3LX) )  ) (store a3LZ "bob" (as nothing (Maybe Sorta3LX) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3LY "bob" (as nothing (Maybe Sorta3LX) )  ) (store a3LY "bob" (as nothing (Maybe Sorta3LX) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3LZ "bob" (as nothing (Maybe Sorta3LX) )  ) a3M0 ) )
+[<-recv] success
+[send->] (assert (= (store a3LY "bob" (as nothing (Maybe Sorta3LX) )  ) a3LZ ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $d~_a3Sm {0}:: m2 ~ m2 (CDictCan)
+[G] $d~_a3Sn {0}:: m3 ~ m3 (CDictCan)
+[G] $d~~_a3Sl {0}:: m2 ~ m2 (CDictCan)
+[G] $d~~_a3So {0}:: m3 ~ m3 (CDictCan)
+(Delete [Symbol [],v,m2,"bob"],fsk0)
+(Delete [Symbol [],v,m1,"bob"],fsk0)
+(fsk0,m3)
+(fsk0,m2)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(m2,m3)
+]
+Eqs:[
+(List [Atom "=",Atom "(store a3LZ \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "(store a3LZ \"bob\" (as nothing (Maybe Sorta3LX) )  )"],(Delete [Symbol [],v,m2,"bob"],Delete [Symbol [],v,m2,"bob"]))
+(List [Atom "=",Atom "(store a3LY \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "(store a3LY \"bob\" (as nothing (Maybe Sorta3LX) )  )"],(Delete [Symbol [],v,m1,"bob"],Delete [Symbol [],v,m1,"bob"]))
+(List [Atom "=",Atom "(store a3LZ \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "a3M0"],(Delete [Symbol [],v,m2,"bob"],m3))
+(List [Atom "=",Atom "(store a3LY \"bob\" (as nothing (Maybe Sorta3LX) )  )",Atom "a3LZ"],(Delete [Symbol [],v,m1,"bob"],m2))
+(List [Atom "=",Atom "a3LZ",Atom "a3M0"],(m2,m3))
+]
+Decs:[
+Atom "(declare-sort Sorta3LX)"
+Atom "(declare-const a3LY (Array String (Maybe Sorta3LX)))"
+Atom "(declare-const a3LZ (Array String (Maybe Sorta3LX)))"
+Atom "(declare-const a3M0 (Array String (Maybe Sorta3LX)))"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-sort Sorta3LX)
+[<-recv] success
+[send->] (declare-const a3LY (Array String (Maybe Sorta3LX)))
+[<-recv] success
+[send->] (declare-const a3LZ (Array String (Maybe Sorta3LX)))
+[<-recv] success
+[send->] (declare-const a3M0 (Array String (Maybe Sorta3LX)))
+[<-recv] success
+[send->] (assert (= (store a3LZ "bob" (as nothing (Maybe Sorta3LX) )  ) (store a3LZ "bob" (as nothing (Maybe Sorta3LX) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3LY "bob" (as nothing (Maybe Sorta3LX) )  ) (store a3LY "bob" (as nothing (Maybe Sorta3LX) )  ) ) )
+[<-recv] success
+[send->] (assert (= (store a3LZ "bob" (as nothing (Maybe Sorta3LX) )  ) a3M0 ) )
+[<-recv] success
+[send->] (assert (= (store a3LY "bob" (as nothing (Maybe Sorta3LX) )  ) a3LZ ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= a3LZ a3M0 ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(n,0)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "a3Me",Atom "0"],(n,0))
+]
+Decs:[
+Atom "(declare-const a3Me Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Me Int)
+[<-recv] success
+[send->] (assert (= a3Me 0 ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(+ [1,n],fsk0)
+(fsk0,n)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(+ 1 a3Mm)",Atom "(+ 1 a3Mm)"],(+ [1,n],+ [1,n]))
+(List [Atom "=",Atom "(+ 1 a3Mm)",Atom "a3Me"],(+ [1,n],n))
+]
+Decs:[
+Atom "(declare-const a3Me Int)"
+Atom "(declare-const a3Mm Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Me Int)
+[<-recv] success
+[send->] (declare-const a3Mm Int)
+[<-recv] success
+[send->] (assert (= (+ 1 a3Mm) (+ 1 a3Mm) ) )
+[<-recv] success
+[send->] (assert (= (+ 1 a3Mm) a3Me ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(n,0)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "a3Mw",Atom "0"],(n,0))
+]
+Decs:[
+Atom "(declare-const a3Mw Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Mw Int)
+[<-recv] success
+[send->] (assert (= a3Mw 0 ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(+ [1,n],fsk0)
+(fsk0,n)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(+ 1 a3MD)",Atom "(+ 1 a3MD)"],(+ [1,n],+ [1,n]))
+(List [Atom "=",Atom "(+ 1 a3MD)",Atom "a3Mw"],(+ [1,n],n))
+]
+Decs:[
+Atom "(declare-const a3Mw Int)"
+Atom "(declare-const a3MD Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Mw Int)
+[<-recv] success
+[send->] (declare-const a3MD Int)
+[<-recv] success
+[send->] (assert (= (+ 1 a3MD) (+ 1 a3MD) ) )
+[<-recv] success
+[send->] (assert (= (+ 1 a3MD) a3Mw ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(n,0)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "a3MM",Atom "0"],(n,0))
+]
+Decs:[
+Atom "(declare-const a3MM Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3MM Int)
+[<-recv] success
+[send->] (assert (= a3MM 0 ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(+ [1,n],fsk0)
+(fsk0,n)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(+ 1 a3MT)",Atom "(+ 1 a3MT)"],(+ [1,n],+ [1,n]))
+(List [Atom "=",Atom "(+ 1 a3MT)",Atom "a3MM"],(+ [1,n],n))
+]
+Decs:[
+Atom "(declare-const a3MM Int)"
+Atom "(declare-const a3MT Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3MM Int)
+[<-recv] success
+[send->] (declare-const a3MT Int)
+[<-recv] success
+[send->] (assert (= (+ 1 a3MT) (+ 1 a3MT) ) )
+[<-recv] success
+[send->] (assert (= (+ 1 a3MT) a3MM ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(+ [1,n],fsk0)
+(fsk0,n)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(+ [1,+ [n,m]],+ [n,m])
+]
+Eqs:[
+(List [Atom "=",Atom "(+ 1 a3MT)",Atom "(+ 1 a3MT)"],(+ [1,n],+ [1,n]))
+(List [Atom "=",Atom "(+ 1 a3MT)",Atom "a3MM"],(+ [1,n],n))
+(List [Atom "=",Atom "(+ 1 (+ a3MT a3MO))",Atom "(+ a3MM a3MO)"],(+ [1,+ [n,m]],+ [n,m]))
+]
+Decs:[
+Atom "(declare-const a3MM Int)"
+Atom "(declare-const a3MO Int)"
+Atom "(declare-const a3MT Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3MM Int)
+[<-recv] success
+[send->] (declare-const a3MO Int)
+[<-recv] success
+[send->] (declare-const a3MT Int)
+[<-recv] success
+[send->] (assert (= (+ 1 a3MT) (+ 1 a3MT) ) )
+[<-recv] success
+[send->] (assert (= (+ 1 a3MT) a3MM ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (+ 1 (+ a3MT a3MO)) (+ a3MM a3MO) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(+ [a,b],fsk0)
+(+ [a,a],fsk0)
+(fsk0,fsk0)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(+ a3N4 a3N5)",Atom "(+ a3N4 a3N5)"],(+ [a,b],+ [a,b]))
+(List [Atom "=",Atom "(+ a3N4 a3N4)",Atom "(+ a3N4 a3N4)"],(+ [a,a],+ [a,a]))
+(List [Atom "=",Atom "(+ a3N4 a3N4)",Atom "(+ a3N4 a3N5)"],(+ [a,a],+ [a,b]))
+]
+Decs:[
+Atom "(declare-const a3N4 Int)"
+Atom "(declare-const a3N5 Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3N4 Int)
+[<-recv] success
+[send->] (declare-const a3N5 Int)
+[<-recv] success
+[send->] (assert (= (+ a3N4 a3N5) (+ a3N4 a3N5) ) )
+[<-recv] success
+[send->] (assert (= (+ a3N4 a3N4) (+ a3N4 a3N4) ) )
+[<-recv] success
+[send->] (assert (= (+ a3N4 a3N4) (+ a3N4 a3N5) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+(+ [a,b],fsk0)
+(+ [a,a],fsk0)
+(fsk0,fsk0)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(a,b)
+]
+Eqs:[
+(List [Atom "=",Atom "(+ a3N4 a3N5)",Atom "(+ a3N4 a3N5)"],(+ [a,b],+ [a,b]))
+(List [Atom "=",Atom "(+ a3N4 a3N4)",Atom "(+ a3N4 a3N4)"],(+ [a,a],+ [a,a]))
+(List [Atom "=",Atom "(+ a3N4 a3N4)",Atom "(+ a3N4 a3N5)"],(+ [a,a],+ [a,b]))
+(List [Atom "=",Atom "a3N4",Atom "a3N5"],(a,b))
+]
+Decs:[
+Atom "(declare-const a3N4 Int)"
+Atom "(declare-const a3N5 Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3N4 Int)
+[<-recv] success
+[send->] (declare-const a3N5 Int)
+[<-recv] success
+[send->] (assert (= (+ a3N4 a3N5) (+ a3N4 a3N5) ) )
+[<-recv] success
+[send->] (assert (= (+ a3N4 a3N4) (+ a3N4 a3N4) ) )
+[<-recv] success
+[send->] (assert (= (+ a3N4 a3N4) (+ a3N4 a3N5) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= a3N4 a3N5 ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(+ [a,b],+ [b,a])
+]
+Eqs:[
+(List [Atom "=",Atom "(+ a3Nd a3Ne)",Atom "(+ a3Ne a3Nd)"],(+ [a,b],+ [b,a]))
+]
+Decs:[
+Atom "(declare-const a3Nd Int)"
+Atom "(declare-const a3Ne Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Nd Int)
+[<-recv] success
+[send->] (declare-const a3Ne Int)
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (+ a3Nd a3Ne) (+ a3Ne a3Nd) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+(+ [a,1],+ [1,a])
+]
+Eqs:[
+(List [Atom "=",Atom "(+ a3Nl 1)",Atom "(+ 1 a3Nl)"],(+ [a,1],+ [1,a]))
+]
+Decs:[
+Atom "(declare-const a3Nl Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Nl Int)
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert (or false (not (= (+ a3Nl 1) (+ 1 a3Nl) ) ) ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $dShow_a3Nx {0}:: Show a (CDictCan)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+
+]
+Decs:[
+
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $dShow_a3Nx {0}:: Show a (CDictCan)
+(n,0)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "a3Nw",Atom "0"],(n,0))
+]
+Decs:[
+Atom "(declare-const a3Nw Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Nw Int)
+[<-recv] success
+[send->] (assert (= a3Nw 0 ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+
+
+  ----- Plugin Call HERE !!! ------
+
+
+Solver Call Start:
+	Givens: 
+[
+[G] $dShow_a3Nx {0}:: Show a (CDictCan)
+(+ [1,n],fsk0)
+(fsk0,n)
+]
+	Wanteds: 
+[
+
+]
+	Desireds: 
+[
+
+]
+Eqs:[
+(List [Atom "=",Atom "(+ 1 a3NF)",Atom "(+ 1 a3NF)"],(+ [1,n],+ [1,n]))
+(List [Atom "=",Atom "(+ 1 a3NF)",Atom "a3Nw"],(+ [1,n],n))
+]
+Decs:[
+Atom "(declare-const a3Nw Int)"
+Atom "(declare-const a3NF Int)"
+]
+[send->] (push 1 )
+[<-recv] success
+[send->] (declare-const a3Nw Int)
+[<-recv] success
+[send->] (declare-const a3NF Int)
+[<-recv] success
+[send->] (assert (= (+ 1 a3NF) (+ 1 a3NF) ) )
+[<-recv] success
+[send->] (assert (= (+ 1 a3NF) a3Nw ) )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] sat
+[send->] (assert false )
+[<-recv] success
+[send->] (check-sat )
+[<-recv] unsat
+[send->] (pop 1 )
+[<-recv] success
+[send->] (exit )
+Failed, no modules loaded.
+[send->] (set-option :print-success true )
+[<-recv] success
+[send->] (set-option :produce-models true )
+[<-recv] success
+[send->] (declare-datatypes () ((Type (apply (fst Type)  (snd Type)) (lit (getstr String)))))
+[<-recv] success
+[send->] (declare-datatypes (T) ((Maybe nothing (just (fromJust T)))))
+[<-recv] success
+[send->] (push 1 )
+[<-recv] success
+[send->] (exit )
+Loaded GHCi configuration from /tmp/haskell-stack-ghci/e5eb40c1/ghci-script
+Leaving GHCi.

@@ -183,6 +183,14 @@ union1 = Refl
 
 -- Intersect Test
 
+intersect1 ::
+  ( IntersectFm a b ab
+  , IntersectFm ab c abc
+  , IntersectFm b c bc
+  , IntersectFm a bc abc'
+  ) => abc :~: abc'
+intersect1 = Refl
+
 
 
 
