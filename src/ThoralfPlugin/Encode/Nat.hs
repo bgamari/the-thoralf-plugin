@@ -3,10 +3,11 @@
 #-}
 module ThoralfPlugin.Encode.Nat ( natTheory ) where
 
+import GhcPlugins ( getUnique )
 import TysWiredIn ( typeNatKindCon )
 import TcTypeNats ( typeNatAddTyCon, typeNatSubTyCon )
 import qualified SimpleSMT as SMT
-import Type ( Type, classifyPredType, PredTree(..),
+import Type ( Type, classifyPredType, PredTree(..), TyVar,
               EqRel(..), splitTyConApp_maybe, isStrLitTy,
               splitFunTy_maybe, getTyVar_maybe, tyVarKind,
               tyConAppTyCon_maybe,
@@ -27,6 +28,7 @@ natEncoding :: TheoryEncoding
 natEncoding = emptyTheory
   { typeConvs = [natLitConv, natAddConv, natSubConv]
   , kindConvs = [natKindConv]
+  , tyVarPreds = assertIntIsNat
   }
 
 
@@ -65,6 +67,14 @@ natSubConv ty = do
       in
         return $ TyConvCont tyList VNil mkNatSExpr []
     (_, _) -> Nothing
+
+
+assertIntIsNat :: TyVar -> Maybe [String]
+assertIntIsNat tv = do
+  (KdConvCont _ _) <- natKindConv (tyVarKind tv)
+  let name = show $ getUnique tv
+  let isNat = "(assert (< 0 " ++ name ++ "))"
+  return [isNat]
 
 
 natKindConv :: Type -> Maybe KdConvCont

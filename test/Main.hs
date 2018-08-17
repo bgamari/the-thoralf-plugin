@@ -7,7 +7,6 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE RankNTypes #-}
 
-
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
@@ -18,6 +17,7 @@ module Main where
 import ThoralfPlugin.Theory.FiniteMap
 import ThoralfPlugin.Theory.Bool
 import ThoralfPlugin.Singletons.Symbol
+import ThoralfPlugin.Singletons.Nat
 import qualified ThoralfPlugin.Theory.DisEq as D
 
 import Data.Kind ( Type )
@@ -192,6 +192,11 @@ intersect1 ::
 intersect1 = Refl
 
 
+
+-- | Nats are nats
+
+isNat :: SNat n -> (0 <? n) :~: True
+isNat SNat = Refl
 
 
 

@@ -19,16 +19,17 @@ import Data.List ( partition, intersperse )
 import qualified Data.Map.Strict as M
 import qualified Data.Set as Set
 import qualified SimpleSMT as SMT
-import Control.Monad ( sequence_ )
 import Data.Functor.Identity
 import Class ( Class(..) )
 import System.IO.Error
+import Data.IORef ( IORef )
 
 
 -- GHC API imports:
 import GhcPlugins ( getUnique, getOccName )
 import TcPluginM ( tcPluginIO, lookupOrig, tcLookupClass
-                 , findImportedModule, FindResult(..), zonkCt )
+                 , findImportedModule, FindResult(..), zonkCt
+                 , unsafeTcPluginTcM )
 import TcRnTypes
   ( WantedConstraints, Ct, TcPluginM, TcPluginResult (..)
   , TcPlugin (..), isGivenCt  )
@@ -42,6 +43,7 @@ import Var ( Var, isTcTyVar )
 import Module ( Module, mkModuleName )
 import OccName ( mkTcOcc, occNameString )
 import Outputable ( showSDocUnsafe, ppr )
+import IOEnv ( newMutVar, readMutVar, writeMutVar )
 
 
 -- Internal Imports
@@ -57,7 +59,7 @@ type Map = M.Map
 
 data ThoralfState where
   ThoralfState ::
-    { smtSolver :: SMT.Solver
+    { smtSolver :: IORef SMT.Solver
     , theoryEncoding :: TheoryEncoding
     , disEqClass :: Class
     } -> ThoralfState
@@ -88,7 +90,8 @@ mkThoralfInit debug seed = do
     _ <- traverse (SMT.ackCommand z3Solver) $ map SMT.Atom decs
     SMT.push z3Solver
     return z3Solver
-  return $ ThoralfState z3Solver encoding disEq
+  solverRef <- unsafeTcPluginTcM $ newMutVar z3Solver
+  return $ ThoralfState solverRef encoding disEq
 
   where
 
@@ -112,7 +115,8 @@ mkThoralfInit debug seed = do
 
 
 thoralfStop :: ThoralfState -> TcPluginM ()
-thoralfStop (ThoralfState {smtSolver = solver}) = do
+thoralfStop (ThoralfState {smtSolver = solverRef}) = do
+  solver <- unsafeTcPluginTcM $ readMutVar solverRef
   _ <- tcPluginIO (SMT.stop solver)
   return ()
 
@@ -120,14 +124,17 @@ thoralfStop (ThoralfState {smtSolver = solver}) = do
 
 thoralfSolver :: Debug ->
   ThoralfState -> [Ct] -> [Ct] -> [Ct] -> TcPluginM TcPluginResult
-thoralfSolver debug (ThoralfState smt encode deCls) gs ws ds = do
+thoralfSolver debug (ThoralfState smtRef encode deCls) gs ws ds = do
+  -- Refresh the solver
+  _ <- refresh encode smtRef debug
+  smt <- unsafeTcPluginTcM $ readMutVar smtRef
+
   -- Preprocessing
-  printCts debug False gs ws ds
+  _ <- printCts debug False gs ws ds
   zonkedCts <- zonkEverything (gs ++ ws ++ ds)
 
   -- Define reused functions
   let hideError = flip catchIOError (const $ return SMT.Sat)
-  let push = SMT.push smt
   let pop = SMT.pop smt
   let noSolving = return $ TcPluginOk [] []
 
@@ -140,8 +147,8 @@ thoralfSolver debug (ThoralfState smt encode deCls) gs ws ds = do
       let wCtsWithEv = mapMaybe addEvTerm wCts
       givenCheck <- tcPluginIO $ hideError $ do
         SMT.push smt
-        traverse (SMT.ackCommand smt) smtDecs
-        traverse (SMT.assert smt) gSExprs
+        _ <- traverse (SMT.ackCommand smt) smtDecs
+        _ <- traverse (SMT.assert smt) gSExprs
         SMT.check smt
       case givenCheck of
         SMT.Unknown ->  tcPluginIO pop >> noSolving
@@ -157,6 +164,34 @@ thoralfSolver debug (ThoralfState smt encode deCls) gs ws ds = do
               return (TcPluginOk wCtsWithEv [])
             SMT.Unknown -> tcPluginIO pop >> noSolving
             SMT.Sat -> tcPluginIO pop >> noSolving
+
+
+refresh :: TheoryEncoding -> IORef SMT.Solver -> Debug -> TcPluginM ()
+refresh encoding solverRef debug = do
+  solver <- unsafeTcPluginTcM $ readMutVar solverRef
+  _ <- tcPluginIO $ SMT.stop solver
+  let decs = startDecs encoding
+  z3Solver <- tcPluginIO $ do
+    let logLevel = if debug then 0 else 1
+    logger <- SMT.newLogger logLevel
+    z3Solver <- grabSMTsolver logger
+    SMT.ackCommand z3Solver typeDataType
+    _ <- traverse (SMT.ackCommand z3Solver) $ map SMT.Atom decs
+    SMT.push z3Solver
+    return z3Solver
+  unsafeTcPluginTcM $ writeMutVar solverRef z3Solver where
+
+  typeDataType = SMT.Atom typeData
+  typeData = "(declare-datatypes () ((Type (apply (fst Type) \
+             \ (snd Type)) (lit (getstr String)))))"
+
+  grabSMTsolver :: SMT.Logger -> IO SMT.Solver
+  grabSMTsolver logger = SMT.newSolver "z3" solverOpts (Just logger)
+
+  solverOpts = [ "-smt2", "-in" ]
+
+
+
 
 
 data ProcessedEqs where
@@ -203,12 +238,12 @@ addEvTerm ct = do
 
 
 printParsedInputs :: Bool -> [SExpr] -> SExpr -> [SExpr] -> TcPluginM ()
-printParsedInputs True givenSExprs wantedSExpr parseDeclrs = do
+printParsedInputs True gSExpr wSExpr parseDeclrs = do
   tcPluginIO $ do
     putStrLn $ "Given SExpr: \n" ++
-      (show $ map (`SMT.showsSExpr`  "") givenSExprs)
+      (show $ map (`SMT.showsSExpr`  "") gSExpr)
     putStrLn $ "Wanted SExpr: \n" ++
-      (SMT.showsSExpr wantedSExpr "")
+      (SMT.showsSExpr wSExpr "")
     putStrLn $ "Variable Decs: \n" ++
       (show $ map (`SMT.showsSExpr`  "") parseDeclrs)
 printParsedInputs False _ _ _ = return ()

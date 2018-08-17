@@ -17,8 +17,8 @@ module ThoralfPlugin.Encode.TheoryEncoding
   ) where
 
 
-
-import Type ( Type, Kind )
+import Control.Applicative ( (<|>) )
+import Type ( Type, Kind, TyVar )
 import TcRnTypes( TcPluginM )
 import Data.Vec
 
@@ -30,6 +30,7 @@ data TheoryEncoding where
     { kindConvs :: [Type -> Maybe KdConvCont]
     , typeConvs :: [Type -> Maybe TyConvCont]
     , startDecs :: [String]      -- Top level, never changing declarations
+    , tyVarPreds :: TyVar -> Maybe [String] -- $tvpred
     } -> TheoryEncoding
 
 -- $theoryEncoding
@@ -47,6 +48,15 @@ data TheoryEncoding where
 -- generic SMT data types. Since SMT doesn't support polymorhphic
 -- functions, these functions need to be unique per the kind of their
 -- arguments. These are continuations in 'DecCont'.
+
+-- $tvpred
+--
+-- Predicated on type variables. These take the encoding of a type
+-- variable, and create SMT statements which can be asserted that restrict
+-- the variable in question. This is useful for restricting the domain of a
+-- converted type. For instance, if type level naturals are converted into
+-- SMT integers, asserting each integer variable is larger than zero is
+-- sensible.
 
 
 -- | A Kind Conversion Continuation
@@ -70,6 +80,7 @@ data TyConvCont where
 data DecCont where
   DecCont ::
     { decContKds :: Vec n Kind
+    , decContHash :: String
     , decCont :: Vec n String -> [String]
     } -> DecCont
 
@@ -85,9 +96,10 @@ data DecCont where
 -- kinds into a list of strings and feeding that to the 'decCont' function.
 --
 -- A 'DecCont' must satisfy the property that two declarations are the same
--- if and only if the converted list of kinds are the same. So, to make
--- each declaration different, an encoding must use a hash of the converted
--- list of kinds in making the declaration.
+-- if and only if the converted list of kinds and the hashes are the same.
+-- So, to make each declaration different, an encoding must use a hash of
+-- the converted list of kinds along with the given hash to ensure no
+-- declarations are repeated.
 
 
 
@@ -108,6 +120,7 @@ emptyTheory = TheoryEncoding
   { typeConvs = []
   , kindConvs = []
   , startDecs = []
+  , tyVarPreds = const Nothing
   }
 
 addEncodings :: TheoryEncoding -> TheoryEncoding -> TheoryEncoding
@@ -115,6 +128,8 @@ addEncodings encode1 encode2 = TheoryEncoding
   { typeConvs = typeConvs encode1 ++ typeConvs encode2
   , kindConvs = kindConvs encode1 ++ kindConvs encode2
   , startDecs = startDecs encode1 ++ startDecs encode2
+  , tyVarPreds =
+      \tvar -> (tyVarPreds encode1 tvar <|> tyVarPreds encode2 tvar)
   }
 
 

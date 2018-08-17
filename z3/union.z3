@@ -39,9 +39,30 @@
 ;   ( (_ map both)  x     ( (_ map both) y z )         )
 ;)))
 
-(assert  (= (both ))
-)
 
+;(declare-const nil (Array Int (Maybe Int)))
+
+;(assert (= nil ( (as const (Array Int (Maybe Int))) nothing )
+;        )
+;)
+
+;(assert (not
+;  (= nil   ( (_ map both) nil nil  )   )
+;))
+
+
+;(assert (not  (=
+;   ( (_ map both)  ((_ map both) x y) z  )
+;   ( (_ map both)  x     ( (_ map both) y z )         )
+;)))
+
+
+(define-sort Nat () Int)
+(assert (forall ((n Nat)) (< 0 n) )  )
+
+(declare-const a312 Nat)
+
+;(assert (not (= (< 1 (+ a312 1)) true ) ) )
 
 
 

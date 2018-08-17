@@ -135,7 +135,7 @@ unionConvert union ty = do
   (True, _:valKd:m1:m2:_)  <- return match
   let tys = m1 :> m2 :> VNil
   let kds = valKd :> VNil
-  let decCont = DecCont kds eitherDec
+  let decCont = DecCont kds "either" eitherDec
   return $ TyConvCont tys kds unionStr [decCont]
   where
 
@@ -168,7 +168,7 @@ interConvert intersect ty = do
   (True, _:valKd:m1:m2:_)  <- return match
   let tys = m1 :> m2 :> VNil
   let kds = valKd :> VNil
-  let decCont = DecCont kds bothDec
+  let decCont = DecCont kds "both" bothDec
   return $ TyConvCont tys kds interStr [decCont]
   where
 

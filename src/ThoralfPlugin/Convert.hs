@@ -147,6 +147,67 @@ maybeExtractTyEq ct = do
     Nothing -> t
 
 
+-- ** Converting the Dependencies
+----------------------------------------
+
+
+convertDeps :: ConvDependencies -> ConvMonad [SExpr]
+convertDeps (ConvDeps tyvars' kdvars' defvars' decs) = do
+  let nub = S.toList . S.fromList
+  let tyvars = nub tyvars'
+  let kdvars = nub kdvars'
+  let defvars = nub defvars'
+  (EncodingData _ theories) <- ask
+  let mkPred = tyVarPreds theories
+  let tvPreds = foldMap (fmap SMT.Atom) $ mapMaybe mkPred tyvars
+
+  convertedTyVars <- traverse convertTyVars tyvars
+  let tyVarExprs = map fst convertedTyVars
+  let kindVars = nub $ concatMap snd convertedTyVars ++ kdvars
+  let kindExprs = map mkSMTSort kindVars
+  let defExprs = map mkDefaultSMTVar defvars
+  decExprs <- convertDecs decs
+  -- Order matters:
+  let varExprs = kindExprs ++ tyVarExprs ++ defExprs
+  let otherExprs = decExprs ++ tvPreds
+  let exprs = varExprs ++ otherExprs
+  return exprs
+
+
+-- | Converting Local Declarations
+convertDecs :: [Decl] -> ConvMonad [SExpr]
+convertDecs ds = do
+  let assocList = map (\(Decl k v) -> (k,v)) ds
+  let ourMap = M.fromList assocList
+  let uniqueDecs = foldMap snd $ M.toList ourMap
+  return $ map SMT.Atom uniqueDecs where
+
+
+mkDefaultSMTVar :: TyVar -> SExpr
+mkDefaultSMTVar tv = let
+  name = show $ getUnique tv
+  smtStr = "(declare-const " ++ name ++ " Type)"
+  in SMT.Atom smtStr
+
+mkSMTSort :: TyVar -> SExpr
+mkSMTSort tv = let
+  name = "Sort" ++ (show $ getUnique tv)
+  smtStr = "(declare-sort " ++ name ++ ")"
+  in SMT.Atom smtStr
+
+
+-- | Kind variables are just type variables
+type KdVar = TyVar
+convertTyVars :: TyVar -> ConvMonad (SExpr, [KdVar])
+convertTyVars tv = do
+  (smtSort, kindVars) <- convertKind $ tyVarKind tv
+  let tvId = show $ getUnique tv
+  let smtVar = "(declare-const " ++ tvId ++ " " ++ smtSort ++ ")"
+  return (SMT.Atom smtVar, kindVars)
+
+
+
+
 -- * Converting A Single Type
 --------------------------------------------------------------------------------
 
@@ -161,7 +222,7 @@ type ConvertedType = (String, ConvDependencies)
 
 -- | These are pieces of a type that need to be converted into
 -- SMT declarations or definitions in order for the converted
--- type to be well sorted.
+-- type to be well sorted or correct.
 data ConvDependencies where
   ConvDeps ::
     { convTyVars :: [TyVar] -- Type variables for a known theory
@@ -171,12 +232,12 @@ data ConvDependencies where
     } -> ConvDependencies
 
 noDeps :: ConvDependencies
-noDeps = ConvDeps [] [] [] []
+noDeps = mempty
 
 data Decl where
   Decl ::
-    { decKey :: String     -- ^ A unique identifier
-    , localDec :: [String] -- ^ A list of local declarations
+    { decKey :: (String, String) -- ^ A unique identifier
+    , localDec :: [String]       -- ^ A list of local declarations
     } -> Decl
 
 type Hash = String
@@ -245,10 +306,10 @@ convDecConts dcs = do
   return (decls, kdVars) where
 
   convDecCont :: DecCont -> ConvMonad (Decl, [KdVar])
-  convDecCont (DecCont kholes cont) = do
+  convDecCont (DecCont kholes declName cont) = do
    recur <- vecMapAll convertKind kholes
    let kConvs = fmap fst recur
-   let declKey = foldMap id kConvs
+   let declKey = (declName, foldMap id kConvs)
    let kdVars = foldMap snd recur
    let decl = Decl declKey (cont kConvs)
    return (decl, kdVars)
@@ -292,60 +353,6 @@ defConvTy = tryFns [defTyVar, defFn, defTyConApp] where
 
   appDef :: String -> String -> String
   appDef f x = "(apply " ++ f ++ " " ++ x ++ ")"
-
-
--- ** Converting the Dependencies
-----------------------------------------
-
-
-convertDeps :: ConvDependencies -> ConvMonad [SExpr]
-convertDeps (ConvDeps tyvars' kdvars' defvars' decs) = do
-  let nub = S.toList . S.fromList
-  let tyvars = nub tyvars'
-  let kdvars = nub kdvars'
-  let defvars = nub defvars'
-
-  convertedTyVars <- traverse convertTyVars tyvars
-  let tyVarExprs = map fst convertedTyVars
-  let kindVars = nub $ concatMap snd convertedTyVars ++ kdvars
-  let kindExprs = map mkSMTSort kindVars
-  let defExprs = map mkDefaultSMTVar defvars
-  decExprs <- convertDecs decs
-  -- Order matters:
-  let exprs = kindExprs ++ tyVarExprs ++ defExprs ++ decExprs
-  return exprs
-
-
--- | Converting Local Declarations
-convertDecs :: [Decl] -> ConvMonad [SExpr]
-convertDecs ds = do
-  let assocList = map (\(Decl k v) -> (k,v)) ds
-  let ourMap = M.fromList assocList
-  let uniqueDecs = foldMap snd $ M.toList ourMap
-  return $ map SMT.Atom uniqueDecs where
-
-
-mkDefaultSMTVar :: TyVar -> SExpr
-mkDefaultSMTVar tv = let
-  name = show $ getUnique tv
-  smtStr = "(declare-const " ++ name ++ " Type)"
-  in SMT.Atom smtStr
-
-mkSMTSort :: TyVar -> SExpr
-mkSMTSort tv = let
-  name = "Sort" ++ (show $ getUnique tv)
-  smtStr = "(declare-sort " ++ name ++ ")"
-  in SMT.Atom smtStr
-
-
--- | Kind variables are just type variables
-type KdVar = TyVar
-convertTyVars :: TyVar -> ConvMonad (SExpr, [KdVar])
-convertTyVars tv = do
-  (smtSort, kindVars) <- convertKind $ tyVarKind tv
-  let tvId = show $ getUnique tv
-  let smtVar = "(declare-const " ++ tvId ++ " " ++ smtSort ++ ")"
-  return (SMT.Atom smtVar, kindVars)
 
 
 
