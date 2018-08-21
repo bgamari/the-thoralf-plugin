@@ -172,7 +172,7 @@ thoralfSolver debug (ThoralfState smtRef encode deCls) gs' ws' ds' = do
               tcPluginIO pop
               return (TcPluginOk wCtsWithEv [])
             SMT.Unknown -> tcPluginIO pop >> noSolving
-            SMT.Sat -> tcPluginIO (pop >> putStrLn "plug fail") >> noSolving
+            SMT.Sat -> tcPluginIO pop >> noSolving
     _ -> printCts debug True gs ws ds
 
 refresh :: TheoryEncoding -> IORef SMT.Solver -> Debug -> TcPluginM ()
