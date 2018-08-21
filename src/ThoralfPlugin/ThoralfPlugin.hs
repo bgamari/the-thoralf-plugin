@@ -206,35 +206,6 @@ isEqCt diseq ct = case (maybeExtractTyEq ct, maybeExtractTyDisEq diseq ct) of
   _ -> True
 
 
-data ProcessedEqs where
-  ProcessedEqs ::
-    { givenSExprs :: [SExpr] -- ^ Given equalities
-    , wantedSExpr :: SExpr   -- ^ $wsexp
-    , wantedCts :: [Ct]      -- ^ The constraints in our 'wantedAssert'.
-    } -> ProcessedEqs
-
--- $wsexp
---
--- The expression [(not w_1) or (not w_2) or ...] for
--- wanted equalities w_i.
-
-
-processEqs :: [(SExpr, Ct)] -> ProcessedEqs
-processEqs = runIdentity . processEqs'
-
-processEqs' :: [(SExpr, Ct)] -> Identity ProcessedEqs
-processEqs' xs = do
-  let part = partition (isGivenCt . snd) xs
-  let false = SMT.Atom "false"
-  let gs = fst part
-  let ws = snd part
-  return $ ProcessedEqs
-    { givenSExprs = map fst gs
-    , wantedSExpr = foldl SMT.or false (map (SMT.not . fst) ws)
-    , wantedCts = map snd ws
-    }
-
-
 
 -- * Solver Helper Functions
 --------------------------------------------------------------------------------
