@@ -135,7 +135,7 @@ thoralfSolver debug (ThoralfState smtRef encode deCls) gs' ws' ds' = do
   _ <- printCts debug False gs ws ds
 
   -- Define reused functions
-  let print = tcPluginIO . putStrLn . show
+  --let print = tcPluginIO . putStrLn . show
   let hideError = flip catchIOError (const $ return SMT.Sat)
   let pop = SMT.pop smt
   let noSolving = return $ TcPluginOk [] []
@@ -168,7 +168,7 @@ thoralfSolver debug (ThoralfState smtRef encode deCls) gs' ws' ds' = do
             SMT.check smt
           case wantedCheck of
             SMT.Unsat -> do
-              print wCtsWithEv
+              --print wCtsWithEv
               tcPluginIO pop
               return (TcPluginOk wCtsWithEv [])
             SMT.Unknown -> tcPluginIO pop >> noSolving
