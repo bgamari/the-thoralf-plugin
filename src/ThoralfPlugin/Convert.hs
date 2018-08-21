@@ -6,7 +6,7 @@
 
 module ThoralfPlugin.Convert where
 
-import Data.Maybe ( mapMaybe )
+import Data.Maybe ( mapMaybe, catMaybes )
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified SimpleSMT as SMT
@@ -18,7 +18,7 @@ import Control.Monad.Reader
 import GhcPlugins ( getUnique )
 import TcRnTypes ( Ct, ctPred )
 import Class ( Class(..) )
-import TcType ( Kind )
+import TcType ( Kind, tcGetTyVar_maybe )
 import Var ( TyVar )
 import Type ( Type, PredTree (..), EqRel (..), getTyVar_maybe
             , splitTyConApp_maybe, splitFunTy_maybe
@@ -27,6 +27,7 @@ import Type ( Type, PredTree (..), EqRel (..), getTyVar_maybe
 
 -- Internal imports
 import ThoralfPlugin.Encode.TheoryEncoding
+import ThoralfPlugin.Variables
 import Data.Vec
 
 
@@ -58,8 +59,6 @@ data ConvCts where
     } -> ConvCts
 
 
-
-
 -- | Since our encoding data is passed around as a constant state, we put
 -- it in a reader monad. Of course, conversion could fail, so we transform
 -- from a Maybe monad.
@@ -87,8 +86,8 @@ conv cts = do
   EncodingData disEqClass _ <- ask
   let disEquals = extractDisEq disEqClass cts
   let equals = extractEq cts
-  convDisEqs <- traverse convPair (map fst disEquals)
-  convEqs <- traverse convPair (map fst equals)
+  convDisEqs <- mapSome $ fmap convPair (map fst disEquals)
+  convEqs <- mapSome $ fmap convPair (map fst equals)
 
   let deps = mconcat $ map snd convDisEqs ++ map snd convEqs
   decls <- convertDeps deps
@@ -96,6 +95,7 @@ conv cts = do
   let eqExprs = map (mkEqExpr . fst) convEqs
   let disEqExprs = map (mkDisEqExpr . fst) convDisEqs
   let matchingCts = map snd $ disEquals ++ equals
+  --guard (length matchingCts == length (disEqExprs ++ eqExprs))
   let convPairs = zip (disEqExprs ++ eqExprs) matchingCts
   return $ ConvCts convPairs decls
 
@@ -115,6 +115,13 @@ conv cts = do
 
   mkDisEqExpr :: (SExpr, SExpr) -> SExpr
   mkDisEqExpr (s1,s2) = (SMT.not $ SMT.eq s1 s2)
+
+  mapSome :: [ConvMonad a] -> ConvMonad [a]
+  mapSome xs = do
+    state <- ask
+    let maybeVals = map (`runReaderT` state) xs
+    return $ catMaybes maybeVals
+
 
 
 
@@ -138,13 +145,18 @@ maybeExtractTyDisEq disEqCls ct = do
 maybeExtractTyEq :: Ct -> Maybe ((Type, Type), Ct)
 maybeExtractTyEq ct = do
   let predTree = classifyPredType $ ctPred ct
-  EqPred NomEq t1 t2 <- return predTree
+  case predTree of
+    EqPred NomEq t1 t2 -> return ((t1,t2),ct)
+    _ -> Nothing
+
+
+  {-
   return ((simpIfCan t1, simpIfCan t2), ct) where
 
   simpIfCan :: Type -> Type
   simpIfCan t = case coreView t of
     Just t' -> t'
-    Nothing -> t
+    Nothing -> t -}
 
 
 -- ** Converting the Dependencies
@@ -267,7 +279,7 @@ convertType ty =
 
 tyVarConv :: Type -> Maybe (String, TyVar)
 tyVarConv ty = do
-  tyvar <- getTyVar_maybe ty
+  tyvar <- tcGetTyVar_maybe ty
   -- Not checking for skolems.
   -- See doc on "dumb tau variables"
   let isSkolem = True

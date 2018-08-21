@@ -51,11 +51,11 @@ type family TJust (a :: k) :: TMaybe k where {}
 ----------------------------------------------------------------------------
 
 -- The Encoding
-type family Nil :: forall (k :: Type) (v :: Type). Fm k v where {}
+type family Nil :: Fm (k :: Type) (v :: Type) where {}
 
 type family Alter (m :: Fm k v) (key :: k) (val :: v) :: Fm k v where {}
 
-type family Delete (m :: Fm k (v :: Type)) (key :: k) :: Fm k v where {}
+type family Delete (m :: Fm (k :: Type) (v :: Type)) (key :: k) :: Fm k v where {}
 
 type family UnionL (m :: Fm (k :: Type) (v :: Type)) (m' :: Fm k v)
   :: Fm k v where {}
