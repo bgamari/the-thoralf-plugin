@@ -3,7 +3,6 @@
 \\[ ~ \\]
 \\[ ~ \\]
 \\[ ~ \\]
-\\[ ~ \\]
 
 # *Divesh Otwani* *
 ## Haverford College
@@ -17,7 +16,6 @@ $ ~~ $
 
 \\[ ~ \\]
 \\[ ~ \\]
-
 *Presenter
 
 ---
@@ -355,13 +353,10 @@ Note: users define "satisfy" (via the literal equality relation)
 
 
 # Solving EDP: Nats: Handwave S.E.
-
- * Why does this work at all?
+* Why does this work at all?
     * Sufficient: Equivalence of existance of "satisfying" substitutions
-* Encoding property: For encoding function $f : \texttt{GHC-TYPE} \rightarrow \texttt{SMT-SORT}$,
+* S.E. follows from **Encoding property**: For encoding function $f : \texttt{GHC-TYPE} \rightarrow \texttt{SMT-SORT}$,
     * $ t \sim t' \iff f(t) \cong f(t')$
-    * **this implies S.E.**
-
 ## Type Error
     !text
       from the context: n ~ (1 + n1)
@@ -556,7 +551,6 @@ $$ t \sim t' \iff f(t) \cong f(t')$$
 
 > [**github.com/Divesh-Otwani/the-thoralf-plugin**](https://github.com/Divesh-Otwani/the-thoralf-plugin)
 
-\\[ ~ \\]
 \\[ ~ \\]
 \\[ ~ \\]
 
