@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+
+  landslide modifications: Adam Zapletal (adamzap@gmail.com)
+                           Nicolas Perriault (nperriault@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>The Thoralf Plugin</title>
+    <!-- Styles -->
+    
+    <link rel="stylesheet" media="print" href="file:///usr/local/lib/python2.7/dist-packages/landslide-1.1.3-py2.7.egg/landslide/themes/default/css/print.css">
+    <link rel="stylesheet" media="screen, projection" href="file:///usr/local/lib/python2.7/dist-packages/landslide-1.1.3-py2.7.egg/landslide/themes/light/css/screen.css">
+    
+    
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    
+    <script type="text/javascript" src="file:///usr/local/lib/python2.7/dist-packages/landslide-1.1.3-py2.7.egg/landslide/themes/default/js/slides.js"></script>
+    
+    
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+        });
+      </script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <!-- /Javascripts -->
+</head>
+<body>
+  <div id="blank"></div>
+  <div class="presentation">
+    <div id="current_presenter_notes">
+      <div id="presenter_note"></div>
+    </div>
+    <div class="slides">
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-1">
+          <div class="inner">
+            
+            <header><h1>The Thoralf Plugin</h1></header>
+            
+            
+            <section><p>\[ ~ \]
+\[ ~ \]
+\[ ~ \]
+\[ ~ \]</p>
+<h1><em>Divesh Otwani</em> *</h1>
+<h2>Haverford College</h2>
+<h2>dotwani@haverford.edu</h2>
+<p>$ ~~ $</p>
+<h1>Richard A. Eisenberg</h1>
+<h2>Bryn Mawr College</h2>
+<h2>rae@cs.brynmawr.edu</h2>
+<p>\[ ~ \]
+\[ ~ \]</p>
+<p>*Presenter</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              1/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-2">
+          <div class="inner">
+            
+            <header><h1>Agenda</h1></header>
+            
+            
+            <section><ol>
+<li><strong>What's the problem? Who cares?</strong></li>
+<li>Contributions</li>
+<li>Main Ideas<ol>
+<li>Formalization</li>
+<li>Equivalence of Substitutions</li>
+<li>Unification</li>
+</ol>
+</li>
+<li>The Paper</li>
+<li>Conclusion</li>
+</ol></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              2/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-3">
+          <div class="inner">
+            
+            <header><h1>Motivation</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">{-# @OPTIONS_GHC -fplugin ThoralfPlugin.Plugin@ #-}</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="kr">data</span> <span class="kt">Vec</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="kr">where</span>
+<span class="lineno"> 4 </span>  <span class="kt">VNil</span>  <span class="ow">::</span> <span class="kt">Vec</span> <span class="mi">0</span> <span class="n">a</span>
+<span class="lineno"> 5 </span>  <span class="p">(</span><span class="kt">:&gt;</span><span class="p">)</span>  <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">n</span><span class="p">)</span> <span class="n">a</span>
+<span class="lineno"> 6 </span><span class="kr">infixr</span> <span class="mi">5</span> <span class="kt">:&gt;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="nf">concatVec</span> <span class="ow">::</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="lineno"> 9 </span><span class="nf">concatVec</span> <span class="kt">VNil</span>       <span class="n">ys</span>  <span class="ow">=</span>  <span class="n">ys</span>
+<span class="lineno">10 </span><span class="nf">concatVec</span> <span class="p">(</span><span class="n">x</span> <span class="kt">:&gt;</span> <span class="n">xs</span><span class="p">)</span>  <span class="n">ys</span>  <span class="ow">=</span>  <span class="n">x</span> <span class="kt">:&gt;</span> <span class="p">(</span><span class="n">concatVec</span> <span class="n">xs</span> <span class="n">ys</span><span class="p">)</span>
+</pre></div>
+
+<h2>Type error:</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: (1 + (n1 + m)) ~ (n + m)
+<span class="lineno">2 </span>  from the context: n ~ (1 + n1)
+<span class="lineno">3 </span>  Expected type: Vec (n + m) a
+<span class="lineno">4 </span>    Actual type: Vec (1 + (n1 + m)) a
+</pre></div>
+
+<p>\[ ~ \]</p>
+<p>GOAL: Make the <em>right</em> type errors dissapear.</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              3/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-4">
+          <div class="inner">
+            
+            <header><h1>Motivation</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">{-# @OPTIONS_GHC -fplugin ThoralfPlugin.Plugin@ #-}</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="kr">data</span> <span class="kt">Vec</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="kr">where</span>
+<span class="lineno"> 4 </span>  <span class="kt">VNil</span>  <span class="ow">::</span> <span class="kt">Vec</span> <span class="mi">0</span> <span class="n">a</span>
+<span class="lineno"> 5 </span>  <span class="p">(</span><span class="kt">:&gt;</span><span class="p">)</span>  <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">n</span><span class="p">)</span> <span class="n">a</span>
+<span class="lineno"> 6 </span><span class="kr">infixr</span> <span class="mi">5</span> <span class="kt">:&gt;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="nf">concatVec</span> <span class="ow">::</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="lineno"> 9 </span><span class="nf">concatVec</span> <span class="kt">VNil</span>       <span class="n">ys</span>  <span class="ow">=</span>  <span class="n">ys</span>
+<span class="lineno">10 </span><span class="nf">concatVec</span> <span class="p">(</span><span class="n">x</span> <span class="kt">:&gt;</span> <span class="n">xs</span><span class="p">)</span>  <span class="n">ys</span>  <span class="ow">=</span>  <span class="n">x</span> <span class="kt">:&gt;</span> <span class="p">(</span><span class="n">concatVec</span> <span class="n">xs</span> <span class="n">ys</span><span class="p">)</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="nf">fancyLookup</span> <span class="ow">::</span> <span class="kt">In</span> <span class="n">n</span> <span class="n">keys</span> <span class="ow">=&gt;</span> <span class="kt">FancyMap</span> <span class="n">keys</span> <span class="kt">Nat</span> <span class="kt">Bool</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span>
+</pre></div>
+
+<ul>
+<li>Support type indicies<ul>
+<li>These can be fancy: type level sets, finite maps</li>
+</ul>
+</li>
+<li>Allow us to mimic dependent types</li>
+<li>Enable us to write sophisticated data types<ul>
+<li>E.g., Generic records</li>
+</ul>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              4/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-5">
+          <div class="inner">
+            
+            <header><h1>Motivation: Existing Approaches</h1></header>
+            
+            
+            <section><h2>Type Families</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="kr">type</span> <span class="kr">family</span> <span class="p">(</span><span class="n">n</span> <span class="ow">::</span> <span class="kt">Nat</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">m</span> <span class="ow">::</span> <span class="kt">Nat</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="kr">where</span>
+<span class="lineno">2 </span>  <span class="kt">Z</span>     <span class="o">+</span> <span class="n">m</span> <span class="ow">=</span> <span class="kt">Z</span>
+<span class="lineno">3 </span>  <span class="p">(</span><span class="kt">S</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">m</span> <span class="ow">=</span> <span class="kt">S</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+
+<p>Issues: complicated instances, tedious proofs</p>
+<h2>Type Checker Plugins Assert Deductions</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: (1 + (n1 + m)) ~ (n + m)
+<span class="lineno">2 </span>  from the context: n ~ (1 + n1)
+<span class="lineno">3 </span>  Expected type: Vec (n + m) a
+<span class="lineno">4 </span>    Actual type: Vec (1 + (n1 + m)) a
+</pre></div>
+
+<ul>
+<li>Diatchki’s type-nat-solver</li>
+<li>Gundry’s uom-solver</li>
+</ul>
+<h2>Problem Statement</h2>
+<ol>
+<li>Formalize the type error</li>
+<li>Provide an algorithm in a plugin</li>
+</ol></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              5/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-6">
+          <div class="inner">
+            
+            <header><h1>Agenda</h1></header>
+            
+            
+            <section><ol>
+<li><s>What's the problem? Who cares?</s></li>
+<li><strong>Contributions</strong></li>
+<li>Main Ideas<ol>
+<li>Formalization</li>
+<li>Equivalence of Substitutions</li>
+<li>Unification</li>
+</ol>
+</li>
+<li>The Paper</li>
+<li>Conclusion</li>
+</ol></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              6/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-7">
+          <div class="inner">
+            
+            <header><h1>Contributions</h1></header>
+            
+            
+            <section><h2>1. The Thoralf Plugin</h2>
+<blockquote>
+<p><a href="https://github.com/Divesh-Otwani/the-thoralf-plugin"><strong>github.com/Divesh-Otwani/the-thoralf-plugin</strong></a></p>
+</blockquote>
+<ul>
+<li>A handful of indices: nats, maps, sets</li>
+<li>Extensible: Fairly easy to add more indices</li>
+<li>Generic: You can add indicies</li>
+</ul>
+<h2>2. Formalized the problem from the type error</h2>
+<blockquote>
+<p>Call it the <strong>equational deduction problem</strong>,  EDP</p>
+</blockquote>
+<h2>3. Generic, SMT-based algorithm for EDP</h2></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              7/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-8">
+          <div class="inner">
+            
+            <header><h1>Agenda</h1></header>
+            
+            
+            <section><ol>
+<li><s>What's the problem? Who cares?</s></li>
+<li><s>Contributions</s></li>
+<li>Main Ideas<ol>
+<li><strong>Formalization</strong></li>
+<li>Equivalence of Substitutions</li>
+<li>Unification</li>
+</ol>
+</li>
+<li>The Paper</li>
+<li>Conclusion</li>
+</ol></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              8/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-9">
+          <div class="inner">
+            
+            <header><h1>Formalization: Nats</h1></header>
+            
+            
+            <section><h2>Type error:</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: (1 + (n1 + m)) ~ (n + m)
+<span class="lineno">2 </span>  from the context: n ~ (1 + n1)
+<span class="lineno">3 </span>  Expected type: Vec (n + m) a
+<span class="lineno">4 </span>    Actual type: Vec (1 + (n1 + m)) a
+</pre></div>
+
+<h2>Formalizing the error</h2>
+<ul>
+<li>We have a set of given equalities $G$ and a set of wanted equalities $W$.</li>
+<li>
+<p>What does it mean to assume  $n \sim (1 + n_1)~$?</p>
+<ul>
+<li>We have some $n, n_1,m$ such that $n = (1 + n_1)$</li>
+<li>We have a substitution so each for each given $g \sim g'$ 
+we know $g = g'$</li>
+</ul>
+</li>
+<li>
+<p>When do we deduce the wanted equality?</p>
+<ul>
+<li>When all substitutions that satisfy the given equalities satisfy the wanted
+equalities</li>
+</ul>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              9/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-10">
+          <div class="inner">
+            
+            <header><h1>Formalization: Finite Maps</h1></header>
+            
+            
+            <section><blockquote>
+<p>$\texttt{Fm} ::= \texttt{Nil } \vert \texttt{ Alter } fm ~ k ~ v ~\vert
+\texttt{ Delete } fm ~ k$</p>
+</blockquote>
+<h1>Finite Map Type Error</h1>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: m1 ~ (Alter m1 &quot;price&quot; Int)
+<span class="lineno">2 </span>  from the context: m ~ (Alter m1 field val)
+<span class="lineno">3 </span>  or                m ~ Alter m &quot;price&quot; Int
+<span class="lineno">4 </span>  or from           DisEquality &quot;price&quot; field
+</pre></div>
+
+<h1>Analysis</h1>
+<ul>
+<li>The given says we have a $m, m_1, field, val$ such that all givens pairs are
+in fact equal<ul>
+<li>We define the equality relation of literal finite maps, $E$,</li>
+</ul>
+</li>
+</ul>
+<p>$$\frac{\texttt{k} \sim \texttt{k'}}{\texttt{Alter (Alter fm k v1) k' v2} \sim \texttt{Alter fm k v2}}$$</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              10/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-11">
+          <div class="inner">
+            
+            <header><h1>Formalization: Finite Maps</h1></header>
+            
+            
+            <section><blockquote>
+<p>$\texttt{Fm} ::= \texttt{Nil } \vert \texttt{ Alter } fm ~ k ~ v ~\vert
+\texttt{ Delete } fm ~ k$</p>
+</blockquote>
+<h1>Finite Map Type Error</h1>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: m1 ~ (Alter m1 &quot;price&quot; Int)
+<span class="lineno">2 </span>  from the context: m = (Alter m1 field val)
+<span class="lineno">3 </span>  or                m = Alter m &quot;price&quot; Int
+<span class="lineno">4 </span>  or from           &quot;price&quot; != field
+</pre></div>
+
+<h1>Analysis</h1>
+<ul>
+<li>The given says we have a $m, m_1, field, val$ such that all givens pairs are
+in fact equal<ul>
+<li>We define the equality relation of literal finite maps, $E$,</li>
+</ul>
+</li>
+</ul>
+<p>$$\frac{\texttt{k} \sim \texttt{k'}}{\texttt{Alter (Alter fm k v1) k' v2} \sim \texttt{Alter fm k v2}}$$</p>
+<ul>
+<li>We deduce the wanted if, as per our definition of literal equality, all
+  substitutions which "satisfy" the given equalites, also, satisfy the wanted
+  equality</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              11/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-12">
+          <div class="inner">
+            
+            <header><h1>Summary: Formalizing EDP</h1></header>
+            
+            
+            <section><h2>Formalization:</h2>
+<blockquote>
+<p>$ G \Rightarrow W $ iff all (closing) substitutions that satisfy $G$ neccesarily satisfy $W$</p>
+</blockquote>
+<p>Note: users define "satisfy" (via the literal equality relation)</p>
+<h2>Ok, how can we solve this problem?</h2></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              12/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-13">
+          <div class="inner">
+            
+            <header><h1>Agenda</h1></header>
+            
+            
+            <section><ol>
+<li><s>What's the problem? Who cares?</s></li>
+<li><s>Contributions</s></li>
+<li>Main Ideas<ol>
+<li><s>Formalization</s></li>
+<li><strong>Equivalence of Substitutions</strong></li>
+<li>Unification</li>
+</ol>
+</li>
+<li>The Paper</li>
+<li>Conclusion</li>
+</ol></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              13/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-14">
+          <div class="inner">
+            
+            <header><h1>Solving EDP: What are SMT solvers?</h1></header>
+            
+            
+            <section><h2>Simple Example</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>(declare-const n Int)
+<span class="lineno">2 </span>(declare-const m Int)
+<span class="lineno">3 </span>(declare-const n1 Int)
+<span class="lineno">4 </span>
+<span class="lineno">5 </span>; Assert all givens.
+<span class="lineno">6 </span>(assert (= n (+ 1 n1)))
+<span class="lineno">7 </span>(assert (= n1 (+ 1 n)))
+<span class="lineno">8 </span>(check-sat) // unsat
+</pre></div>
+
+<ul>
+<li>We should see unsat above</li>
+</ul>
+<h2>Example Continued</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>; Assert at least one wanted is false.
+<span class="lineno">2 </span>(assert (= n (+ 1 n1)))
+<span class="lineno">3 </span>(assert (not (= n m)))
+<span class="lineno">4 </span>(check-sat)
+</pre></div>
+
+<ul>
+<li>We should see sat above</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              14/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-15">
+          <div class="inner">
+            
+            <header><h1>Solving EDP: Nats</h1></header>
+            
+            
+            <section><ul>
+<li>Why does this work at all?</li>
+</ul>
+<h2>Type Error</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: (n2 - n1) ~ (m - n)
+<span class="lineno">2 </span>  from the context: n ~ (1 + n1)
+<span class="lineno">3 </span>  or from: m ~ (1 + n2)
+</pre></div>
+
+<h2>SMT Query</h2>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span>(declare-const n Int)
+<span class="lineno"> 2 </span>(declare-const m Int)
+<span class="lineno"> 3 </span>(declare-const n1 Int)
+<span class="lineno"> 4 </span>(declare-const n2 Int)
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span>; Assert all givens.
+<span class="lineno"> 7 </span>(assert (= n (+ 1 n1)))
+<span class="lineno"> 8 </span>(assert (= m (+ 1 n2)))
+<span class="lineno"> 9 </span>(check-sat) ; check if givens are consistent
+<span class="lineno">10 </span>
+<span class="lineno">11 </span>; Assert at least one wanted is false.
+<span class="lineno">12 </span>(assert (not (= (- n2 n1) (- m n))))
+<span class="lineno">13 </span>(check-sat) ; we want &quot;unsat&quot;
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              15/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-16">
+          <div class="inner">
+            
+            <header><h1>Solving EDP: Nats: Handwave S.E.</h1></header>
+            
+            
+            <section><ul>
+<li>Why does this work at all?<ul>
+<li>Sufficient: Equivalence of existance of "satisfying" substitutions</li>
+</ul>
+</li>
+<li>Encoding property: For encoding function $f : \texttt{GHC-TYPE} \rightarrow \texttt{SMT-SORT}$,<ul>
+<li>$ t \sim t' \iff f(t) \cong f(t')$</li>
+<li><strong>this implies S.E.</strong></li>
+</ul>
+</li>
+</ul>
+<h2>Type Error</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>  from the context: n ~ (1 + n1)
+<span class="lineno">2 </span>  or from: m ~ (1 + n2)
+</pre></div>
+
+<h2>SMT Query</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span>(declare-const n Int)
+<span class="lineno">2 </span>(declare-const m Int)
+<span class="lineno">3 </span>(declare-const n1 Int)
+<span class="lineno">4 </span>(declare-const n2 Int)
+<span class="lineno">5 </span>
+<span class="lineno">6 </span>; Assert all givens.
+<span class="lineno">7 </span>(assert (= n (+ 1 n1)))
+<span class="lineno">8 </span>(assert (= m (+ 1 n2)))
+<span class="lineno">9 </span>(check-sat) ; check if givens are consistent
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              16/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-17">
+          <div class="inner">
+            
+            <header><h1>Solving EDP: Finite Maps</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: m1 ~ (Alter m1 &quot;price&quot; Int)
+<span class="lineno">2 </span>  from the context: m ~ (Alter m1 field val)
+<span class="lineno">3 </span>  or                m ~ Alter m &quot;price&quot; Int
+<span class="lineno">4 </span>  or from           DisEquality &quot;price&quot; field
+</pre></div>
+
+<h2>SMT Call</h2>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span>(declare-datatypes (T)
+<span class="lineno"> 2 </span>  ((Maybe nothing (just (fromJust T)))))
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span>(declare-const m (Array String (Maybe String)))
+<span class="lineno"> 5 </span>(declare-const m1 (Array String (Maybe String)))
+<span class="lineno"> 6 </span>(declare-const field String)
+<span class="lineno"> 7 </span>(declare-const val String)
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span>; Assert Givens
+<span class="lineno">10 </span>(assert (not (= &quot;price&quot; field)))
+<span class="lineno">11 </span>(assert (= m (store m &quot;price&quot; (just &quot;Int&quot;))))
+<span class="lineno">12 </span>(assert (= m (store m1 field (just val))))
+<span class="lineno">13 </span>(check-sat)
+<span class="lineno">14 </span>
+<span class="lineno">15 </span>; Assert at least one wanted is false.
+<span class="lineno">16 </span>(assert (not (= m1 (store m1 &quot;price&quot; (just &quot;Int&quot;)))))
+<span class="lineno">17 </span>(check-sat)
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              17/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-18">
+          <div class="inner">
+            
+            <header><h1>Solving EDP: Finite Maps: Argue S.E.</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno">1 </span>* Could not deduce: m1 ~ (Alter m1 &quot;price&quot; Int)
+<span class="lineno">2 </span>  from the context: m ~ (Alter m1 field val)
+<span class="lineno">3 </span>  or                m ~ Alter m &quot;price&quot; Int
+<span class="lineno">4 </span>  or from           DisEquality &quot;price&quot; field
+</pre></div>
+
+<ul>
+<li><strong>Suppose</strong> for $f : \texttt{Fm Int Bool} \rightarrow \texttt{Array Int (Maybe
+  Bool)}$, for all $ t,t'$, $ \quad \quad \quad \quad \quad \quad \quad \quad ~~~ t \sim t' \iff f(t) \cong f(t') $</li>
+<li>Claim: Subst. Equiv. of GHC world and SMT world<ul>
+<li>$(\Rightarrow).$ Suppose $\varphi$ satisfies $\texttt{m ~ (Alter m1 field val)}$.</li>
+<li>WTS: $\exists ~m', m_1', field', val'$ such that 
+ $m' \cong \texttt{(store }m' ~field' ~val'\texttt{)}$.</li>
+</ul>
+</li>
+</ul>
+<p>$\varphi(m)  \sim  \varphi(\texttt{Alter } ~~~m_1 ~~~field
+~~~val )\texttt{)}$</p>
+<p>$f(\varphi(m))  \cong f( \varphi(\texttt{Alter } ~~~m_1 ~~~field
+~~~val ))\texttt{)}$</p>
+<p>$f(\varphi(m))  \cong f(\texttt{Alter } ~~~\varphi(m_1) ~~~\varphi(field) 
+~~~((\varphi(val))\texttt{)}$</p>
+<p>$f(\varphi(m))  \cong \texttt{(store } ~~~(f(\varphi(m_1))) ~~~(f(\varphi(field)))
+~~~(f(\varphi(val)))\texttt{)}$</p>
+<ul>
+<li>Other direction ( and general argument similar)</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              18/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-19">
+          <div class="inner">
+            
+            <header><h1>Solving EDP: Summary</h1></header>
+            
+            
+            <section><h2>1. Assert givens and assert at least one wanted false</h2>
+<h2>2. It's sufficient to get substitutive equivalence</h2>
+<p>From this, proving our algorithm meets our specification of EDP is easy.</p>
+<h2>3. This follows from the encoding property:</h2>
+<p>For the encoding function $f : \texttt{GHC-TYPE} \rightarrow \texttt{SMT-SORT}$,</p>
+<p>$$ t \sim t' \iff f(t) \cong f(t')$$</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              19/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-20">
+          <div class="inner">
+            
+            <header><h1>Agenda</h1></header>
+            
+            
+            <section><ol>
+<li><s>What's the problem? Who cares?</s></li>
+<li><s>Contributions</s></li>
+<li>Main Ideas<ol>
+<li><s>Formalization</s></li>
+<li><s>Equivalence of Substitutions</s></li>
+<li><strong>Unification</strong></li>
+</ol>
+</li>
+<li>The Paper</li>
+<li>Conclusion</li>
+</ol></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              20/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-21">
+          <div class="inner">
+            
+            <header><h1>Unification</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="kr">type</span> <span class="kt">Has</span> <span class="n">fm</span> <span class="n">key</span> <span class="n">val</span> <span class="ow">=</span> <span class="p">(</span><span class="kt">Alter</span> <span class="n">fm</span> <span class="n">key</span> <span class="n">val</span> <span class="o">~</span> <span class="n">fm</span><span class="p">)</span>
+<span class="lineno">2 </span>
+<span class="lineno">3 </span><span class="nf">someFn</span> <span class="ow">::</span> <span class="kt">SomeTy</span> <span class="p">(</span><span class="kt">Alter</span> <span class="n">fm</span> <span class="s">&quot;a&quot;</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Int</span>
+<span class="lineno">4 </span>
+<span class="lineno">5 </span><span class="nf">otherFn</span> <span class="ow">::</span> <span class="kt">Has</span> <span class="n">fm</span> <span class="s">&quot;a&quot;</span> <span class="mi">5</span> <span class="ow">=&gt;</span> <span class="kt">SomeTy</span> <span class="n">fm</span> <span class="ow">-&gt;</span> <span class="kt">Int</span>
+</pre></div>
+
+<ul>
+<li>First function introducing a pointless unification variable</li>
+<li>Second function is clearer and less computational annoying</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              21/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-22">
+          <div class="inner">
+            
+            <header><h1>Agenda</h1></header>
+            
+            
+            <section><ol>
+<li><s>What's the problem? Who cares?</s></li>
+<li><s>Contributions</s></li>
+<li><s>Main Ideas</s><ol>
+<li><s>Formalization</s></li>
+<li><s>Equivalence of Substitutions</s></li>
+<li><s>Unification</s></li>
+</ol>
+</li>
+<li><strong>The Paper</strong></li>
+<li>Conclusion</li>
+</ol></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              22/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-23">
+          <div class="inner">
+            
+            <header><h1>The Paper</h1></header>
+            
+            
+            <section><h2>In the paper</h2>
+<ul>
+<li>Starting thoughts on type safety</li>
+<li>Gorey details of formalizing EDP</li>
+<li>A fancy example</li>
+<li>Type-level finite maps</li>
+<li>Extensible records</li>
+</ul>
+<h2><em>Not</em> in the paper</h2>
+<ul>
+<li>Rigorous theory of type safety</li>
+<li>Connection between the EDP problem and the theory behind GHC’s type safety</li>
+<li>Practical examples</li>
+<li>Proof of correctness of the SMT algorithm</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              23/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-24">
+          <div class="inner">
+            
+            <header><h1>Conclusion</h1></header>
+            
+            
+            <section><ul>
+<li>Has potential<ul>
+<li>With SMT solvers growing, could become very powerful</li>
+<li>Many fancy types work now</li>
+</ul>
+</li>
+<li>Lot's of work left<ul>
+<li>Type safety, error messages, proof of correctness</li>
+<li>Practical examples</li>
+</ul>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              24/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-25">
+          <div class="inner">
+            
+            <header><h1>Questions about <em>The Thoralf Plugin</em>?</h1></header>
+            
+            
+            <section><blockquote>
+<p><a href="https://github.com/Divesh-Otwani/the-thoralf-plugin"><strong>github.com/Divesh-Otwani/the-thoralf-plugin</strong></a></p>
+</blockquote>
+<p>\[ ~ \]
+\[ ~ \]
+\[ ~ \]</p>
+<h1><em>Divesh Otwani</em> *</h1>
+<h2>Haverford College</h2>
+<h2>dotwani@haverford.edu</h2>
+<p>$ ~~ $</p>
+<h1>Richard A. Eisenberg</h1>
+<h2>Bryn Mawr College</h2>
+<h2>rae@cs.brynmawr.edu</h2>
+<p>\[ ~ \]</p>
+<p>*Presenter</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              25/25
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div id="toc" class="sidebar hidden">
+    <h2>Table of Contents</h2>
+    <table>
+      <caption>Table of Contents</caption>
+      
+      <tr id="toc-row-1">
+        <th><a href="#slide1">The Thoralf Plugin</a></th>
+        <td><a href="#slide1">1</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-2">
+        <th><a href="#slide2">Agenda</a></th>
+        <td><a href="#slide2">2</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-3">
+        <th><a href="#slide3">Motivation</a></th>
+        <td><a href="#slide3">3</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-4">
+        <th><a href="#slide4">Motivation</a></th>
+        <td><a href="#slide4">4</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-5">
+        <th><a href="#slide5">Motivation: Existing Approaches</a></th>
+        <td><a href="#slide5">5</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-6">
+        <th><a href="#slide6">Agenda</a></th>
+        <td><a href="#slide6">6</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-7">
+        <th><a href="#slide7">Contributions</a></th>
+        <td><a href="#slide7">7</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-8">
+        <th><a href="#slide8">Agenda</a></th>
+        <td><a href="#slide8">8</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-9">
+        <th><a href="#slide9">Formalization: Nats</a></th>
+        <td><a href="#slide9">9</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-10">
+        <th><a href="#slide10">Formalization: Finite Maps</a></th>
+        <td><a href="#slide10">10</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-11">
+        <th><a href="#slide11">Formalization: Finite Maps</a></th>
+        <td><a href="#slide11">11</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-12">
+        <th><a href="#slide12">Summary: Formalizing EDP</a></th>
+        <td><a href="#slide12">12</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-13">
+        <th><a href="#slide13">Agenda</a></th>
+        <td><a href="#slide13">13</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-14">
+        <th><a href="#slide14">Solving EDP: What are SMT solvers?</a></th>
+        <td><a href="#slide14">14</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-15">
+        <th><a href="#slide15">Solving EDP: Nats</a></th>
+        <td><a href="#slide15">15</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-16">
+        <th><a href="#slide16">Solving EDP: Nats: Handwave S.E.</a></th>
+        <td><a href="#slide16">16</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-17">
+        <th><a href="#slide17">Solving EDP: Finite Maps</a></th>
+        <td><a href="#slide17">17</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-18">
+        <th><a href="#slide18">Solving EDP: Finite Maps: Argue S.E.</a></th>
+        <td><a href="#slide18">18</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-19">
+        <th><a href="#slide19">Solving EDP: Summary</a></th>
+        <td><a href="#slide19">19</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-20">
+        <th><a href="#slide20">Agenda</a></th>
+        <td><a href="#slide20">20</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-21">
+        <th><a href="#slide21">Unification</a></th>
+        <td><a href="#slide21">21</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-22">
+        <th><a href="#slide22">Agenda</a></th>
+        <td><a href="#slide22">22</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-23">
+        <th><a href="#slide23">The Paper</a></th>
+        <td><a href="#slide23">23</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-24">
+        <th><a href="#slide24">Conclusion</a></th>
+        <td><a href="#slide24">24</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-25">
+        <th><a href="#slide25">Questions about <em>The Thoralf Plugin</em>?</a></th>
+        <td><a href="#slide25">25</a></td>
+      </tr>
+      
+      
+    </table>
+  </div>
+  
+  <div id="help" class="sidebar hidden">
+    <h2>Help</h2>
+    <table>
+      <caption>Help</caption>
+      <tr>
+        <th>Table of Contents</th>
+        <td>t</td>
+      </tr>
+      <tr>
+        <th>Exposé</th>
+        <td>ESC</td>
+      </tr>
+      <tr>
+        <th>Full screen slides</th>
+        <td>e</td>
+      </tr>
+      <tr>
+        <th>Presenter View</th>
+        <td>p</td>
+      </tr>
+      <tr>
+        <th>Source Files</th>
+        <td>s</td>
+      </tr>
+      <tr>
+        <th>Slide Numbers</th>
+        <td>n</td>
+      </tr>
+      <tr>
+        <th>Toggle screen blanking</th>
+        <td>b</td>
+      </tr>
+      <tr>
+        <th>Show/hide slide context</th>
+        <td>c</td>
+      </tr>
+      <tr>
+        <th>Notes</th>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>Help</th>
+        <td>h</td>
+      </tr>
+    </table>
+  </div>
+  <script>main()</script>
+</body>
+</html>
