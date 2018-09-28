@@ -38,7 +38,7 @@ $ ~~ $
 # Motivation
 
     !haskell
-    {-# @OPTIONS_GHC -fplugin ThoralfPlugin.Plugin@ #-}
+    {-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
 
     data Vec :: Nat -> Type -> Type where
       VNil  :: Vec 0 a
@@ -67,7 +67,7 @@ GOAL: Make the *right* type errors dissapear.
 # Motivation
 
     !haskell
-    {-# @OPTIONS_GHC -fplugin ThoralfPlugin.Plugin@ #-}
+    {-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
 
     data Vec :: Nat -> Type -> Type where
       VNil  :: Vec 0 a
@@ -354,7 +354,7 @@ Note: users define "satisfy" (via the literal equality relation)
 
 # Solving EDP: Nats: Handwave S.E.
 * Why does this work at all?
-    * Sufficient: Equivalence of existance of "satisfying" substitutions
+    * Sufficient: Equivalence of existence of "satisfying" substitutions
 * S.E. follows from **Encoding property**: For encoding function $f : \texttt{GHC-TYPE} \rightarrow \texttt{SMT-SORT}$,
     * $ t \sim t' \iff f(t) \cong f(t')$
 ## Type Error
@@ -442,7 +442,7 @@ $f(\varphi(m))  \cong f(\texttt{Alter } ~~~\varphi(m_1) ~~~\varphi(field)
 $f(\varphi(m))  \cong \texttt{(store } ~~~(f(\varphi(m_1))) ~~~(f(\varphi(field)))
 ~~~(f(\varphi(val)))\texttt{)}$
 
-* Other direction ( and general argument similar)
+* Other direction (and general argument similar)
 
 
 
@@ -516,7 +516,7 @@ $$ t \sim t' \iff f(t) \cong f(t')$$
 ## In the paper
 
 * Starting thoughts on type safety
-* Gorey details of formalizing EDP
+* Gory details of formalizing EDP
 * A fancy example
   * Type-level finite maps
   * Extensible records

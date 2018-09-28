@@ -147,7 +147,7 @@
             <header><h1>Motivation</h1></header>
             
             
-            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">{-# @OPTIONS_GHC -fplugin ThoralfPlugin.Plugin@ #-}</span>
+            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">{-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}</span>
 <span class="lineno"> 2 </span>
 <span class="lineno"> 3 </span><span class="kr">data</span> <span class="kt">Vec</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="kr">where</span>
 <span class="lineno"> 4 </span>  <span class="kt">VNil</span>  <span class="ow">::</span> <span class="kt">Vec</span> <span class="mi">0</span> <span class="n">a</span>
@@ -197,7 +197,7 @@
             <header><h1>Motivation</h1></header>
             
             
-            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">{-# @OPTIONS_GHC -fplugin ThoralfPlugin.Plugin@ #-}</span>
+            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">{-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}</span>
 <span class="lineno"> 2 </span>
 <span class="lineno"> 3 </span><span class="kr">data</span> <span class="kt">Vec</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="kr">where</span>
 <span class="lineno"> 4 </span>  <span class="kt">VNil</span>  <span class="ow">::</span> <span class="kt">Vec</span> <span class="mi">0</span> <span class="n">a</span>
@@ -771,7 +771,7 @@ in fact equal<ul>
             
             <section><ul>
 <li>Why does this work at all?<ul>
-<li>Sufficient: Equivalence of existance of "satisfying" substitutions</li>
+<li>Sufficient: Equivalence of existence of "satisfying" substitutions</li>
 </ul>
 </li>
 <li>S.E. follows from <strong>Encoding property</strong>: For encoding function $f : \texttt{GHC-TYPE} \rightarrow \texttt{SMT-SORT}$,<ul>
@@ -905,7 +905,7 @@ in fact equal<ul>
 <p>$f(\varphi(m))  \cong \texttt{(store } ~~~(f(\varphi(m_1))) ~~~(f(\varphi(field)))
 ~~~(f(\varphi(val)))\texttt{)}$</p>
 <ul>
-<li>Other direction ( and general argument similar)</li>
+<li>Other direction (and general argument similar)</li>
 </ul></section>
             
           </div>
@@ -1096,7 +1096,7 @@ in fact equal<ul>
             <section><h2>In the paper</h2>
 <ul>
 <li>Starting thoughts on type safety</li>
-<li>Gorey details of formalizing EDP</li>
+<li>Gory details of formalizing EDP</li>
 <li>A fancy example</li>
 <li>Type-level finite maps</li>
 <li>Extensible records</li>
