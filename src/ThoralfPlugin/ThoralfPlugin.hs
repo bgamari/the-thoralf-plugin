@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP                #-}
 {-# LANGUAGE TypeFamilies       #-}
 {-# LANGUAGE TypeInType         #-}
 {-# LANGUAGE TypeOperators      #-}
@@ -34,7 +35,13 @@ import TcRnTypes
   ( WantedConstraints, Ct, TcPluginM, TcPluginResult (..)
   , TcPlugin (..), isGivenCt  )
 import TcType ( isMetaTyVar )
+
+#if __GLASGOW_HASKELL__ > 804
+import TcEvidence ( EvTerm(..), evCoercion )
+#else
 import TcEvidence ( EvTerm(..) )
+#endif
+
 import TyCoRep ( UnivCoProvenance(..) )
 import Coercion ( mkUnivCo, Role(..)  )
 import Type ( Type, splitTyConApp_maybe, getTyVar_maybe )
@@ -107,8 +114,9 @@ mkThoralfInit debug seed = do
     grabSMTsolver logger = SMT.newSolver "z3" solverOpts (Just logger)
 
     typeDataType = SMT.Atom typeData
-    typeData = "(declare-datatypes () ((Type (apply (fst Type) \
-               \ (snd Type)) (lit (getstr String)))))"
+    typeData =
+        -- As one long line to avoid problems with CPP and string gaps.
+        "(declare-datatypes () ((Type (apply (fst Type) (snd Type)) (lit (getstr String)))))"
 
 
 
@@ -191,8 +199,10 @@ refresh encoding solverRef debug = do
   unsafeTcPluginTcM $ writeMutVar solverRef z3Solver where
 
   typeDataType = SMT.Atom typeData
-  typeData = "(declare-datatypes () ((Type (apply (fst Type) \
-             \ (snd Type)) (lit (getstr String)))))"
+
+  typeData =
+      -- As one long line to avoid problems with CPP and string gaps.
+      "(declare-datatypes () ((Type (apply (fst Type) (snd Type)) (lit (getstr String)))))"
 
   grabSMTsolver :: SMT.Logger -> IO SMT.Solver
   grabSMTsolver logger = SMT.newSolver "z3" solverOpts (Just logger)
@@ -266,7 +276,12 @@ zonkEverything (x:xs) = do
 -- Give the types inside a Predtree of the form (EqPred NomEq t1 t2)
 makeEqEvidence :: String -> (Type, Type) -> EvTerm
 makeEqEvidence s (t1,t2) =
-  EvCoercion $ mkUnivCo (PluginProv s) Nominal t1 t2
+#if __GLASGOW_HASKELL__ > 804
+  evCoercion
+#else
+  EvCoercion
+#endif
+  $ mkUnivCo (PluginProv s) Nominal t1 t2
 
 
 
