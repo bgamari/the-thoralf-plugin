@@ -9,7 +9,7 @@ module ThoralfPlugin.Theory.UoM (
   ) where
 
 import GHC.Types ( Symbol )
-import Data.Kind ( Type, Constraint )
+import Data.Kind ( Constraint )
 import GHC.TypeLits
 
 {-

@@ -4,24 +4,15 @@
 
 module ThoralfPlugin.Encode.UoM ( uomTheory ) where
 
-import qualified SimpleSMT as SMT
-import TyCon ( TyCon(..), tyConKind )
-import Type ( Type, classifyPredType, PredTree(..),
-              EqRel(..), splitTyConApp_maybe, isStrLitTy,
-              splitFunTy_maybe, getTyVar_maybe, tyVarKind,
-              tyConAppTyCon_maybe,
-              mkStrLitTy, PredType, mkPrimEqPred,
-              isTyVar, typeKind, nonDetCmpType, coreView,
-              isNumLitTy
-            )
-import TcPluginM ( tcPluginIO, tcPluginTrace
-                 , tcLookupTyCon, lookupOrig, tcLookupClass
-                 , findImportedModule, FindResult(..), zonkCt
-                 , unsafeTcPluginTcM, TcPluginM(..)
+import TyCon ( TyCon(..) )
+import Type ( Type, splitTyConApp_maybe )
+import TcPluginM ( tcLookupTyCon, lookupOrig
+                 , findImportedModule, FindResult(..)
+                 , TcPluginM
                  )
 import OccName ( mkTcOcc )
 import Module ( Module, mkModuleName )
-import FastString ( unpackFS, fsLit )
+import FastString ( fsLit )
 
 import ThoralfPlugin.Encode.TheoryEncoding
 

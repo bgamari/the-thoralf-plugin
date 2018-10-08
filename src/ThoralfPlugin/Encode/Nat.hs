@@ -6,16 +6,7 @@ module ThoralfPlugin.Encode.Nat ( natTheory ) where
 import GhcPlugins ( getUnique )
 import TysWiredIn ( typeNatKindCon )
 import TcTypeNats ( typeNatAddTyCon, typeNatSubTyCon )
-import qualified SimpleSMT as SMT
-import Type ( Type, classifyPredType, PredTree(..), TyVar,
-              EqRel(..), splitTyConApp_maybe, isStrLitTy,
-              splitFunTy_maybe, getTyVar_maybe, tyVarKind,
-              tyConAppTyCon_maybe,
-              mkStrLitTy, PredType, mkPrimEqPred,
-              isTyVar, typeKind, nonDetCmpType, coreView,
-              isNumLitTy
-            )
-import qualified Data.Kind as Kind
+import Type ( Type, TyVar, splitTyConApp_maybe, tyVarKind, isNumLitTy )
 import TcRnTypes( TcPluginM )
 
 import ThoralfPlugin.Encode.TheoryEncoding

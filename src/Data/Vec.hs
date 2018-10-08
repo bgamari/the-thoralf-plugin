@@ -8,6 +8,7 @@ module Data.Vec where
 
 import Data.Kind
 import Data.Monoid
+import Prelude
 
 data Vec :: Nat -> Type -> Type where
   VNil :: Vec 'Zero a

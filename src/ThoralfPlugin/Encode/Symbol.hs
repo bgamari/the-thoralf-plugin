@@ -4,27 +4,12 @@
 
 module ThoralfPlugin.Encode.Symbol ( symbolTheory ) where
 
-import qualified SimpleSMT as SMT
-import TyCon ( TyCon(..), tyConKind )
-import Type ( Type, classifyPredType, PredTree(..),
-              EqRel(..), splitTyConApp_maybe, isStrLitTy,
-              splitFunTy_maybe, getTyVar_maybe, tyVarKind,
-              tyConAppTyCon_maybe,
-              mkStrLitTy, PredType, mkPrimEqPred,
-              isTyVar, typeKind, nonDetCmpType, coreView,
-              isNumLitTy
+import Type ( Type,
+              splitTyConApp_maybe, isStrLitTy
             )
-import TcPluginM ( tcPluginIO, tcPluginTrace
-                 , tcLookupTyCon, lookupOrig, tcLookupClass
-                 , findImportedModule, FindResult(..), zonkCt
-                 , unsafeTcPluginTcM, TcPluginM(..)
-                 )
-import OccName ( mkTcOcc )
-import Module ( Module, mkModuleName )
-import FastString ( unpackFS, fsLit )
-import TysWiredIn ( maybeTyCon, promotedNothingDataCon, promotedJustDataCon
-                  , liftedTypeKind, typeSymbolKind, typeSymbolKindCon
-                  )
+import TcPluginM ( TcPluginM )
+import FastString ( unpackFS )
+import TysWiredIn ( typeSymbolKindCon )
 
 
 import ThoralfPlugin.Encode.TheoryEncoding
