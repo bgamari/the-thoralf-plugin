@@ -6,6 +6,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
@@ -17,6 +18,8 @@ module Nat where
 import ThoralfPlugin.Theory.Bool
 import ThoralfPlugin.Singletons.Nat
 import Data.Type.Equality
+import Data.Type.Bool
+import Data.Proxy
 import Data.Kind
 import GHC.TypeLits
 
@@ -70,3 +73,13 @@ stripPrefix (x :> xs) (y :> ys) =
 ltTrans :: forall (a :: Nat) (b :: Nat) (c :: Nat).
   (a <? b) :~: True -> (b <? c) :~: True -> (a <? c) :~: True
 ltTrans Refl Refl = Refl
+
+-- Test for #4.
+type family Max (x :: Nat) (y :: Nat) :: Nat where
+  Max x y = If (x <=? y) y x
+
+g :: forall n. (1 <= n) => Proxy n -> ()
+g = f
+
+f :: forall n. (Max n 1 ~ n) => Proxy n -> ()
+f Proxy = ()
