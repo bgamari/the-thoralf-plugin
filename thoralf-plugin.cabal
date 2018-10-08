@@ -1,5 +1,9 @@
 name:                thoralf-plugin
 version:             0.1.0.0
+synopsis:            An extensible GHC typechecker plugin based on Z3
+description:         Thoralf is a small yet extensible typechecker plugin based on the
+                     Z3 SMT solver. It is designed to be easy to extend with new
+                     theories.
 license:             MIT
 license-file:        LICENSE
 author:              Divesh Otwani
@@ -43,7 +47,7 @@ library
                        , GADTs
                        , RecordWildCards
 
-  build-depends:         base
+  build-depends:         base < 5
                        , containers
                        , ghc
                        , ghc-prim
