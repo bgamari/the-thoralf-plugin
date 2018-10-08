@@ -10,6 +10,8 @@
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
+{-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
+
 module Nat where
 
 import ThoralfPlugin.Theory.Bool

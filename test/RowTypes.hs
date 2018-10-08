@@ -10,6 +10,9 @@
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
+{-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
+
+
 module RowTypes where
 
 import GHC.TypeLits
