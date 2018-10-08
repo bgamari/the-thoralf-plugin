@@ -37,7 +37,7 @@ natAddConv ty = do
   case (tycon == typeNatAddTyCon, types) of
     (True, [x,y]) ->
       let
-        mkNatSExpr :: Vec Two String -> Vec Zero String -> String
+        mkNatSExpr :: Vec Two String -> Vec 'Zero String -> String
         mkNatSExpr (a :> b :> VNil) VNil = "(+ " ++ a ++ " " ++ b ++ ")"
         tyList = x :> y :> VNil
       in
@@ -52,7 +52,7 @@ natSubConv ty = do
   case (tycon == typeNatSubTyCon, types) of
     (True, [x,y]) ->
       let
-        mkNatSExpr :: Vec Two String -> Vec Zero String -> String
+        mkNatSExpr :: Vec Two String -> Vec 'Zero String -> String
         mkNatSExpr (a :> b :> VNil)  VNil = "(- " ++ a ++ " " ++ b ++ ")"
         tyList = x :> y :> VNil
       in

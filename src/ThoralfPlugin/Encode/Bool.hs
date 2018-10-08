@@ -90,7 +90,7 @@ compLitConv comp ty = do
 
 
 type Two = 'Succ ('Succ 'Zero)
-compMaker :: Vec Two String -> Vec Zero String -> String
+compMaker :: Vec Two String -> Vec 'Zero String -> String
 compMaker (x :> y :> VNil) VNil = "(< " ++ x ++ " " ++ y ++ ")"
 
 
@@ -106,7 +106,7 @@ compTyLitNat comp ty = do
     _ -> Nothing
 
 
-compLitMaker :: Vec Two String -> Vec Zero String -> String
+compLitMaker :: Vec Two String -> Vec 'Zero String -> String
 compLitMaker (x :> y :> VNil) VNil =
   "(or (< " ++ x ++ " " ++ y ++ ")  (= " ++ x ++ " " ++ y ++ "))"
 
@@ -119,10 +119,4 @@ boolKindConv ty = do
   case tycon == boolTyCon of
     True -> return $ KdConvCont VNil (const "Bool")
     False -> Nothing
-
-
-
-
-
-
 
