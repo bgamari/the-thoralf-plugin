@@ -18,10 +18,9 @@ module ThoralfPlugin.Singletons.Symbol
 where
 
 import ThoralfPlugin.Theory.DisEq
-import ThoralfPlugin.Theory.Bool
 
 import Data.Kind ( Constraint, Type )
-import GHC.TypeLits ( symbolVal, Symbol, KnownSymbol (..) )
+import GHC.TypeLits ( symbolVal, Symbol, KnownSymbol )
 import Unsafe.Coerce
 
 

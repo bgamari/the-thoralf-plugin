@@ -7,8 +7,8 @@
 module ThoralfPlugin.Variables where
 
 
-import Var ( TyVar, Var, isTcTyVar, varName )
-import TcType ( eqType, isMetaTyVar, Kind, TcType, TcTyVar )
+import Var ( TyVar, Var, isTcTyVar )
+import TcType ( isMetaTyVar )
 
 data VarCat = Tau | Skol | Irr
   deriving Eq

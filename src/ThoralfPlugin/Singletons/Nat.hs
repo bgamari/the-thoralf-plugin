@@ -21,7 +21,7 @@ where
 import ThoralfPlugin.Theory.Bool
 
 import Data.Kind ( Constraint, Type )
-import GHC.TypeLits ( Nat, natVal, KnownNat (..) )
+import GHC.TypeLits ( Nat, natVal, KnownNat )
 import Unsafe.Coerce
 
 
