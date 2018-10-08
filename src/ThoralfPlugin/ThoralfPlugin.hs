@@ -15,11 +15,10 @@ module ThoralfPlugin.ThoralfPlugin ( thoralfPlugin ) where
 import Prelude hiding ( showList )
 import FastString ( fsLit )
 import Data.Maybe ( mapMaybe )
-import Data.List ( partition, intersperse, (\\) )
+import Data.List ( intersperse, (\\) )
 import qualified Data.Map.Strict as M
 import qualified Data.Set as Set
 import qualified SimpleSMT as SMT
-import Data.Functor.Identity
 import Class ( Class(..) )
 import System.IO.Error
 import Data.IORef ( IORef )
@@ -32,7 +31,7 @@ import TcPluginM ( tcPluginIO, lookupOrig, tcLookupClass
                  , unsafeTcPluginTcM )
 import TcRnTypes
   ( WantedConstraints, Ct, TcPluginM, TcPluginResult (..)
-  , TcPlugin (..), isGivenCt  )
+  , TcPlugin (..) )
 import TcType ( isMetaTyVar )
 import TcEvidence ( EvTerm(..) )
 import TyCoRep ( UnivCoProvenance(..) )

@@ -12,6 +12,7 @@ import qualified Data.Set as S
 import qualified SimpleSMT as SMT
 import Data.Semigroup
 import Control.Monad.Reader
+import Prelude
 
 
 -- GHC API imports:
@@ -22,12 +23,11 @@ import TcType ( Kind, tcGetTyVar_maybe )
 import Var ( TyVar )
 import Type ( Type, PredTree (..), EqRel (..), getTyVar_maybe
             , splitTyConApp_maybe, splitFunTy_maybe
-            , classifyPredType, coreView, tyVarKind )
+            , classifyPredType, tyVarKind )
 
 
 -- Internal imports
 import ThoralfPlugin.Encode.TheoryEncoding
-import ThoralfPlugin.Variables
 import Data.Vec
 
 

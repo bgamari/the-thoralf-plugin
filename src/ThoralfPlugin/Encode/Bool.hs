@@ -6,30 +6,18 @@ module ThoralfPlugin.Encode.Bool ( boolTheory ) where
 
 import TysWiredIn ( boolTyCon, promotedTrueDataCon, promotedFalseDataCon )
 
-import TyCon ( TyCon(..), tyConKind )
+import TyCon ( TyCon(..) )
 
-import TcPluginM ( tcPluginIO, tcPluginTrace
-                 , tcLookupTyCon, lookupOrig, tcLookupClass
-                 , findImportedModule, FindResult(..), zonkCt
-                 , unsafeTcPluginTcM, TcPluginM(..)
+import TcPluginM ( tcLookupTyCon, lookupOrig
+                 , findImportedModule, FindResult(..)
+                 , TcPluginM
                  )
 
-import Type ( Type, classifyPredType, PredTree(..),
-              EqRel(..), splitTyConApp_maybe, isStrLitTy,
-              splitFunTy_maybe, getTyVar_maybe, tyVarKind,
-              tyConAppTyCon_maybe,
-              mkStrLitTy, PredType, mkPrimEqPred,
-              isTyVar, typeKind, nonDetCmpType, coreView,
-              isNumLitTy
-            )
-
-import qualified Data.Kind as Kind
+import Type ( Type, splitTyConApp_maybe )
 
 import OccName ( mkTcOcc )
 import Module ( Module, mkModuleName )
-import FastString ( unpackFS, fsLit )
-
-
+import FastString ( fsLit )
 
 import ThoralfPlugin.Encode.TheoryEncoding
 
@@ -102,7 +90,7 @@ compLitConv comp ty = do
 
 
 type Two = 'Succ ('Succ 'Zero)
-compMaker :: Vec Two String -> Vec Zero String -> String
+compMaker :: Vec Two String -> Vec 'Zero String -> String
 compMaker (x :> y :> VNil) VNil = "(< " ++ x ++ " " ++ y ++ ")"
 
 
@@ -118,7 +106,7 @@ compTyLitNat comp ty = do
     _ -> Nothing
 
 
-compLitMaker :: Vec Two String -> Vec Zero String -> String
+compLitMaker :: Vec Two String -> Vec 'Zero String -> String
 compLitMaker (x :> y :> VNil) VNil =
   "(or (< " ++ x ++ " " ++ y ++ ")  (= " ++ x ++ " " ++ y ++ "))"
 
@@ -131,10 +119,4 @@ boolKindConv ty = do
   case tycon == boolTyCon of
     True -> return $ KdConvCont VNil (const "Bool")
     False -> Nothing
-
-
-
-
-
-
 

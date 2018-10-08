@@ -24,13 +24,13 @@ import Data.Vec
 
 
 
--- $theoryEncoding
+-- | See $theoryEncoding
 data TheoryEncoding where
   TheoryEncoding ::
     { kindConvs :: [Type -> Maybe KdConvCont]
     , typeConvs :: [Type -> Maybe TyConvCont]
     , startDecs :: [String]      -- Top level, never changing declarations
-    , tyVarPreds :: TyVar -> Maybe [String] -- $tvpred
+    , tyVarPreds :: TyVar -> Maybe [String] -- ^ See $tvpred
     } -> TheoryEncoding
 
 -- $theoryEncoding

@@ -4,24 +4,15 @@
 
 module ThoralfPlugin.Encode.FiniteMap ( fmTheory ) where
 
-import qualified SimpleSMT as SMT
-import TyCon ( TyCon(..), tyConKind )
-import Type ( Type, classifyPredType, PredTree(..),
-              EqRel(..), splitTyConApp_maybe, isStrLitTy,
-              splitFunTy_maybe, getTyVar_maybe, tyVarKind,
-              tyConAppTyCon_maybe,
-              mkStrLitTy, PredType, mkPrimEqPred,
-              isTyVar, typeKind, nonDetCmpType, coreView,
-              isNumLitTy
-            )
-import TcPluginM ( tcPluginIO, tcPluginTrace
-                 , tcLookupTyCon, lookupOrig, tcLookupClass
-                 , findImportedModule, FindResult(..), zonkCt
-                 , unsafeTcPluginTcM, TcPluginM(..)
+import TyCon ( TyCon(..) )
+import Type ( Type, splitTyConApp_maybe )
+import TcPluginM ( tcLookupTyCon, lookupOrig
+                 , findImportedModule, FindResult(..)
+                 , TcPluginM
                  )
 import OccName ( mkTcOcc )
 import Module ( Module, mkModuleName )
-import FastString ( unpackFS, fsLit )
+import FastString ( fsLit )
 import Data.Hashable ( hash )
 
 import ThoralfPlugin.Encode.TheoryEncoding
@@ -91,7 +82,7 @@ nilConvert nil ty = do
   return $ TyConvCont VNil kindList nilString []
   where
 
-  nilString :: Vec Zero String -> Vec Two String -> String
+  nilString :: Vec 'Zero String -> Vec Two String -> String
   nilString VNil (keyKindStr :> valKindStr :> VNil) = nilStr where
     maybeVal = " (Maybe " ++ valKindStr ++ ")"
     arrayTp = "(Array " ++ keyKindStr ++ " " ++ maybeVal ++ ")"
@@ -106,7 +97,7 @@ alterConvert alter ty = do
   return $ TyConvCont tyList VNil alterString []
   where
 
-  alterString :: Vec Three String -> Vec Zero String -> String
+  alterString :: Vec Three String -> Vec 'Zero String -> String
   alterString (fmStr :> keyStr :> valStr :> VNil) VNil = altStr where
     valueStr = "(just " ++ valStr  ++ ")"
     altStr = "(store " ++ fmStr ++ " " ++ keyStr ++ " " ++ valueStr ++ ")"
