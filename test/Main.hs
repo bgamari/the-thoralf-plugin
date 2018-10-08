@@ -23,10 +23,6 @@ import qualified ThoralfPlugin.Theory.DisEq as D
 
 import Data.Kind ( Type )
 import GHC.TypeLits
-import System.IO (hFlush, stdin, stdout)
-
-
-import GHC.TypeLits
 
 data a :~: b where
   Refl :: a :~: a
