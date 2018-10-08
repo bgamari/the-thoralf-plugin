@@ -18,7 +18,7 @@ import qualified ThoralfPlugin.Theory.DisEq as D
 
 import Data.Kind ( Type )
 import GHC.TypeLits ( Symbol )
-import Data.Singletons.TypeLits
+import Data.Singletons.TypeLits hiding ( SSymbol )
 import System.IO (hFlush, stdin, stdout)
 
 
@@ -68,19 +68,8 @@ extract (MkUnit d) = d
 type Meters  = FromList '[ '("meters", 1) ]
 type Seconds = FromList '[ '("secs",   1) ]
 
-calcDistance :: IsDiv Meters Seconds metPerSec => 
+calcDistance :: IsDiv Meters Seconds metPerSec =>
                 Unit metPerSec -> Unit Seconds -> Unit Meters
 calcDistance a b = mult a b
 
 -------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-

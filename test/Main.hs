@@ -10,6 +10,7 @@
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
+{-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
 
 module Main where
 
@@ -135,7 +136,7 @@ pRecPrice (PRec rec) = getPrice rec
 
 
 data PricedRec where
-  PRec :: Has m "price" Int => 
+  PRec :: Has m "price" Int =>
           RowType m -> PricedRec
 
 
@@ -143,8 +144,8 @@ totalPrice :: [PricedRec] -> Int
 totalPrice = sum . (map pRecPrice)
 
 car = PRec
-  (AddField (AddField EmptyRec (SSym @"price") (9000 :: Int)) 
-  (SSym @"make") 
+  (AddField (AddField EmptyRec (SSym @"price") (9000 :: Int))
+  (SSym @"make")
   ("honda" :: String))
 
 plane = PRec
@@ -197,8 +198,3 @@ intersect1 = Refl
 
 isNat :: SNat n -> (0 <? n) :~: True
 isNat SNat = Refl
-
-
-
-
-
