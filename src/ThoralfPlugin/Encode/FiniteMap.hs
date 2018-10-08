@@ -82,7 +82,7 @@ nilConvert nil ty = do
   return $ TyConvCont VNil kindList nilString []
   where
 
-  nilString :: Vec Zero String -> Vec Two String -> String
+  nilString :: Vec 'Zero String -> Vec Two String -> String
   nilString VNil (keyKindStr :> valKindStr :> VNil) = nilStr where
     maybeVal = " (Maybe " ++ valKindStr ++ ")"
     arrayTp = "(Array " ++ keyKindStr ++ " " ++ maybeVal ++ ")"
@@ -97,7 +97,7 @@ alterConvert alter ty = do
   return $ TyConvCont tyList VNil alterString []
   where
 
-  alterString :: Vec Three String -> Vec Zero String -> String
+  alterString :: Vec Three String -> Vec 'Zero String -> String
   alterString (fmStr :> keyStr :> valStr :> VNil) VNil = altStr where
     valueStr = "(just " ++ valStr  ++ ")"
     altStr = "(store " ++ fmStr ++ " " ++ keyStr ++ " " ++ valueStr ++ ")"
