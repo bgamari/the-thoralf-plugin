@@ -24,14 +24,18 @@ import ThoralfPlugin.Encode.TheoryEncoding
 
 boolTheory :: TcPluginM TheoryEncoding
 boolTheory = do
-  let boolModM = findImportedModule boolMod $ Just pkg
-  Found _ boolModule <- boolModM
+  Found _ boolModule <- findImportedModule boolMod $ Just pkg
   compTyCon <- findTyCon boolModule "<?"
+
+  Found _ dataTypeBoolModule <- findImportedModule dataTypeBoolMod $ Just base
+  ifTyCon <- findTyCon dataTypeBoolModule "If"
+
   Found _ typeNatMod <- findImportedModule tyNatMod $ Just base
   compNat <- findTyCon typeNatMod "<=?"
-  return $ boolEncoding compTyCon compNat
+  return $ boolEncoding compTyCon compNat ifTyCon
   where
     boolMod = mkModuleName "ThoralfPlugin.Theory.Bool"
+    dataTypeBoolMod = mkModuleName "Data.Type.Bool"
     tyNatMod = mkModuleName "GHC.TypeNats"
     pkg = fsLit "thoralf-plugin"
     base = fsLit "base"
@@ -43,13 +47,14 @@ boolTheory = do
 
 
 
-boolEncoding :: TyCon -> TyCon -> TheoryEncoding
-boolEncoding compTyCon compNatCon = emptyTheory
+boolEncoding :: TyCon -> TyCon -> TyCon -> TheoryEncoding
+boolEncoding compTyCon compNatCon ifCon = emptyTheory
   { typeConvs =
       [ trueLitConv
       , falseLitConv
       , compLitConv compTyCon
       , compTyLitNat compNatCon
+      , ifConv ifCon
       ]
   , kindConvs = [boolKindConv]
   }
@@ -110,7 +115,19 @@ compLitMaker :: Vec Two String -> Vec 'Zero String -> String
 compLitMaker (x :> y :> VNil) VNil =
   "(or (< " ++ x ++ " " ++ y ++ ")  (= " ++ x ++ " " ++ y ++ "))"
 
+ifConv :: TyCon -> Type -> Maybe TyConvCont
+ifConv ifCon ty = do
+  (tycon, types) <- splitTyConApp_maybe ty
+  case (tycon == ifCon, types) of
+    -- N.B. The first argument is the kind
+    (True, (_ : x : y : z : xs)) -> return $
+        TyConvCont (x :> y :> z :> VNil) VNil ifMaker []
+    _ -> Nothing
 
+type Three = 'Succ Two
+ifMaker :: Vec Three String -> Vec 'Zero String -> String
+ifMaker (x :> y :> z :> VNil) VNil =
+  "(ite " ++ x ++ " " ++ y ++ " " ++ z ++ ")"
 
 
 boolKindConv :: Type -> Maybe KdConvCont
