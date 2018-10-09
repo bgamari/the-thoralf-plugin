@@ -39,6 +39,21 @@ test3Bad = Refl
 test4 :: (a + b) :~: (a + a) -> a :~: b
 test4 Refl = Refl
 
+test5 :: (a * b) :~: (b * a)
+test5 = Refl
+
+test6 :: ((a * 3) `Div` 3) :~: a
+test6 = Refl
+
+test7 :: (a + a + a) :~: (3 * a)
+test7 = Refl
+
+test8 :: (a `Div` 1) :~: a
+test8 = Refl
+
+--test9 :: (a `Mod` a) :~: 0
+--test9 = Refl
+
 data Vec :: Nat -> Type -> Type where
   VNil :: Vec 0 a
   (:>) :: a -> Vec n a -> Vec (1+n) a

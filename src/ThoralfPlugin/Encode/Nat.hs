@@ -1,11 +1,15 @@
-{-# LANGUAGE TypeFamilies, TypeInType, TypeOperators,
+{-# LANGUAGE CPP, TypeFamilies, TypeInType, TypeOperators,
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 module ThoralfPlugin.Encode.Nat ( natTheory ) where
 
-import GhcPlugins ( getUnique )
+import GhcPlugins ( getUnique, TyCon )
 import TysWiredIn ( typeNatKindCon )
-import TcTypeNats ( typeNatAddTyCon, typeNatSubTyCon )
+import TcTypeNats ( typeNatAddTyCon, typeNatSubTyCon, typeNatMulTyCon, typeNatExpTyCon
+#if MIN_VERSION_base(4,11,0)
+                  , typeNatDivTyCon, typeNatModTyCon
+#endif
+                  )
 import Type ( Type, TyVar, splitTyConApp_maybe, tyVarKind, isNumLitTy )
 import TcRnTypes( TcPluginM )
 
@@ -17,7 +21,15 @@ natTheory = return natEncoding
 
 natEncoding :: TheoryEncoding
 natEncoding = emptyTheory
-  { typeConvs = [natLitConv, natAddConv, natSubConv]
+  { typeConvs = [ natLitConv
+                , binaryOpConv typeNatAddTyCon "+"
+                , binaryOpConv typeNatSubTyCon "-"
+                , binaryOpConv typeNatMulTyCon "*"
+#if MIN_VERSION_base(4,11,0)
+                , binaryOpConv typeNatDivTyCon "div"
+                , binaryOpConv typeNatModTyCon "mod"
+#endif
+                ]
   , kindConvs = [natKindConv]
   , tyVarPreds = assertIntIsNat
   }
@@ -31,34 +43,19 @@ natLitConv ty = do
 
 type Two = 'Succ ('Succ 'Zero)
 
-natAddConv :: Type -> Maybe TyConvCont
-natAddConv ty = do
+binaryOpConv :: TyCon -> String
+             -> Type -> Maybe TyConvCont
+binaryOpConv tycon0 op ty = do
   (tycon, types) <- splitTyConApp_maybe ty
-  case (tycon == typeNatAddTyCon, types) of
+  case (tycon == tycon0, types) of
     (True, [x,y]) ->
       let
         mkNatSExpr :: Vec Two String -> Vec 'Zero String -> String
-        mkNatSExpr (a :> b :> VNil) VNil = "(+ " ++ a ++ " " ++ b ++ ")"
+        mkNatSExpr (a :> b :> VNil) VNil = "(" ++ op ++ " " ++ a ++ " " ++ b ++ ")"
         tyList = x :> y :> VNil
       in
         return $ TyConvCont tyList VNil mkNatSExpr []
     (_, _) -> Nothing
-
-
-
-natSubConv :: Type -> Maybe TyConvCont
-natSubConv ty = do
-  (tycon, types) <- splitTyConApp_maybe ty
-  case (tycon == typeNatSubTyCon, types) of
-    (True, [x,y]) ->
-      let
-        mkNatSExpr :: Vec Two String -> Vec 'Zero String -> String
-        mkNatSExpr (a :> b :> VNil)  VNil = "(- " ++ a ++ " " ++ b ++ ")"
-        tyList = x :> y :> VNil
-      in
-        return $ TyConvCont tyList VNil mkNatSExpr []
-    (_, _) -> Nothing
-
 
 assertIntIsNat :: TyVar -> Maybe [String]
 assertIntIsNat tv = do
