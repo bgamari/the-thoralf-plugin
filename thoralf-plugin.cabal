@@ -55,6 +55,8 @@ library
                        , mtl
                        , simple-smt
 
+  if impl(ghc >= 8.6)
+    default-extensions:  NoStarIsType
 
 
 Test-suite tests
@@ -67,4 +69,6 @@ Test-suite tests
   build-depends:         base
                        , thoralf-plugin
 
+  if impl(ghc >= 8.6)
+    default-extensions:  NoStarIsType
 
