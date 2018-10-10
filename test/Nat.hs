@@ -67,5 +67,5 @@ stripPrefix (x :> xs) (y :> ys) =
 -}
 
 ltTrans :: forall (a :: Nat) (b :: Nat) (c :: Nat).
-  (a <? b) :~: True -> (b <? c) :~: True -> (a <? c) :~: True
+  (a <? b) :~: 'True -> (b <? c) :~: 'True -> (a <? c) :~: 'True
 ltTrans Refl Refl = Refl
