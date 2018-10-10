@@ -15,7 +15,6 @@
 module Nat where
 
 import ThoralfPlugin.Theory.Bool
-import ThoralfPlugin.Singletons.Nat
 import Data.Type.Equality
 import Data.Kind
 import GHC.TypeLits
