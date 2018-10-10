@@ -63,7 +63,7 @@ boolEncoding compTyCon compNatCon = emptyTheory
 
 trueLitConv :: Type -> Maybe TyConvCont
 trueLitConv ty = do
-  (tcon,xs) <- splitTyConApp_maybe ty
+  (tcon, _) <- splitTyConApp_maybe ty
   case tcon == promotedTrueDataCon of
     True -> return $
       TyConvCont VNil VNil (const . const $ "true") []
@@ -73,7 +73,7 @@ trueLitConv ty = do
 
 falseLitConv :: Type -> Maybe TyConvCont
 falseLitConv ty = do
-  (tcon,xs) <- splitTyConApp_maybe ty
+  (tcon, _) <- splitTyConApp_maybe ty
   case tcon == promotedFalseDataCon of
     True -> return $
       TyConvCont VNil VNil (const . const $ "false") []
@@ -84,7 +84,7 @@ compLitConv :: TyCon -> Type -> Maybe TyConvCont
 compLitConv comp ty = do
   (tycon, types) <- splitTyConApp_maybe ty
   case (tycon == comp, types) of
-    (True, (x : y : xs)) -> return $
+    (True, (x : y : _)) -> return $
         TyConvCont (x :> y :> VNil) VNil compMaker []
     _ -> Nothing
 
@@ -99,7 +99,7 @@ compTyLitNat :: TyCon -> Type -> Maybe TyConvCont
 compTyLitNat comp ty = do
   (tycon, types) <- splitTyConApp_maybe ty
   case (tycon == comp, types) of
-    (True, (x : y : xs)) -> return $
+    (True, (x : y : _)) -> return $
         TyConvCont (x :> y :> VNil) VNil compLitMaker []
         --TyConvCont (x :> y :> VNil) VNil (const . const $ "true") []
         --TyConvCont VNil VNil (const . const $  "true") []
@@ -115,7 +115,7 @@ compLitMaker (x :> y :> VNil) VNil =
 
 boolKindConv :: Type -> Maybe KdConvCont
 boolKindConv ty = do
-  (tycon, xs) <- splitTyConApp_maybe ty
+  (tycon, _) <- splitTyConApp_maybe ty
   case tycon == boolTyCon of
     True -> return $ KdConvCont VNil (const "Bool")
     False -> Nothing
