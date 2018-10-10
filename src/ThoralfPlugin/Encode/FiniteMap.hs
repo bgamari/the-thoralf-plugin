@@ -121,8 +121,8 @@ deleteConvert delete ty = do
 
 unionConvert :: TyCon -> Type -> Maybe TyConvCont
 unionConvert union ty = do
-  (tcon, tys) <- splitTyConApp_maybe ty
-  let match = (tcon == union, tys)
+  (tcon, tys') <- splitTyConApp_maybe ty
+  let match = (tcon == union, tys')
   (True, _:valKd:m1:m2:_)  <- return match
   let tys = m1 :> m2 :> VNil
   let kds = valKd :> VNil
@@ -154,8 +154,8 @@ unionConvert union ty = do
 
 interConvert :: TyCon -> Type -> Maybe TyConvCont
 interConvert intersect ty = do
-  (tcon, tys) <- splitTyConApp_maybe ty
-  let match = (tcon == intersect, tys)
+  (tcon, tys') <- splitTyConApp_maybe ty
+  let match = (tcon == intersect, tys')
   (True, _:valKd:m1:m2:_)  <- return match
   let tys = m1 :> m2 :> VNil
   let kds = valKd :> VNil
