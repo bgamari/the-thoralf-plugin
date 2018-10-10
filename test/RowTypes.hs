@@ -51,11 +51,13 @@ data PricedRec where
 totalPrice :: [PricedRec] -> Int
 totalPrice = sum . (map pRecPrice)
 
+car :: PricedRec
 car = PRec
   (AddField (AddField EmptyRec (SSym @"price") (9000 :: Int))
   (SSym @"make")
   ("honda" :: String))
 
+plane :: PricedRec
 plane = PRec
   (AddField (AddField EmptyRec (SSym @"pilot") ("zhang" :: String))
   (SSym @"price")
