@@ -1,4 +1,7 @@
 # the-thoralf-plugin
+
+[![Build Status](https://travis-ci.org/bgamari/the-thoralf-plugin.svg)](https://travis-ci.org/bgamari/the-thoralf-plugin)
+
 This a type-checker plugin for type-indicies such as type level natural
 numbers and type level finite maps.
 
