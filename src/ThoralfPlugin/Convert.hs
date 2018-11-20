@@ -378,7 +378,7 @@ defConvTy = tryFnsM [defTyVar, defFn, defTyConApp] where
     if isTypeFamilyTyCon tcon
     then do
       let convTcon = (show $ getUnique tcon)
-      let converted = foldl appFamDef convTcon defConvTys
+      let converted = "("++unwords (convTcon:defConvTys)++")"
       return (converted, tvars{convTyFams = tcon : convTyFams tvars})
     else do
       let convTcon = "(lit \"" ++ (show $ getUnique tcon) ++ "\")"
@@ -387,10 +387,6 @@ defConvTy = tryFnsM [defTyVar, defFn, defTyConApp] where
 
   appDef :: String -> String -> String
   appDef f x = "(apply " ++ f ++ " " ++ x ++ ")"
-
-  appFamDef :: String -> String -> String
-  appFamDef f x = "(" ++ f ++ " " ++ x ++ ")"
-
 
 
 -- * Converting A Single Kind
