@@ -1,4 +1,4 @@
-resolver: lts-12.6
+resolver: lts-12.18
 packages:
    - .
 extra-deps: [ simple-smt-0.8 ]

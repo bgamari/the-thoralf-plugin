@@ -14,6 +14,6 @@ plugin = defaultPlugin {tcPlugin = const (Just currentPlugin)}
 
 -- The Boolean is for debugging
 currentPlugin :: TcPlugin
-currentPlugin = thoralfPlugin False thoralfTheories
+currentPlugin = thoralfPlugin True thoralfTheories
 
 

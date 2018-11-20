@@ -14,9 +14,11 @@ import Data.Semigroup
 import Control.Monad.Reader
 import Prelude
 
+import DynFlags
+import Outputable hiding ( (<>) )
 
 -- GHC API imports:
-import GhcPlugins ( getUnique )
+import GhcPlugins hiding ( (<>) )
 import TcRnTypes ( Ct, ctPred )
 import Class ( Class(..) )
 import TcType ( Kind, tcGetTyVar_maybe )
@@ -329,45 +331,50 @@ convDecConts dcs = do
 
 defaultConvTy :: Type -> ConvMonad ConvertedType
 defaultConvTy ty = do
-  (convertedTy, defVars) <- lift (defConvTy ty)
-  return (convertedTy, noDeps {convDefVar = defVars})
+  defConvTy ty
 
-defConvTy :: Type -> Maybe (String, [TyVar])
-defConvTy = tryFns [defTyVar, defFn, defTyConApp] where
+defConvTy :: Type -> ConvMonad ConvertedType
+defConvTy = tryFnsM [defTyVar, defFn, defTyConApp] where
 
-  defTyVar :: Type -> Maybe (String, [TyVar])
+  defTyVar :: Type -> ConvMonad ConvertedType
   defTyVar ty = do
-    tv <- getTyVar_maybe ty
-    return ( show $ getUnique tv, [tv])
+    tv <- lift $ getTyVar_maybe ty
+    return ( show $ getUnique tv, noDeps {convDefVar = [tv]})
 
-  defFn :: Type -> Maybe (String, [TyVar])
+  defFn :: Type -> ConvMonad ConvertedType
   defFn ty = do
-    (fn, arg) <- splitFunTy_maybe ty
+    (fn, arg) <- lift $ splitFunTy_maybe ty
     (fnStr, tv1) <- defConvTy fn
     (argStr, tv2) <- defConvTy arg
     let smtStr = fnDef fnStr argStr
-    return (smtStr, tv1 ++ tv2)
+    return (smtStr, tv1 <> tv2)
 
   fnDef :: String -> String -> String
   fnDef strIn strOut =
     "(apply (apply (lit \"->\") " ++
       strIn ++ ") " ++ strOut ++ ")"
 
-  defTyConApp :: Type -> Maybe (String, [TyVar])
+  defTyConApp :: Type -> ConvMonad ConvertedType
   defTyConApp ty = do
-    (tcon, tys) <- splitTyConApp_maybe ty
-    recur <- traverse defConvTy tys
+    (tcon, tys) <- lift $ splitTyConApp_maybe ty
+    recur <- traverse convertType tys
     let defConvTys = map fst recur
     let tvars = foldMap snd recur
-    let convTcon = "(lit \"" ++ (show $ getUnique tcon) ++ "\")"
-    let converted = foldl appDef convTcon defConvTys
-    return (converted, tvars)
+    if isTypeFamilyTyCon tcon
+    then do
+      let convTcon = (show $ getUnique tcon)
+      let converted = foldl appFamDef convTcon defConvTys
+      return (converted, tvars)
+    else do
+      let convTcon = "(lit \"" ++ (show $ getUnique tcon) ++ "\")"
+      let converted = foldl appDef convTcon defConvTys
+      return (converted, tvars)
 
   appDef :: String -> String -> String
   appDef f x = "(apply " ++ f ++ " " ++ x ++ ")"
 
-
-
+  appFamDef :: String -> String -> String
+  appFamDef f x = "(" ++ f ++ " " ++ x ++ ")"
 
 
 
@@ -406,6 +413,13 @@ tryFns [] _ = Nothing
 tryFns (f:fs) a = case f a of
   Nothing -> tryFns fs a
   Just b -> Just b
+tryFnsM :: [a -> ConvMonad b] -> a -> ConvMonad b
+tryFnsM [] _ = lift Nothing
+tryFnsM (f:fs) a = do
+  env <- ask
+  case runReaderT (f a) env of
+    Nothing -> tryFnsM fs a
+    Just b -> lift $ Just b
 
 
 
