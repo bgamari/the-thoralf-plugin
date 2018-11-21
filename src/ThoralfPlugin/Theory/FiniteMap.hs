@@ -14,8 +14,7 @@ module ThoralfPlugin.Theory.FiniteMap
   , IntersectFm
   ) where
 
-import GHC.Types ( Symbol )
-import Data.Kind ( Type, Constraint )
+import Data.Kind ( Type )
 
 
 {-

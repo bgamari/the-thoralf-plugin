@@ -15,7 +15,6 @@
 module Nat where
 
 import ThoralfPlugin.Theory.Bool
-import ThoralfPlugin.Singletons.Nat
 import Data.Type.Equality
 import Data.Kind
 import GHC.TypeLits
@@ -68,5 +67,5 @@ stripPrefix (x :> xs) (y :> ys) =
 -}
 
 ltTrans :: forall (a :: Nat) (b :: Nat) (c :: Nat).
-  (a <? b) :~: True -> (b <? c) :~: True -> (a <? c) :~: True
+  (a <? b) :~: 'True -> (b <? c) :~: 'True -> (a <? c) :~: 'True
 ltTrans Refl Refl = Refl

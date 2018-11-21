@@ -20,7 +20,7 @@ import ThoralfPlugin.Encode.TheoryEncoding
 
 fmTheory :: TcPluginM TheoryEncoding
 fmTheory = do
-  (Found location fmModule) <- findImportedModule fmModName (Just pkg)
+  (Found _ fmModule) <- findImportedModule fmModName (Just pkg)
   nil <- findTyCon fmModule "Nil"
   alt <- findTyCon fmModule "Alter"
   del <- findTyCon fmModule "Delete"
@@ -76,7 +76,7 @@ type Three = 'Succ Two
 
 nilConvert :: TyCon -> Type -> Maybe TyConvCont
 nilConvert nil ty = do
-  (tcon, (keyKind : valKind : xs)) <- splitTyConApp_maybe ty
+  (tcon, (keyKind : valKind : _)) <- splitTyConApp_maybe ty
   True <- return $ tcon == nil
   let kindList =  keyKind :> valKind :> VNil
   return $ TyConvCont VNil kindList nilString []
@@ -91,7 +91,7 @@ nilConvert nil ty = do
 
 alterConvert :: TyCon -> Type -> Maybe TyConvCont
 alterConvert alter ty = do
-  (tcon, (_ : _ : fmTp : keyTp : valTp : xs)) <- splitTyConApp_maybe ty
+  (tcon, (_ : _ : fmTp : keyTp : valTp : _)) <- splitTyConApp_maybe ty
   True <- return $ tcon == alter
   let tyList = fmTp :> keyTp :> valTp :> VNil
   return $ TyConvCont tyList VNil alterString []
@@ -105,7 +105,7 @@ alterConvert alter ty = do
 
 deleteConvert :: TyCon -> Type -> Maybe TyConvCont
 deleteConvert delete ty = do
-  (tcon, (_ : valKd : fmTp : keyTp : xs)) <- splitTyConApp_maybe ty
+  (tcon, (_ : valKd : fmTp : keyTp : _)) <- splitTyConApp_maybe ty
   True <- return $ tcon == delete
   let tyList = fmTp :> keyTp :> VNil
   let kdList = valKd :> VNil
@@ -121,8 +121,8 @@ deleteConvert delete ty = do
 
 unionConvert :: TyCon -> Type -> Maybe TyConvCont
 unionConvert union ty = do
-  (tcon, tys) <- splitTyConApp_maybe ty
-  let match = (tcon == union, tys)
+  (tcon, tys') <- splitTyConApp_maybe ty
+  let match = (tcon == union, tys')
   (True, _:valKd:m1:m2:_)  <- return match
   let tys = m1 :> m2 :> VNil
   let kds = valKd :> VNil
@@ -154,8 +154,8 @@ unionConvert union ty = do
 
 interConvert :: TyCon -> Type -> Maybe TyConvCont
 interConvert intersect ty = do
-  (tcon, tys) <- splitTyConApp_maybe ty
-  let match = (tcon == intersect, tys)
+  (tcon, tys') <- splitTyConApp_maybe ty
+  let match = (tcon == intersect, tys')
   (True, _:valKd:m1:m2:_)  <- return match
   let tys = m1 :> m2 :> VNil
   let kds = valKd :> VNil
@@ -193,7 +193,7 @@ interConvert intersect ty = do
 
 fmConvert :: TyCon -> Type -> Maybe KdConvCont
 fmConvert fm ty = do
-  (tcon, (_ : _ : keyKind : valKind : xs)) <- splitTyConApp_maybe ty
+  (tcon, (_ : _ : keyKind : valKind : _)) <- splitTyConApp_maybe ty
   True <- return $ tcon == fm
   let kindList = keyKind :> valKind :> VNil
   return $ KdConvCont kindList fmString

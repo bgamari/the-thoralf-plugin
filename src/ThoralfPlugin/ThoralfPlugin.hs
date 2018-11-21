@@ -87,7 +87,6 @@ mkThoralfInit debug seed = do
   let findModule = findImportedModule
   (Found _ disEqModule) <- findModule disEqName (Just pkgName)
   disEq <- findClass disEqModule "DisEquality"
-  let decs = startDecs encoding
   z3Solver <- tcPluginIO $ do
     let logLevel = if debug then 0 else 1
     logger <- SMT.newLogger logLevel
@@ -111,11 +110,6 @@ mkThoralfInit debug seed = do
 
     grabSMTsolver :: SMT.Logger -> IO SMT.Solver
     grabSMTsolver logger = SMT.newSolver "z3" solverOpts (Just logger)
-
-    typeDataType = SMT.Atom typeData
-    typeData =
-        -- As one long line to avoid problems with CPP and string gaps.
-        "(declare-datatypes () ((Type (apply (fst Type) (snd Type)) (lit (getstr String)))))"
 
 
 
