@@ -1,37 +1,22 @@
-{-# LANGUAGE TypeFamilies, TypeInType, GADTs,
-    DataKinds, AllowAmbiguousTypes,
-    OverloadedLabels, StandaloneDeriving,
-    TypeOperators, ScopedTypeVariables, TypeApplications
-#-}
+{-# LANGUAGE TypeFamilies, GADTs, DataKinds #-}
 
 {-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
-{-# OPTIONS_GHC -Wno-unused-matches #-}
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-
 
 module UoM where
 
-
+import Data.Kind (Type)
+import Data.Singletons.TypeLits hiding (SSymbol)
+import ThoralfPlugin.Singletons.Symbol (SSymbol)
 import ThoralfPlugin.Theory.UoM
-import ThoralfPlugin.Singletons.Symbol
-import qualified ThoralfPlugin.Theory.DisEq as D
-
-import Data.Kind ( Type )
-import GHC.TypeLits ( Symbol )
-import Data.Singletons.TypeLits hiding ( SSymbol )
-import System.IO (hFlush, stdin, stdout)
-
-
-import GHC.TypeLits
-
-main :: IO ()
-main = return ()
 
 -- | Interface
 -------------------------------------------------------------
 
 data Unit :: UoM -> Type where
   MkUnit :: Double -> Unit m
+
+instance Show (Unit a) where
+    show (MkUnit x) = show x
 
 -- Note: we only expose this part of the interface:
 
@@ -68,8 +53,11 @@ extract (MkUnit d) = d
 type Meters  = FromList '[ '("meters", 1) ]
 type Seconds = FromList '[ '("secs",   1) ]
 
-calcDistance :: IsDiv Meters Seconds metPerSec =>
-                Unit metPerSec -> Unit Seconds -> Unit Meters
+calcDistance
+    :: IsDiv Meters Seconds metPerSec
+    => Unit metPerSec
+    -> Unit Seconds
+    -> Unit Meters
 calcDistance a b = mult a b
 
 -------------------------------------------------------------

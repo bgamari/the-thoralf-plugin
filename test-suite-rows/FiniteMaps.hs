@@ -17,6 +17,8 @@ module FiniteMaps where
 import ThoralfPlugin.Theory.FiniteMap
 import Data.Type.Equality
 
+-- import GHC.TypeLits -- Uncomment for symtest
+
 type LOne = '[ '(2,"hi"), '(1,"ok") ]
 type LTwo = '[ '(1,"ok"), '(2,"hi") ]
 
@@ -30,8 +32,23 @@ deleteTwice = Refl
 altTwice :: (AddField m1 m2 "ok" 2, AddField m2 m3 "ok" 2) => m2 :~: m3
 altTwice = Refl
 
---symtest :: forall (a :: Symbol). "hi" :~: a
---symtest = Refl
+{-
+symtest :: forall (a :: Symbol). "hi" :~: a
+symtest = Refl
+
+NOTE: Expected failure for symtest.
+
+• Couldn't match type ‘a’ with ‘"hi"’
+  ‘a’ is a rigid type variable bound by
+    the type signature for:
+      symtest :: forall (a :: Symbol). "hi" :~: a
+  Expected type: "hi" :~: a
+    Actual type: "hi" :~: "hi"
+• In the expression: Refl
+  In an equation for ‘symtest’: symtest = Refl
+• Relevant bindings include
+    symtest :: "hi" :~: a
+-}
 
 -- Union Test
 union1 ::
