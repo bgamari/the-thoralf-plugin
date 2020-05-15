@@ -75,5 +75,10 @@ Test-suite units
   other-modules:         UoM
   ghc-options:           -Wall -fplugin ThoralfPlugin.Plugin
   build-depends:         base
+                       , QuickCheck
                        , singletons
                        , thoralf-plugin
+                       , tasty
+                       , tasty-hunit
+                       , tasty-quickcheck
+                       , tasty-th
