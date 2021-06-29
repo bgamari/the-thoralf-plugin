@@ -35,13 +35,12 @@ import Data.TypeLits
 
 test :: forall (a :: Nat). (1 + a) :~: (a + 1)
 test = Refl
-
 ```
 
 We can convert this into a problem for an smt solver.
 Say we have the file `example.z3` as follows:
 
-```text
+```lisp
 (declare-const a Int)
 (assert (not (= (+ 1 a) (+ a 1))))
 (check-sat)
@@ -123,7 +122,6 @@ The interface is pretty simple:
 
 
 ```haskell
-
 data Nat where
   Zero :: Nat
   Succ :: Nat -> Nat
@@ -132,7 +130,6 @@ data Vec :: Nat -> Kind.Type -> Kind.Type where
   VNil :: Vec Zero a
   (:>) :: a -> Vec n a -> Vec (Succ n) a
 infixr 5 :>
-
 ```
 
 We can imagine that for `(1 + 2)`, we would have a function in our `TheoryBox` that produces
@@ -221,7 +218,6 @@ In other words, your type index should represent
 all the information you want even though GHC doesn't 
 use it the way you want it to.
 
-
 -}
 
 ------------------------------------------------------------------------
@@ -267,11 +263,9 @@ type family
     DelField m m' k = (Delete m k) ~ m'
 ------------------------------------------------------------------------
 
-
 type family Build (m :: Fm k v) (xs :: [(k, v)]) :: Fm k v where
   Build m '[] = m
   Build m ('(k,v) :< ys) = Build (Alter m k v) ys
-
 ```
 
 ### Starting The TheorySeed: Getting Type Constructors
@@ -280,7 +274,6 @@ All of the following code is in the module
 ThoralfPlugin.Box.FiniteMaps
 
 ```haskell
-
 fmSeed :: TheorySeed
 fmSeed = do
   (Found location fmModule) <- findImportedModule fmModName (Just pkg)
@@ -331,16 +324,12 @@ mkFmBox nil alter delete fm =
 maybeDef :: SExpr
 maybeDef = SMT.Atom "(declare-datatypes (T) \
            \((Maybe nothing (just (fromJust T)))))"
-
-
-
-
 ```
 
 
 ### The Type Constructor `Nil`
 
-```
+```haskell
 {-
 
 We make one conversion function per type family
@@ -399,7 +388,6 @@ nilString VNil (keyKindStr :> valKindStr :> VNil) =
     arrayTp = "(Array " ++ keyKindStr ++ " " ++ maybeVal ++ ")"
     nilStr = "((as const " ++ arrayTp ++ ") nothing)"
   in nilStr
-
 ```
 
 
@@ -407,7 +395,6 @@ nilString VNil (keyKindStr :> valKindStr :> VNil) =
 ### The Type Constructor `Alter`
 
 ```haskell
-
 {-
 
 Analogous to the converstion function for Nil is the one for Alter.
@@ -432,10 +419,8 @@ alterConvert alter ty = do
       in
         Just $ TyKit (tyList, VNil, alterString)
 
-
 -- as before, alterString expects the corresponding lists of
 -- converted Types and Kinds and makes the desired expression.
-
 
 type Three = 'Succ ('Succ ('Succ 'Zero))
 alterString :: Vec Three String -> Vec Zero String -> String
@@ -449,7 +434,6 @@ alterString (fmStr :> keyStr :> valStr :> VNil) VNil =
       "(store " ++ fmStr ++ " " ++ keyStr ++ " " ++ valueStr ++ ")"
   in
     altStr
-
 ```
 
 We omit the conversion function for the type family `Delete` 
@@ -459,7 +443,6 @@ since it's similar to the `Alter` case.
 ### The Kind Constructor `Fm`
 
 ```haskell
-
 {-
 
 Finally, we make the function of type KindConv, 
@@ -470,7 +453,6 @@ is the smt string-making kit for kinds, KdStrMaker,
 only deals with other kinds to convert, not types.
 
 Hence, we return tuples of (kinds-to-convert, kind-string-maker).
-
 
 -}
 
@@ -492,7 +474,6 @@ fmString (keyKindStr :> valKindStr :> VNil) =
 mkArrayTp :: String -> String -> String
 mkArrayTp keySort valSort =
   "(Array " ++ keySort ++ " (Maybe " ++ valSort ++ "))"
-
 ```
 
 ### Finishing Up
@@ -503,14 +484,12 @@ ThoralfPlugin/Plugin:
 
 
 ```haskell
-
 currentDefaultSeed :: TheorySeed
 currentDefaultSeed =
   sumSeeds [ natSeed
-           , fmSeed                     -- << here it is!  
+           , fmSeed -- << here it is!  
            , symbolSeed
            ]
-
 ```
 
 ## Restrictions and rules
@@ -559,7 +538,6 @@ and using `unsafeCoerce` as we do below.
 
 
 ```haskell
-
 import GHC.TypeLits
 
 {-
@@ -571,7 +549,6 @@ natVal :: SNat n -> Int
 
 We could write the following.
 -}
-
 
 compareSNat :: SNat n -> SNat m -> NatOrder
 compareSNat x y = case (compare (natVal x) (natVal y)) of
@@ -597,8 +574,6 @@ type family NatEq (x :: Nat) (y :: Nat) :: Bool where {}
 
 data Dict :: Constraint -> Type where
   Dict :: a => Dict a
-
-
 ```
 Now, if we had a TheoryBox for the kind `Bool` (analogous to the kind `Fm k v`) 
 with support for the operators `NatLt, NatGt, NatEq` 
@@ -606,8 +581,3 @@ with support for the operators `NatLt, NatGt, NatEq`
 this would be really powerful.
 This singleton comparison function could help implement, say,
 a verified binary search tree.
-
-
-
-
-
