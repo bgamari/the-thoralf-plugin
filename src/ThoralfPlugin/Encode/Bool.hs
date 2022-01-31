@@ -38,17 +38,21 @@ import ThoralfPlugin.Encode.TheoryEncoding
 
 boolTheory :: TcPluginM TheoryEncoding
 boolTheory = do
+  -- There's been a change in base for (<=?) for 4.16.0.0
+  -- type family (m :: Nat) <=? (n :: Nat) :: Bool
+  -- type (<=?) m n = OrdCond (Compare m n) 'True 'True 'False
+
+  -- ThoralfPlugin.Theory.Bool now has both <? and <=?. Previously
+  -- <? was being picked up from ThoralfPlugin.Theory.Bool but
+  -- <=? was being picked up from GHC.TypeNats.
   let boolModM = findImportedModule boolMod $ Just pkg
   Found _ boolModule <- boolModM
   compTyCon <- findTyCon boolModule "<?"
-  Found _ typeNatMod <- findImportedModule tyNatMod $ Just base
-  compNat <- findTyCon typeNatMod "<=?"
+  compNat <- findTyCon boolModule "<=?"
   return $ boolEncoding compTyCon compNat
   where
     boolMod = mkModuleName "ThoralfPlugin.Theory.Bool"
-    tyNatMod = mkModuleName "GHC.TypeNats"
     pkg = fsLit "thoralf-plugin"
-    base = fsLit "base"
 
     findTyCon :: Module -> String -> TcPluginM TyCon
     findTyCon md strNm = do
