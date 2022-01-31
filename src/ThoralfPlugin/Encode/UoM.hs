@@ -1,9 +1,21 @@
-{-# LANGUAGE TypeFamilies, TypeInType, TypeOperators,
+{-# LANGUAGE CPP,
+    TypeFamilies, TypeInType, TypeOperators,
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 
 module ThoralfPlugin.Encode.UoM ( uomTheory ) where
 
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Plugins ( TyCon, mkTcOcc )
+import GHC.Core.Type ( Type, splitTyConApp_maybe )
+import GHC.Tc.Plugin
+                 ( tcLookupTyCon, lookupOrig
+                 , findImportedModule, FindResult(..)
+                 , TcPluginM
+                 )
+import GHC.Unit.Module ( Module, mkModuleName )
+import GHC.Data.FastString ( fsLit )
+#else
 import TyCon ( TyCon(..) )
 import Type ( Type, splitTyConApp_maybe )
 import TcPluginM ( tcLookupTyCon, lookupOrig
@@ -13,6 +25,7 @@ import TcPluginM ( tcLookupTyCon, lookupOrig
 import OccName ( mkTcOcc )
 import Module ( Module, mkModuleName )
 import FastString ( fsLit )
+#endif
 
 import ThoralfPlugin.Encode.TheoryEncoding
 

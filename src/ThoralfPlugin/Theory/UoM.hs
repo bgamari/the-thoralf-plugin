@@ -8,7 +8,6 @@ module ThoralfPlugin.Theory.UoM (
   One, IsBase, IsProd, IsDiv
   ) where
 
-import GHC.Types ( Symbol )
 import Data.Kind ( Constraint )
 import GHC.TypeLits
 

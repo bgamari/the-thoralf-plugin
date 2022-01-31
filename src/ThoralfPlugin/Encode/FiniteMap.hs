@@ -1,9 +1,21 @@
-{-# LANGUAGE TypeFamilies, TypeInType, TypeOperators,
+{-# LANGUAGE CPP,
+    TypeFamilies, TypeInType, TypeOperators,
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 
 module ThoralfPlugin.Encode.FiniteMap ( fmTheory ) where
 
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Data.FastString ( fsLit )
+import GHC.Core.Type ( Type, splitTyConApp_maybe )
+import GHC.Plugins ( TyCon, mkTcOcc )
+import GHC.Unit.Module ( Module, mkModuleName )
+import GHC.Tc.Plugin
+                 ( tcLookupTyCon, lookupOrig
+                 , findImportedModule, FindResult(..)
+                 , TcPluginM
+                 )
+#else
 import TyCon ( TyCon(..) )
 import Type ( Type, splitTyConApp_maybe )
 import TcPluginM ( tcLookupTyCon, lookupOrig
@@ -13,6 +25,7 @@ import TcPluginM ( tcLookupTyCon, lookupOrig
 import OccName ( mkTcOcc )
 import Module ( Module, mkModuleName )
 import FastString ( fsLit )
+#endif
 import Data.Hashable ( hash )
 
 import ThoralfPlugin.Encode.TheoryEncoding
@@ -139,12 +152,11 @@ unionConvert union ty = do
     eith = "either" ++ hashVal
     hashVal = show $ hash valKd
 
+  -- WARNING: Don't wrap with \ as CPP barf on it with lexical error.
   eitherDec :: Vec One String -> [String]
   eitherDec (valKd :> VNil) = let hashVal = show $ hash valKd in
-    [ "(declare-fun either" ++ hashVal ++ " ((Maybe "++ valKd ++ ") \
-      \(Maybe "++ valKd ++ ")) (Maybe " ++ valKd ++"))"
-    , "(assert (forall ((y (Maybe " ++ valKd ++ "))) \
-      \(= (either" ++ hashVal ++ " (as nothing (Maybe " ++
+    [ "(declare-fun either" ++ hashVal ++ " ((Maybe "++ valKd ++ ") (Maybe "++ valKd ++ ")) (Maybe " ++ valKd ++"))"
+    , "(assert (forall ((y (Maybe " ++ valKd ++ "))) (= (either" ++ hashVal ++ " (as nothing (Maybe " ++
         valKd ++ ") ) y) y)))"
     , "(assert (forall ((x (Maybe " ++ valKd ++ ")) (y (Maybe " ++ valKd ++
       "))) (=> ((_ is (just (" ++ valKd ++ ") (Maybe " ++ valKd ++
@@ -176,8 +188,7 @@ interConvert intersect ty = do
     [ "(declare-fun both" ++ hashVal ++ 
       " ((Maybe " ++ valKd ++ ") (Maybe " ++
         valKd ++ ")) (Maybe " ++ valKd ++ "))"
-    , "(assert (forall ((y (Maybe " ++ valKd ++ "))) \
-      \(= (both" ++ hashVal ++ " y " ++ noth ++ ") " ++ noth ++ ")))"
+    , "(assert (forall ((y (Maybe " ++ valKd ++ "))) (= (both" ++ hashVal ++ " y " ++ noth ++ ") " ++ noth ++ ")))"
     , "(assert (forall ((y (Maybe " ++ valKd ++
       "))) (= (both" ++ hashVal ++ " nothing y) nothing)))"
     , "(assert (forall ((x (Maybe " ++ valKd ++ ")) (y (Maybe " ++ 
