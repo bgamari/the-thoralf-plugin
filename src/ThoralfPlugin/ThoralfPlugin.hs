@@ -14,18 +14,39 @@ module ThoralfPlugin.ThoralfPlugin ( thoralfPlugin ) where
 
 -- Simple imports:
 import Prelude hiding ( showList )
-import FastString ( fsLit )
 import Data.Maybe ( mapMaybe )
 import Data.List ( intersperse, (\\) )
 import qualified Data.Map.Strict as M
 import qualified Data.Set as Set
 import qualified SimpleSMT as SMT
-import Class ( Class(..) )
 import System.IO.Error
 import Data.IORef ( IORef )
 
 
 -- GHC API imports:
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Builtin.Names ( getUnique )
+import GHC.Core.Coercion ( Role(..), Var, mkUnivCo )
+import GHC.Core.Type ( Type, splitTyConApp_maybe )
+import GHC.Core.TyCo.Rep ( UnivCoProvenance(PluginProv) )
+import GHC.Plugins ( TyCon, mkTcOcc, getTyVar_maybe )
+import GHC.Unit.Module ( Module, mkModuleName )
+import GHC.Data.FastString ( fsLit )
+import GHC.Core.Class ( Class )
+import GHC.Tc.Plugin
+                 ( TcPluginM
+                 , tcPluginIO, lookupOrig, tcLookupClass
+                 , findImportedModule, FindResult(..), zonkCt
+                 , unsafeTcPluginTcM )
+import GHC.Tc.Types ( TcPlugin(..), TcPluginResult(..) )
+import GHC.Types.Var ( isTcTyVar )
+import GHC.Tc.Types.Constraint ( Ct, WantedConstraints(..) )
+import GHC.Tc.Types.Evidence ( EvTerm(..), evCoercion )
+import GHC.Utils.Outputable ( showSDocUnsafe, ppr )
+import GHC.Tc.Utils.TcType ( isMetaTyVar )
+import GHC.Plugins ( getOccName, occNameString )
+import GHC.Data.IOEnv ( newMutVar, readMutVar, writeMutVar )
+#else
 import GhcPlugins ( getUnique, getOccName )
 import TcPluginM ( tcPluginIO, lookupOrig, tcLookupClass
                  , findImportedModule, FindResult(..), zonkCt
@@ -50,6 +71,9 @@ import Module ( Module, mkModuleName )
 import OccName ( mkTcOcc, occNameString )
 import Outputable ( showSDocUnsafe, ppr )
 import IOEnv ( newMutVar, readMutVar, writeMutVar )
+import FastString ( fsLit )
+import Class ( Class(..) )
+#endif
 
 
 -- Internal Imports

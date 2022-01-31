@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeInType #-}
 {-# LANGUAGE TypeOperators #-}
@@ -16,6 +17,17 @@ import Prelude
 
 
 -- GHC API imports:
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Builtin.Names ( getUnique )
+import GHC.Tc.Types.Constraint ( Ct, ctPred )
+import GHC.Core.Class ( Class )
+import GHC.Core.Type
+            ( Kind, Type, TyVar, getTyVar_maybe
+            , splitTyConApp_maybe, splitFunTy_maybe
+            , tyVarKind )
+import GHC.Tc.Utils.TcType ( tcGetTyVar_maybe )
+import GHC.Core.Predicate ( Pred(..), EqRel(..), classifyPredType )
+#else
 import GhcPlugins ( getUnique )
 import TcRnTypes ( Ct, ctPred )
 import Class ( Class(..) )
@@ -24,6 +36,7 @@ import Var ( TyVar )
 import Type ( Type, PredTree (..), EqRel (..), getTyVar_maybe
             , splitTyConApp_maybe, splitFunTy_maybe
             , classifyPredType, tyVarKind )
+#endif
 
 
 -- Internal imports
@@ -342,7 +355,11 @@ defConvTy = tryFns [defTyVar, defFn, defTyConApp] where
 
   defFn :: Type -> Maybe (String, [TyVar])
   defFn ty = do
+#if MIN_VERSION_ghc(9, 2, 0)
+    (fn, arg, _) <- splitFunTy_maybe ty
+#else
     (fn, arg) <- splitFunTy_maybe ty
+#endif
     (fnStr, tv1) <- defConvTy fn
     (argStr, tv2) <- defConvTy arg
     let smtStr = fnDef fnStr argStr

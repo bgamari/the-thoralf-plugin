@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP                #-}
 {-# LANGUAGE TypeFamilies       #-}
 {-# LANGUAGE TypeInType         #-}
 {-# LANGUAGE TypeOperators      #-}
@@ -18,8 +19,13 @@ module ThoralfPlugin.Encode.TheoryEncoding
 
 
 import Control.Applicative ( (<|>) )
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Core.Type ( Type, Kind, TyVar )
+import GHC.Tc.Plugin ( TcPluginM )
+#else 
 import Type ( Type, Kind, TyVar )
-import TcRnTypes( TcPluginM )
+import TcRnTypes ( TcPluginM )
+#endif
 import Data.Vec
 
 

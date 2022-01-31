@@ -1,15 +1,27 @@
-{-# LANGUAGE TypeFamilies, TypeInType, TypeOperators,
+{-# LANGUAGE CPP,
+    TypeFamilies, TypeInType, TypeOperators,
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 
 module ThoralfPlugin.Encode.Symbol ( symbolTheory ) where
 
-import Type ( Type,
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Core.Type
+            ( Type,
+              splitTyConApp_maybe, isStrLitTy
+            )
+import GHC.Tc.Plugin ( TcPluginM )
+import GHC.Data.FastString (unpackFS)
+import GHC.Builtin.Types ( typeSymbolKindCon )
+#else 
+import Type
+            ( Type,
               splitTyConApp_maybe, isStrLitTy
             )
 import TcPluginM ( TcPluginM )
 import FastString ( unpackFS )
 import TysWiredIn ( typeSymbolKindCon )
+#endif
 
 
 import ThoralfPlugin.Encode.TheoryEncoding

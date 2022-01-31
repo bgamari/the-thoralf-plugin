@@ -1,16 +1,24 @@
-{-# LANGUAGE TypeFamilies, TypeInType, TypeOperators,
+{-# LANGUAGE CPP,
+    TypeFamilies, TypeInType, TypeOperators,
     GADTs, RecordWildCards, StandaloneDeriving
 #-}
 module ThoralfPlugin.Encode.Nat ( natTheory ) where
 
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Builtin.Names ( getUnique )
+import GHC.Builtin.Types ( naturalTyCon )
+import GHC.Builtin.Types.Literals (typeNatAddTyCon, typeNatSubTyCon)
+import GHC.Core.Type ( Type, TyVar, splitTyConApp_maybe, tyVarKind, isNumLitTy )
+import GHC.Tc.Plugin ( TcPluginM )
+#else
 import GhcPlugins ( getUnique )
 import TysWiredIn ( typeNatKindCon )
 import TcTypeNats ( typeNatAddTyCon, typeNatSubTyCon )
 import Type ( Type, TyVar, splitTyConApp_maybe, tyVarKind, isNumLitTy )
 import TcRnTypes( TcPluginM )
+#endif
 
 import ThoralfPlugin.Encode.TheoryEncoding
-
 
 natTheory :: TcPluginM TheoryEncoding
 natTheory = return natEncoding
@@ -68,13 +76,21 @@ assertIntIsNat tv = do
   return [isNat]
 
 
+#if MIN_VERSION_ghc(9, 2, 0)
+natKindConv :: Type -> Maybe KdConvCont
+natKindConv ty = do
+  (tycon, _) <- splitTyConApp_maybe ty
+  case tycon == naturalTyCon of
+    True -> return $ KdConvCont VNil (const "Int")
+    False -> Nothing
+#else
 natKindConv :: Type -> Maybe KdConvCont
 natKindConv ty = do
   (tycon, _) <- splitTyConApp_maybe ty
   case tycon == typeNatKindCon of
     True -> return $ KdConvCont VNil (const "Int")
     False -> Nothing
-
+#endif
 
 
 

@@ -76,9 +76,12 @@ Test-suite units
   ghc-options:           -Wall -fplugin ThoralfPlugin.Plugin
   build-depends:         base
                        , QuickCheck
-                       , singletons
                        , thoralf-plugin
                        , tasty
                        , tasty-hunit
                        , tasty-quickcheck
                        , tasty-th
+  if impl(ghc >= 9.2.0)
+    build-depends: singletons-base
+  else
+    build-depends: singletons < 3.0

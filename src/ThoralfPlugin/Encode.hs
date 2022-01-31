@@ -1,7 +1,13 @@
+{-# LANGUAGE CPP #-}
+
 module ThoralfPlugin.Encode ( thoralfTheories ) where
 
 
+#if MIN_VERSION_ghc(9, 2, 0)
+import GHC.Tc.Plugin ( TcPluginM )
+#else
 import TcRnTypes( TcPluginM )
+#endif
 
 import ThoralfPlugin.Encode.TheoryEncoding
 

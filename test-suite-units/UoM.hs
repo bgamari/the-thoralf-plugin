@@ -1,13 +1,18 @@
-{-# LANGUAGE TypeFamilies, GADTs, DataKinds #-}
+{-# LANGUAGE CPP, TypeFamilies, GADTs, DataKinds #-}
 
 {-# OPTIONS_GHC -fplugin ThoralfPlugin.Plugin #-}
 
 module UoM where
 
 import Data.Kind (Type)
-import Data.Singletons.TypeLits hiding (SSymbol)
 import ThoralfPlugin.Singletons.Symbol (SSymbol)
 import ThoralfPlugin.Theory.UoM
+
+#if MIN_VERSION_base(4, 16, 0)
+import GHC.TypeLits.Singletons hiding (SSymbol)
+#else
+import Data.Singletons.TypeLits hiding (SSymbol)
+#endif
 
 -- | Interface
 -------------------------------------------------------------
